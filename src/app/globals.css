@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+:root {
+  --forest: #114b2f;
+  --green: #197a48;
+  --green-bright: #42a96b;
+  --mint: #eef8f1;
+  --cream: #fbfaf5;
+  --ink: #173328;
+  --muted: #66756c;
+  --line: #dce8df;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: Inter, Aptos, "Segoe UI", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #c9edd4;
+  color: #103723;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.site-shell {
+  width: min(100% - 2rem, 80rem);
+  margin-inline: auto;
+}
+
+.hero-commerce-copy {
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .hero-commerce-copy {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-commerce-copy {
+    padding-left: max(2rem, calc((100vw - 80rem) / 2));
+    padding-right: 3rem;
+  }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.balance {
+  text-wrap: balance;
+}
+
+.pretty {
+  text-wrap: pretty;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
+/* Restrained, consistent controls used across the customer storefront. */
+.commerce-button {
+  min-height: 2.75rem;
+  border-radius: 0.5rem !important;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 650 !important;
+  line-height: 1.2;
+  letter-spacing: 0;
+  box-shadow: none !important;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.commerce-button:hover {
+  transform: none !important;
+}
+
+.commerce-button-primary {
+  border: 1px solid #174f31;
+  background: #174f31;
+  color: #fff;
+}
+
+.commerce-button-primary:hover {
+  border-color: #103b25;
+  background: #103b25;
+}
+
+.commerce-button-secondary {
+  border: 1px solid #b8c9bd;
+  background: #fff;
+  color: #174f31;
+}
+
+.commerce-button-secondary:hover {
+  border-color: #728f7a;
+  background: #f7faf8;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 420ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

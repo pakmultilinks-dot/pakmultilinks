@@ -1,0 +1,18 @@
+import { Search, UserRound } from "lucide-react";
+import { db, isDatabaseConfigured } from "@/lib/db";
+import { DemoNotice, EmptyState, PageHeading, panelClass } from "../../_components/ui";
+
+const money = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", maximumFractionDigits: 0 });
+
+export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const { q = "" } = await searchParams;
+  let connected=isDatabaseConfigured;
+  let customers:Array<{id:string;name:string;email:string;phone:string;createdAt:Date;orderCount:number;spending:number;recent:string}>=[];
+  if(connected)try{
+    const rows=await db.user.findMany({where:{role:"CUSTOMER",...(q?{OR:[{name:{contains:q.slice(0,100),mode:"insensitive"}},{email:{contains:q.slice(0,100),mode:"insensitive"}}]}:{})},take:100,orderBy:{createdAt:"desc"},select:{id:true,name:true,email:true,phone:true,createdAt:true,_count:{select:{orders:{where:{status:{not:"CANCELLED"}}}}},orders:{where:{status:{not:"CANCELLED"}},orderBy:{createdAt:"desc"},take:1,select:{orderNumber:true}}}});
+    const totals=rows.length?await db.order.groupBy({by:["userId"],where:{userId:{in:rows.map((user)=>user.id)},status:{not:"CANCELLED"}},_sum:{total:true}}):[];
+    const spending=new Map(totals.map((entry)=>[entry.userId,Number(entry._sum.total||0)]));
+    customers=rows.map((user)=>({id:user.id,name:user.name,email:user.email,phone:user.phone||"—",createdAt:user.createdAt,orderCount:user._count.orders,spending:spending.get(user.id)||0,recent:user.orders[0]?.orderNumber||"—"}));
+  }catch{connected=false;}
+  return <><PageHeading eyebrow="Private customer data" title="Customers" description="Registered account summaries are visible only to authenticated administrators." />{!connected&&<DemoNotice/>}<form className="mb-5 flex max-w-md items-center rounded-xl border border-slate-200 bg-white px-3 shadow-sm"><Search className="size-4 text-slate-400"/><input name="q" defaultValue={q} placeholder="Search customer or email" disabled={!connected} className="h-11 min-w-0 flex-1 px-3 text-sm outline-none"/><button disabled={!connected} className="text-xs font-bold text-emerald-800 disabled:opacity-40">Search</button></form><section className={`${panelClass} overflow-hidden`}>{customers.length?<div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500"><tr><th className="px-5 py-3">Customer</th><th className="px-5 py-3">Contact</th><th className="px-5 py-3">Orders</th><th className="px-5 py-3">Total spending</th><th className="px-5 py-3">Recent order</th><th className="px-5 py-3">Joined</th></tr></thead><tbody className="divide-y divide-slate-100">{customers.map((customer)=><tr key={customer.id}><td className="px-5 py-4"><span className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-full bg-emerald-50 text-emerald-800"><UserRound className="size-4"/></span><strong>{customer.name}</strong></span></td><td className="px-5 py-4"><p>{customer.email}</p><p className="text-xs text-slate-500">{customer.phone}</p></td><td className="px-5 py-4 font-bold">{customer.orderCount}</td><td className="px-5 py-4 font-bold">{money.format(customer.spending)}</td><td className="px-5 py-4 text-emerald-800">{customer.recent}</td><td className="px-5 py-4 text-slate-500">{customer.createdAt.toLocaleDateString("en-PK")}</td></tr>)}</tbody></table></div>:<div className="p-5"><EmptyState title="No registered customers found" body={connected?"Customer accounts will appear here after registration.":"Connect PostgreSQL to securely view account and order summaries."}/></div>}</section></>;
+}

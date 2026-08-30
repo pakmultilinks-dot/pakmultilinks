@@ -1,0 +1,66 @@
+<svg width="760" height="640" viewBox="0 0 760 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Professional hygiene supplies</title>
+  <desc id="desc">Unbranded hand wash, spray cleaner, tissue, dispenser and cleaning cloth arranged on pale display blocks.</desc>
+  <filter id="shadow" x="-40%" y="-40%" width="180%" height="200%"><feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#174B31" flood-opacity=".16"/></filter>
+  <circle cx="425" cy="298" r="246" fill="#DDEFE2"/>
+  <circle cx="596" cy="178" r="86" fill="#F7F1D9"/>
+  <path d="M240 486C240 458 263 435 291 435H665C693 435 716 458 716 486V558H240V486Z" fill="#FAF8F0" filter="url(#shadow)"/>
+  <path d="M313 408C313 386 331 368 353 368H579C601 368 619 386 619 408V458H313V408Z" fill="#FFFFFF"/>
+  <ellipse cx="467" cy="548" rx="235" ry="24" fill="#9FC7AA" fill-opacity=".3"/>
+  <g filter="url(#shadow)">
+    <path d="M427 170H500V209H427V170Z" fill="#E4ECE7"/>
+    <path d="M440 148H487V179H440V148Z" fill="#F7FAF8"/>
+    <path d="M463 125C463 113 473 103 485 103H538V125H463Z" fill="#144E31"/>
+    <rect x="483" y="121" width="25" height="13" rx="6.5" fill="#144E31"/>
+    <path d="M408 223C408 194 432 170 461 170H468C497 170 521 194 521 223V432H408V223Z" fill="#FFFFFF"/>
+    <path d="M408 289H521V380H408V289Z" fill="#2C8B57"/>
+    <circle cx="465" cy="333" r="24" fill="#E9F6ED"/>
+    <path d="M465 314C475 326 481 335 481 343C481 352 474 359 465 359C456 359 449 352 449 343C449 335 455 326 465 314Z" fill="#1A6740"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M551 229H636L650 433H538L551 229Z" fill="#FDFEFD"/>
+    <rect x="555" y="204" width="77" height="34" rx="12" fill="#DDE6E0"/>
+    <path d="M572 176H617V210H572V176Z" fill="#F9FBFA"/>
+    <path d="M593 147H649V167H593V147Z" fill="#155236"/>
+    <path d="M593 164H614V182H593V164Z" fill="#155236"/>
+    <rect x="553" y="284" width="82" height="76" rx="14" fill="#DDF1E3"/>
+    <path d="M594 302C605 315 612 325 612 336C612 346 604 354 594 354C584 354 576 346 576 336C576 325 583 315 594 302Z" fill="#228254"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M272 239L335 213L365 433H253L272 239Z" fill="#73B58B"/>
+    <path d="M290 211L328 196L337 221L298 236L290 211Z" fill="#DCE7DF"/>
+    <path d="M311 169H378V187H311V169Z" fill="#174D32"/>
+    <path d="M310 184L334 177L344 210L320 218L310 184Z" fill="#174D32"/>
+    <rect x="270" y="289" width="71" height="86" rx="12" fill="#F5FAF6"/>
+    <path d="M305 309C316 322 322 332 322 342C322 351 315 359 305 359C296 359 288 351 288 342C288 332 295 322 305 309Z" fill="#1A6841"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M128 359H272V473H128V359Z" fill="#FDFEFD"/>
+    <path d="M141 343H260C267 343 272 349 272 356V365H128V356C128 349 134 343 141 343Z" fill="#E7EEE9"/>
+    <path d="M177 343C180 315 190 298 207 293C219 302 226 319 228 343H177Z" fill="#FFFFFF"/>
+    <path d="M189 327C198 322 207 322 216 327" stroke="#D4E1D8" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="200" cy="411" r="25" fill="#E4F2E8"/>
+    <path d="M200 392C210 404 216 413 216 421C216 430 209 437 200 437C191 437 184 430 184 421C184 413 190 404 200 392Z" fill="#268052"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M74 471C117 445 177 448 220 472L205 518C160 535 111 531 70 511L74 471Z" fill="#78B991"/>
+    <path d="M78 477C120 494 166 495 215 480" stroke="#A9D4B8" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#shadow)">
+    <ellipse cx="650" cy="462" rx="53" ry="19" fill="#FFFFFF"/>
+    <path d="M597 410H703V463H597V410Z" fill="#FCFDFB"/>
+    <path d="M605 406C627 386 675 386 697 406" stroke="#DBE6DE" stroke-width="10"/>
+    <path d="M612 415C634 400 667 400 689 415" stroke="#EDF3EE" stroke-width="7"/>
+    <ellipse cx="650" cy="410" rx="53" ry="18" fill="#FFFFFF"/>
+    <circle cx="650" cy="410" r="18" fill="#D9E6DD"/>
+    <circle cx="650" cy="410" r="8" fill="#B9CDBF"/>
+  </g>
+  <g transform="translate(614 506) rotate(-12)">
+    <rect width="86" height="19" rx="9.5" fill="#164F33"/>
+    <path d="M68 16H86V47C86 54 80 60 73 60H68V16Z" fill="#E8EFEA"/>
+    <path d="M73 50V70M80 50V70M86 46V66" stroke="#8AB89A" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <circle cx="249" cy="147" r="9" fill="#52A871"/>
+  <circle cx="675" cy="268" r="7" fill="#E1B747"/>
+  <path d="M186 221C204 209 218 193 227 173C230 198 226 217 214 231C202 244 187 252 167 254C170 240 176 229 186 221Z" fill="#2E8656"/>
+</svg>

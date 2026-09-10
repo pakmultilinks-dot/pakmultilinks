@@ -35,7 +35,14 @@ export async function POST(request: NextRequest) {
     const parsed = productInputSchema.safeParse(await readJson(request, 64_000));
     if (!parsed.success) return NextResponse.json(validationError(parsed.error), { status: 400, headers: noStoreHeaders });
     const data = parsed.data;
-    const product = await requireDatabase().product.create({
+    const database = requireDatabase();
+    const [categoryExists, brandOk] = await Promise.all([
+      database.category.findUnique({ where: { id: data.categoryId }, select: { id: true } }),
+      data.brandId ? database.brand.findUnique({ where: { id: data.brandId }, select: { id: true } }) : Promise.resolve({ id: true }),
+    ]);
+    if (!categoryExists) return jsonError("The selected category does not exist. Please refresh and choose a valid category.", 400);
+    if (data.brandId && !brandOk) return jsonError("The selected brand does not exist. Please refresh and choose a valid brand.", 400);
+    const product = await database.product.create({
       data: {
         name: data.name,
         slug: data.slug,

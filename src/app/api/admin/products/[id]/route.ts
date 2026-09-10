@@ -15,6 +15,12 @@ export async function PATCH(request: NextRequest, context: Context) {
     const data = parsed.data;
     const database = requireDatabase();
     if (!(await database.product.findUnique({ where: { id }, select: { id: true } }))) return jsonError("Product not found.", 404);
+    const [categoryExists, brandOk] = await Promise.all([
+      database.category.findUnique({ where: { id: data.categoryId }, select: { id: true } }),
+      data.brandId ? database.brand.findUnique({ where: { id: data.brandId }, select: { id: true } }) : Promise.resolve({ id: true }),
+    ]);
+    if (!categoryExists) return jsonError("The selected category does not exist. Please refresh and choose a valid category.", 400);
+    if (data.brandId && !brandOk) return jsonError("The selected brand does not exist. Please refresh and choose a valid brand.", 400);
     const product = await database.product.update({
       where: { id },
       data: {

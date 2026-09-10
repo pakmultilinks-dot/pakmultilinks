@@ -49,6 +49,12 @@ export function apiFailure(error: unknown) {
   if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
     return jsonError("A record with that email, SKU, or slug already exists.", 409);
   }
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+    return jsonError("The referenced category, brand, or related record does not exist. Please check your selections and try again.", 400);
+  }
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+    return jsonError("The requested record was not found or has already been removed.", 404);
+  }
   console.error("API request failed", error);
   return jsonError("The request could not be completed.", 500);
 }

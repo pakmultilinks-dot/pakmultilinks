@@ -36,7 +36,11 @@ export async function PATCH(request: NextRequest, context: Context) {
           if (item.productId) {
             await tx.product.updateMany({
               where: { id: item.productId },
-              data: { stock: { increment: item.quantity }, soldQuantity: { decrement: item.quantity } },
+              data: { stock: { increment: item.quantity } },
+            });
+            await tx.product.updateMany({
+              where: { id: item.productId, soldQuantity: { gte: item.quantity } },
+              data: { soldQuantity: { decrement: item.quantity } },
             });
           }
         }

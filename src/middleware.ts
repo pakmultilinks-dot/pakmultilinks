@@ -10,7 +10,7 @@ function secret() {
   return new TextEncoder().encode("pmh-local-development-secret-change-me");
 }
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   if (path === "/admin/login") return NextResponse.next();
   const jwtSecret = secret();

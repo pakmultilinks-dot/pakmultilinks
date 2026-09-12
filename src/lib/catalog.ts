@@ -9,6 +9,38 @@ export const categories: Category[] = [
     icon: "PackageCheck",
     tone: "sand",
   },
+  {
+    id: "cat-washroom",
+    name: "Washroom Supplies",
+    slug: "washroom-supplies",
+    description: "Hand wash, sanitizers and washroom hygiene essentials by carton.",
+    icon: "Droplets",
+    tone: "mint",
+  },
+  {
+    id: "cat-cleaning",
+    name: "Cleaning Products",
+    slug: "cleaning-products",
+    description: "Floor cleaners, sprays and professional cleaning solutions.",
+    icon: "Sparkles",
+    tone: "sky",
+  },
+  {
+    id: "cat-personal",
+    name: "Personal Care",
+    slug: "personal-care",
+    description: "Soaps, hand wash and personal hygiene products for bulk supply.",
+    icon: "Heart",
+    tone: "rose",
+  },
+  {
+    id: "cat-disposable",
+    name: "Disposable Items",
+    slug: "disposable-items",
+    description: "Garbage bags, gloves and single-use hygiene disposables.",
+    icon: "Trash2",
+    tone: "amber",
+  },
 ];
 
 const sharedProduct = {

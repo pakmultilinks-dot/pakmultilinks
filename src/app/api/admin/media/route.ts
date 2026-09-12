@@ -1,16 +1,15 @@
-import { randomBytes } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
+import { put } from "@vercel/blob";
+import { randomUUID } from "node:crypto";
 
 import { NextResponse, type NextRequest } from "next/server";
 
 import {
   jsonError,
   noStoreHeaders,
+  readJson,
   requireAdminRequest,
 } from "@/app/api/_utils";
-
-export const runtime = "nodejs";
+import { deleteBlobs } from "@/lib/blob";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const imageTypes = {
@@ -62,17 +61,41 @@ export async function POST(request: NextRequest) {
     }
 
     const scope = form.get("scope") === "deals" ? "deals" : "products";
-    const filename = `${Date.now()}-${randomBytes(8).toString("hex")}.${imageTypes[mime]}`;
-    const uploadDirectory = path.join(process.cwd(), "public", "uploads", scope);
-    await mkdir(uploadDirectory, { recursive: true });
-    await writeFile(path.join(uploadDirectory, filename), bytes, { flag: "wx" });
+    const filename = `${randomUUID()}.${imageTypes[mime]}`;
+
+    const blob = await put(`${scope}/${filename}`, Buffer.from(bytes), {
+      access: "public",
+      contentType: mime,
+    });
 
     return NextResponse.json(
-      { url: `/uploads/${scope}/${filename}` },
+      { url: blob.url },
       { status: 201, headers: noStoreHeaders },
     );
   } catch (error) {
     console.error("Product media upload failed", error);
     return jsonError("The image could not be uploaded.", 500);
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  if (!(await requireAdminRequest(request))) {
+    return jsonError("Administrator access required.", 401);
+  }
+
+  try {
+    const body = await readJson(request, 16_000) as { urls?: unknown };
+    if (!Array.isArray(body.urls) || body.urls.length === 0) {
+      return jsonError("No image URLs provided.", 400);
+    }
+    const urls = body.urls.filter((u): u is string => typeof u === "string" && u.length > 0);
+    if (urls.length > 100) {
+      return jsonError("Too many URLs. Maximum 100 per request.", 400);
+    }
+    await deleteBlobs(urls);
+    return NextResponse.json({ ok: true }, { headers: noStoreHeaders });
+  } catch (error) {
+    console.error("Blob deletion failed", error);
+    return jsonError("Images could not be deleted.", 500);
   }
 }

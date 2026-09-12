@@ -10,7 +10,12 @@ function normalizeOrigin(value: string) {
 
 export function getSiteOrigin() {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  if (configured) return normalizeOrigin(configured);
+  if (configured) {
+    const normalized = normalizeOrigin(configured);
+    // If configured URL points to a Vercel preview subdomain, use the production custom domain.
+    if (normalized.includes(".vercel.app")) return productionOrigin;
+    return normalized;
+  }
 
   const vercelProduction = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
   if (vercelProduction) {
@@ -20,6 +25,10 @@ export function getSiteOrigin() {
     if (normalized.includes(".vercel.app")) return productionOrigin;
     return normalized;
   }
+
+  // Production fallback: if running in a non-localhost environment (e.g. Vercel),
+  // use the production domain even when env vars are missing.
+  if (process.env.VERCEL === "1" || process.env.VERCEL_ENV === "production") return productionOrigin;
 
   return localOrigin;
 }

@@ -23,9 +23,12 @@ export function minimumCartons(product: Product) {
 }
 
 export function cartonPacking(product: Product) {
-  return product.unitsPerCarton > 0
-    ? `${product.unitsPerCarton.toLocaleString("en-PK")} pieces / carton`
-    : "Carton packing confirmed on request";
+  if (product.unitsPerCarton <= 0) return "Carton packing confirmed on request";
+  // Use Intl.NumberFormat (same formatter on server and client) instead of
+  // Number.toLocaleString which can produce locale-dependent differences
+  // during React hydration.
+  const packed = new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 }).format(product.unitsPerCarton);
+  return `${packed} pieces / carton`;
 }
 
 export function createReference(prefix: string) {

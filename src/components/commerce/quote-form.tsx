@@ -156,7 +156,7 @@ export function QuoteForm({ initialProduct = "" }: { initialProduct?: string }) 
           <input className={inputClass} name="companyName" autoComplete="organization" required maxLength={160} />
         </label>
         <label className="text-sm font-semibold text-slate-800">Phone <span aria-hidden="true" className="text-red-600">*</span>
-          <input className={inputClass} name="phone" type="tel" inputMode="tel" autoComplete="tel" required maxLength={20} pattern="[+0-9][0-9 ()-]{7,19}" placeholder="03XX XXXXXXX" />
+          <input className={inputClass} name="phone" type="tel" inputMode="tel" autoComplete="tel" required maxLength={20} pattern="[+0-9][0-9 \(\)\-]{7,19}" placeholder="03XX XXXXXXX" />
         </label>
         <label className="text-sm font-semibold text-slate-800">Email <span aria-hidden="true" className="text-red-600">*</span>
           <input className={inputClass} name="email" type="email" autoComplete="email" required maxLength={160} />

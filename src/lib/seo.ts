@@ -1,6 +1,7 @@
 import { company } from "@/lib/company";
 
 const localOrigin = "http://localhost:3000";
+const productionOrigin = "https://www.pakmultilinks.com";
 
 function normalizeOrigin(value: string) {
   const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
@@ -12,7 +13,13 @@ export function getSiteOrigin() {
   if (configured) return normalizeOrigin(configured);
 
   const vercelProduction = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
-  if (vercelProduction) return normalizeOrigin(vercelProduction);
+  if (vercelProduction) {
+    const normalized = normalizeOrigin(vercelProduction);
+    // Vercel's VERCEL_PROJECT_PRODUCTION_URL uses the .vercel.app subdomain.
+    // Prefer the production custom domain when running on Vercel.
+    if (normalized.includes(".vercel.app")) return productionOrigin;
+    return normalized;
+  }
 
   return localOrigin;
 }

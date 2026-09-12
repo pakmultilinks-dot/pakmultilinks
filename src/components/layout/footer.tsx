@@ -1,12 +1,13 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 
-import { categories } from "@/lib/catalog";
+import { listPublicCategories } from "@/lib/catalog-server";
 import { company } from "@/lib/company";
 
 import { BrandMark } from "./brand-mark";
 
-export function Footer() {
+export async function Footer() {
+  const categories = await listPublicCategories();
   return (
     <footer className="bg-[#103b27] text-white">
       <div className="site-shell grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_.8fr_.9fr_1.2fr] lg:py-18">

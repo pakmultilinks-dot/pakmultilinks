@@ -12,6 +12,17 @@ const title = (status: string) => status.charAt(0) + status.slice(1).toLowerCase
 const moneyFormatter = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", maximumFractionDigits: 0 });
 const money = { format: (value: number | string) => typeof value === "string" ? value : moneyFormatter.format(value) };
 
+/** Format a date string consistently to avoid server/client hydration mismatches. */
+function formatDate(iso: string) {
+  try {
+    const d = new Date(iso);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  } catch {
+    return iso;
+  }
+}
+
 type LocalOrder = {
   id: string;
   orderNumber?: string;
@@ -87,7 +98,7 @@ export function OrdersTable({ initialRows, connected }: { initialRows: AdminOrde
   }
 
   if (!rows.length) return <EmptyState title="No orders found" body={connected ? "Customer orders will appear here as soon as checkout is completed." : "No browser-local development orders exist in this browser."} />;
-  return <>{(message || localResult.error) && <p role="status" className="mb-4 rounded-xl bg-sky-50 p-3 text-sm text-sky-900">{message || localResult.error}</p>}<div className={`${panelClass} divide-y divide-slate-100 overflow-hidden`}>{rows.map((row) => <details key={row.id} className="group"><summary className="grid cursor-pointer list-none gap-3 p-5 hover:bg-slate-50 sm:grid-cols-[1.1fr_1fr_.7fr_.8fr_auto] sm:items-center"><div><p className="font-bold text-emerald-900">{row.orderNumber}</p><p className="text-xs text-slate-500">{new Date(row.createdAt).toLocaleString("en-PK")}</p></div><div><p className="font-semibold">{row.customerName}</p><p className="truncate text-xs text-slate-500">{row.customerEmail}</p></div><p className="font-bold">{money.format(row.total)}</p><span className="w-fit rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold">{title(row.status)}</span><ChevronDown className="size-4 text-slate-400 transition group-open:rotate-180" /></summary><div className="border-t border-slate-100 bg-slate-50/60 p-5"><div className="grid gap-6 lg:grid-cols-3"><div><h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Items</h3><ul className="space-y-2">{row.items.map((item,index) => <li key={`${item.sku}-${index}`} className="flex justify-between gap-3 text-sm"><span><Package className="mr-2 inline size-3.5 text-slate-400" />{item.name}</span><strong>× {item.quantity}</strong></li>)}</ul></div><div className="text-sm"><h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Delivery contact</h3><p className="mb-2"><Phone className="mr-2 inline size-3.5 text-slate-400" />{row.customerPhone}</p><p><MapPin className="mr-2 inline size-3.5 text-slate-400" />{row.address}, {row.city}</p></div><div><h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Workflow</h3><p className="mb-3 text-xs text-slate-500">{row.paymentMethod.replaceAll("_"," ")} · {row.paymentStatus.replaceAll("_"," ")}. Delivery fee is zero until reviewed and confirmed.</p><label className="text-sm font-semibold">Order status<div className="relative"><select value={row.status} disabled={pending===row.id} onChange={(event) => update(row,event.target.value)} className="mt-1 h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 pr-9 text-sm font-semibold outline-none focus:border-emerald-700">{orderStatuses.map((status) => <option key={status}>{status}</option>)}</select>{pending===row.id && <LoaderCircle className="absolute right-3 top-4 size-4 animate-spin" />}</div></label></div></div></div></details>)}</div></>;
+  return <>{(message || localResult.error) && <p role="status" className="mb-4 rounded-xl bg-sky-50 p-3 text-sm text-sky-900">{message || localResult.error}</p>}<div className={`${panelClass} divide-y divide-slate-100 overflow-hidden`}>{rows.map((row) => <details key={row.id} className="group"><summary className="grid cursor-pointer list-none gap-3 p-5 hover:bg-slate-50 sm:grid-cols-[1.1fr_1fr_.7fr_.8fr_auto] sm:items-center"><div><p className="font-bold text-emerald-900">{row.orderNumber}</p><p className="text-xs text-slate-500">{formatDate(row.createdAt)}</p></div><div><p className="font-semibold">{row.customerName}</p><p className="truncate text-xs text-slate-500">{row.customerEmail}</p></div><p className="font-bold">{money.format(row.total)}</p><span className="w-fit rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold">{title(row.status)}</span><ChevronDown className="size-4 text-slate-400 transition group-open:rotate-180" /></summary><div className="border-t border-slate-100 bg-slate-50/60 p-5"><div className="grid gap-6 lg:grid-cols-3"><div><h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Items</h3><ul className="space-y-2">{row.items.map((item,index) => <li key={`${item.sku}-${index}`} className="flex justify-between gap-3 text-sm"><span><Package className="mr-2 inline size-3.5 text-slate-400" />{item.name}</span><strong>× {item.quantity}</strong></li>)}</ul></div><div className="text-sm"><h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Delivery contact</h3><p className="mb-2"><Phone className="mr-2 inline size-3.5 text-slate-400" />{row.customerPhone}</p><p><MapPin className="mr-2 inline size-3.5 text-slate-400" />{row.address}, {row.city}</p></div><div><h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Workflow</h3><p className="mb-3 text-xs text-slate-500">{row.paymentMethod.replaceAll("_"," ")} · {row.paymentStatus.replaceAll("_"," ")}. Delivery fee is zero until reviewed and confirmed.</p><label className="text-sm font-semibold">Order status<div className="relative"><select value={row.status} disabled={pending===row.id} onChange={(event) => update(row,event.target.value)} className="mt-1 h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 pr-9 text-sm font-semibold outline-none focus:border-emerald-700">{orderStatuses.map((status) => <option key={status}>{status}</option>)}</select>{pending===row.id && <LoaderCircle className="absolute right-3 top-4 size-4 animate-spin" />}</div></label></div></div></div></details>)}</div></>;
 }
 
 export function QuotesTable({ initialRows, connected }: { initialRows: AdminQuoteRow[]; connected: boolean }) {
@@ -228,7 +239,7 @@ export function QuotesTable({ initialRows, connected }: { initialRows: AdminQuot
             <summary className="grid cursor-pointer list-none gap-3 p-5 hover:bg-slate-50 sm:grid-cols-[1fr_1fr_1fr_.7fr_auto] sm:items-center">
               <div>
                 <p className="font-bold text-emerald-900">{row.quoteNumber}</p>
-                <p className="text-xs text-slate-500">{new Date(row.createdAt).toLocaleString("en-PK")}</p>
+                <p className="text-xs text-slate-500">{formatDate(row.createdAt)}</p>
               </div>
               <div>
                 <p className="font-semibold">{row.companyName}</p>

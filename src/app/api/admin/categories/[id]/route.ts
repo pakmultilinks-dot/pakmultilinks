@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
 import { categoryInputSchema, validationError } from "@/lib/validation";
@@ -20,6 +21,8 @@ export async function PATCH(request: NextRequest, context: Context) {
     if (existing.imageUrl && existing.imageUrl !== category.imageUrl) {
       await deleteBlobs([existing.imageUrl]);
     }
+    revalidatePath("/");
+    revalidatePath("/shop");
     return NextResponse.json({ category: serialize(category) }, { headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { AlertCircle, ArrowLeft, Building2, Loader2, LockKeyhole, PackageCheck } from "lucide-react";
 import { persistOrder, useStore } from "@/components/providers/store-provider";
 import type { CustomerDetails, Order } from "@/lib/types";
@@ -12,7 +12,7 @@ const inputClass =
   "mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100";
 
 const fallbackStatus = (status: number) =>
-  status === 404 || status === 501 || status >= 500;
+  status === 404 || status === 501;
 
 async function responseData(response: Response): Promise<Record<string, unknown>> {
   try {
@@ -32,7 +32,19 @@ export function CheckoutForm() {
   const { cart, subtotal, clearCart } = useStore();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [bankTransferEnabled, setBankTransferEnabled] = useState(false);
   const hasQuotePricing = cart.some(({ product }) => product.priceOnRequest);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/settings/public", { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.settings?.bankTransferEnabled) setBankTransferEnabled(true);
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -51,14 +63,14 @@ export function CheckoutForm() {
       province: String(values.get("province") ?? "").trim(),
       city: String(values.get("city") ?? "").trim(),
       address: String(values.get("address") ?? "").trim(),
+      postalCode: String(values.get("postalCode") ?? "").trim() || undefined,
       notes: String(values.get("notes") ?? "").trim() || undefined,
     };
-    const paymentMethod = "Cash on Delivery" as const;
+    const paymentMethod = (String(values.get("paymentMethod") ?? "Cash on Delivery") as "Cash on Delivery" | "Bank Transfer");
     const payload = {
       customer,
       paymentMethod,
       items: cart.map(({ product, quantity }) => ({ productId: product.id, quantity })),
-      clientSubtotal: subtotal,
     };
 
     setSubmitting(true);
@@ -104,6 +116,9 @@ export function CheckoutForm() {
         if (process.env.NODE_ENV === "development" && fallbackStatus(response.status)) {
           developmentFallback();
           return;
+        }
+        if (process.env.NODE_ENV === "development" && response.status >= 500) {
+          console.warn("[Checkout] Server error:", response.status, data);
         }
         throw new Error(errorMessage(data, "We could not place the order. Please review your details and try again."));
       }
@@ -200,9 +215,40 @@ export function CheckoutForm() {
             <label className="text-sm font-semibold text-slate-800 sm:col-span-2">Full address <span aria-hidden="true" className="text-red-600">*</span>
               <textarea className={`${inputClass} min-h-28 resize-y`} name="address" autoComplete="street-address" required maxLength={500} />
             </label>
+            <label className="text-sm font-semibold text-slate-800">Postal code <span className="font-normal text-slate-500">(optional)</span>
+              <input className={inputClass} name="postalCode" autoComplete="postal-code" maxLength={20} placeholder="e.g. 54000" />
+            </label>
             <label className="text-sm font-semibold text-slate-800 sm:col-span-2">Order notes <span className="font-normal text-slate-500">(optional)</span>
               <textarea className={`${inputClass} min-h-24 resize-y`} name="notes" maxLength={1000} placeholder="Access instructions, preferred contact time, or other requirements" />
             </label>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" aria-labelledby="payment-heading">
+          <div className="flex items-center gap-3">
+            <span className="grid size-10 place-items-center rounded-xl bg-emerald-50 text-emerald-800"><LockKeyhole aria-hidden="true" className="size-5" /></span>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Step 2</p>
+              <h2 id="payment-heading" className="text-xl font-bold text-slate-950">Payment method</h2>
+            </div>
+          </div>
+          <div className="mt-5 space-y-3">
+            <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50 transition cursor-pointer">
+              <input type="radio" name="paymentMethod" value="Cash on Delivery" defaultChecked className="accent-emerald-800" />
+              <div>
+                <p className="font-semibold text-slate-900">Cash on Delivery</p>
+                <p className="text-xs text-slate-500">Pay when your order arrives</p>
+              </div>
+            </label>
+            {bankTransferEnabled && (
+              <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50 transition cursor-pointer">
+                <input type="radio" name="paymentMethod" value="Bank Transfer" className="accent-emerald-800" />
+                <div>
+                  <p className="font-semibold text-slate-900">Bank Transfer</p>
+                  <p className="text-xs text-slate-500">Transfer before dispatch</p>
+                </div>
+              </label>
+            )}
           </div>
         </section>
 

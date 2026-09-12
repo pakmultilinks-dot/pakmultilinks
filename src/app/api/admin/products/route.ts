@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { ProductStatus } from "@prisma/client";
 import { requireDatabase } from "@/lib/db";
@@ -68,6 +69,9 @@ export async function POST(request: NextRequest) {
       },
       include: { category: true, brand: true, images: true, attributes: true },
     });
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath(`/product/${product.slug}`);
     return NextResponse.json({ product: serialize(product) }, { status: 201, headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

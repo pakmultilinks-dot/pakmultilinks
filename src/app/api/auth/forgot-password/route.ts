@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
     if (process.env.NODE_ENV === "production" && !deliveryWebhook) {
       return jsonError("Password reset email delivery is not configured. Please contact support.", 503, { code: "RESET_DELIVERY_UNAVAILABLE" });
     }
-    let developmentResetToken: string | undefined;
     let deliveryPayload: { email: string; token: string; expiresInMinutes: number } | undefined;
     if (isDatabaseConfigured) {
       const user = await db.user.findUnique({ where: { email: parsed.data.email } });
@@ -26,8 +25,7 @@ export async function POST(request: NextRequest) {
           db.passwordResetToken.deleteMany({ where: { userId: user.id, usedAt: null } }),
           db.passwordResetToken.create({ data: { userId: user.id, tokenHash, expiresAt: new Date(Date.now() + 30 * 60_000) } }),
         ]);
-        // A real deployment sends this token via its configured transactional email provider.
-        if (process.env.NODE_ENV !== "production") developmentResetToken = token;
+        if (process.env.NODE_ENV !== "production") console.log("[dev] Password reset token:", token);
         if (deliveryWebhook) deliveryPayload = { email: parsed.data.email, token, expiresInMinutes: 30 };
       }
     }
@@ -46,7 +44,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: "If an active account exists, password reset instructions will be sent.",
-        ...(developmentResetToken ? { developmentResetToken } : {}),
       },
       { headers: noStoreHeaders },
     );

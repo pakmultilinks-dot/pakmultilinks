@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
 import { settingsInputSchema, validationError } from "@/lib/validation";
@@ -56,6 +57,7 @@ export async function PUT(request: NextRequest) {
     if (existing?.logoUrl && existing.logoUrl !== settings.logoUrl) urlsToClean.push(existing.logoUrl);
     if (existing?.homepageBannerUrl && existing.homepageBannerUrl !== settings.homepageBannerUrl) urlsToClean.push(existing.homepageBannerUrl);
     if (urlsToClean.length > 0) await deleteBlobs(urlsToClean);
+    revalidatePath("/");
     return NextResponse.json({ settings: serialize(settings) }, { headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

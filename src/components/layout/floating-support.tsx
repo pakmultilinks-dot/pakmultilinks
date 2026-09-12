@@ -4,7 +4,9 @@ import { Bot, BriefcaseBusiness, MessageCircle, Phone, ShoppingBag, Sparkles, X 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-const supportPhone = "+923006917385";
+import { company } from "@/lib/company";
+
+const supportPhone = company.phoneHref;
 
 export function FloatingSupport() {
   const [open, setOpen] = useState(false);
@@ -35,7 +37,7 @@ export function FloatingSupport() {
             <div className="mt-4 grid gap-2">
               <Link href="/shop" onClick={() => setOpen(false)} className="flex min-h-12 items-center gap-3 rounded-xl border border-[#d7e6db] px-4 text-sm font-bold text-[#174c30] transition hover:border-[#8db89a] hover:bg-[#f3faf5]"><ShoppingBag className="size-4 text-[#20814f]" />Browse products <span className="ml-auto">→</span></Link>
               <Link href="/request-quote" onClick={() => setOpen(false)} className="flex min-h-12 items-center gap-3 rounded-xl border border-[#d7e6db] px-4 text-sm font-bold text-[#174c30] transition hover:border-[#8db89a] hover:bg-[#f3faf5]"><BriefcaseBusiness className="size-4 text-[#20814f]" />Request bulk quote <span className="ml-auto">→</span></Link>
-              <a href={`tel:${supportPhone}`} className="flex min-h-12 items-center gap-3 rounded-xl bg-[#17643a] px-4 text-sm font-bold text-white transition hover:bg-[#10522f]"><Phone className="size-4" />Call Zohaib Ahmed <span className="ml-auto">→</span></a>
+              <a href={`tel:${supportPhone}`} className="flex min-h-12 items-center gap-3 rounded-xl bg-[#17643a] px-4 text-sm font-bold text-white transition hover:bg-[#10522f]"><Phone className="size-4" />Call {company.contactPerson} <span className="ml-auto">→</span></a>
             </div>
             <p className="mt-3 text-center text-[11px] leading-5 text-[#718077]">Packing, price and delivery are confirmed with your requirement.</p>
           </div>

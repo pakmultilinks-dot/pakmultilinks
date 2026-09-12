@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { ProductStatus } from "@prisma/client";
 import { requireDatabase } from "@/lib/db";
@@ -58,6 +59,9 @@ export async function PATCH(request: NextRequest, context: Context) {
     // Best-effort cleanup of orphaned Vercel Blob images
     const removedUrls = oldImageUrls.filter((url) => !newImageUrls.includes(url));
     await deleteBlobs(removedUrls);
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath(`/product/${product.slug}`);
     return NextResponse.json({ product: serialize(product) }, { headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

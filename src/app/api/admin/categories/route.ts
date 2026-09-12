@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
 import { categoryInputSchema, validationError } from "@/lib/validation";
@@ -20,6 +21,8 @@ export async function POST(request: NextRequest) {
     if (!parsed.success) return NextResponse.json(validationError(parsed.error), { status: 400, headers: noStoreHeaders });
     const data = parsed.data;
     const category = await requireDatabase().category.create({ data: { ...data, description: data.description || null, imageUrl: data.imageUrl || null, icon: data.icon || null } });
+    revalidatePath("/");
+    revalidatePath("/shop");
     return NextResponse.json({ category: serialize(category) }, { status: 201, headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

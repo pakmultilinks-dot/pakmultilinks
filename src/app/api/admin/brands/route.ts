@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
 import { brandInputSchema, validationError } from "@/lib/validation";
@@ -20,6 +21,8 @@ export async function POST(request: NextRequest) {
     if (!parsed.success) return NextResponse.json(validationError(parsed.error), { status: 400, headers: noStoreHeaders });
     const data = parsed.data;
     const brand = await requireDatabase().brand.create({ data: { ...data, logoUrl: data.logoUrl || null } });
+    revalidatePath("/");
+    revalidatePath("/shop");
     return NextResponse.json({ brand: serialize(brand) }, { status: 201, headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

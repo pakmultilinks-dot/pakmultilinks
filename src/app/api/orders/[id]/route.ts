@@ -6,6 +6,20 @@ import { apiFailure, jsonError, noStoreHeaders, readJson, requireAdminRequest, s
 
 type Context = { params: Promise<{ id: string }> };
 
+/** Valid forward-only transitions: from → set of allowed destinations. */
+const ALLOWED_TRANSITIONS: Record<OrderStatus, Set<OrderStatus>> = {
+  [OrderStatus.PENDING]: new Set([OrderStatus.CONFIRMED, OrderStatus.CANCELLED]),
+  [OrderStatus.CONFIRMED]: new Set([OrderStatus.PROCESSING, OrderStatus.CANCELLED]),
+  [OrderStatus.PROCESSING]: new Set([OrderStatus.SHIPPED, OrderStatus.CANCELLED]),
+  [OrderStatus.SHIPPED]: new Set([OrderStatus.DELIVERED, OrderStatus.CANCELLED]),
+  [OrderStatus.DELIVERED]: new Set(),
+  [OrderStatus.CANCELLED]: new Set(),
+};
+
+function isTransitionAllowed(from: OrderStatus, to: OrderStatus): boolean {
+  return ALLOWED_TRANSITIONS[from]?.has(to) ?? false;
+}
+
 export async function GET(request: NextRequest, context: Context) {
   try {
     if (!(await requireAdminRequest(request))) return jsonError("Administrator access required.", 401);
@@ -28,8 +42,10 @@ export async function PATCH(request: NextRequest, context: Context) {
     const order = await database.$transaction(async (tx) => {
       const existing = await tx.order.findUnique({ where: { id }, include: { items: true } });
       if (!existing) throw new MissingOrderError();
-      if (existing.status === OrderStatus.CANCELLED && parsed.data.status !== OrderStatus.CANCELLED) {
-        throw new InvalidOrderTransitionError("Cancelled orders cannot be reopened. Create a new order so stock is checked again.");
+      if (!isTransitionAllowed(existing.status, parsed.data.status)) {
+        throw new InvalidOrderTransitionError(
+          `Cannot transition order from "${existing.status}" to "${parsed.data.status}".`,
+        );
       }
       if (existing.status !== OrderStatus.CANCELLED && parsed.data.status === OrderStatus.CANCELLED) {
         for (const item of existing.items) {

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AlertTriangle, CheckCircle2, Mail, Phone } from "lucide-react";
 import { useStore } from "@/components/providers/store-provider";
+import { getPrice } from "@/lib/catalog";
 import { company } from "@/lib/company";
 import { formatPrice } from "@/lib/utils";
 
@@ -47,7 +48,7 @@ export function OrderConfirmationClient({ orderId, mode }: { orderId: string; mo
           <div className="mt-7 rounded-2xl border border-slate-200 p-5">
             <div className="flex flex-wrap justify-between gap-3"><h2 className="font-bold text-slate-950">Submitted products</h2><span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">{order.status}</span></div>
             <ul className="mt-4 space-y-3 border-b border-slate-200 pb-4">
-              {order.items.map(({ product, quantity }) => <li key={product.id} className="flex justify-between gap-4 text-sm"><span className="text-slate-600">{product.name} × {quantity} carton{quantity === 1 ? "" : "s"}</span><span className="font-semibold text-slate-950">{product.priceOnRequest ? "Quote required" : formatPrice((product.salePrice ?? product.price) * quantity)}</span></li>)}
+              {order.items.map(({ product, quantity }) => <li key={product.id} className="flex justify-between gap-4 text-sm"><span className="text-slate-600">{product.name} × {quantity} carton{quantity === 1 ? "" : "s"}</span><span className="font-semibold text-slate-950">{product.priceOnRequest ? "Quote required" : formatPrice(getPrice(product) * quantity)}</span></li>)}
             </ul>
             <dl className="mt-4 space-y-2 text-sm"><div className="flex justify-between"><dt className="text-slate-600">Wholesale carton pricing</dt><dd className="font-bold text-slate-950">{order.items.some(({ product }) => product.priceOnRequest) ? "Final quote required" : formatPrice(order.subtotal)}</dd></div><div className="flex justify-between gap-4"><dt className="text-slate-600">Packing, delivery and final payable total</dt><dd className="text-right font-semibold text-amber-700">Confirmed after review</dd></div></dl>
           </div>

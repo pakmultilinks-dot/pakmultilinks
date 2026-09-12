@@ -6,7 +6,10 @@ const AUTH_COOKIE = "pmh_session";
 function secret() {
   const configured = process.env.AUTH_SECRET || process.env.JWT_SECRET;
   if (configured && configured.length >= 32) return new TextEncoder().encode(configured);
-  if (process.env.NODE_ENV === "production") return null;
+  if (process.env.NODE_ENV === "production") {
+    console.error("AUTH_SECRET must be set to at least 32 characters in production.");
+    return null;
+  }
   return new TextEncoder().encode("pmh-local-development-secret-change-me");
 }
 

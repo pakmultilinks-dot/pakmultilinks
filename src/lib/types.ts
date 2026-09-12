@@ -65,6 +65,7 @@ export type CustomerDetails = {
   province: string;
   city: string;
   address: string;
+  postalCode?: string;
   notes?: string;
 };
 
@@ -83,7 +84,7 @@ export type Order = {
 
 export type QuoteItem = {
   product: string;
-  quantity: string;
+  quantity: number;
 };
 
 export type QuoteRequest = {

@@ -3,7 +3,7 @@
 import { Check, FileText, Minus, Plus, ShieldCheck, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useStore } from "@/components/providers/store-provider";
 import type { Product } from "@/lib/types";
@@ -22,6 +22,16 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   const minimum = minimumCartons(product);
   const [quantity, setQuantity] = useState(minimum);
   const [added, setAdded] = useState(false);
+  const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const resetAdded = useCallback(() => {
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+    addedTimer.current = setTimeout(() => setAdded(false), 3000);
+  }, []);
+
+  useEffect(() => {
+    return () => { if (addedTimer.current) clearTimeout(addedTimer.current); };
+  }, []);
   const hasSale = product.salePrice != null && product.salePrice < product.price;
   const isUnavailable = product.stock < minimum && !product.allowBackorder;
   const maxQuantity = product.allowBackorder ? 10_000 : Math.max(product.stock, minimum);
@@ -34,6 +44,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
     if (isUnavailable) return;
     addToCart(product, quantity);
     setAdded(true);
+    resetAdded();
   }
 
   function handleBuyNow() {

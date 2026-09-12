@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
 import { brandInputSchema, validationError } from "@/lib/validation";
@@ -20,6 +21,8 @@ export async function PATCH(request: NextRequest, context: Context) {
     if (existing.logoUrl && existing.logoUrl !== brand.logoUrl) {
       await deleteBlobs([existing.logoUrl]);
     }
+    revalidatePath("/");
+    revalidatePath("/shop");
     return NextResponse.json({ brand: serialize(brand) }, { headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

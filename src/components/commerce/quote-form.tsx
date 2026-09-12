@@ -17,11 +17,11 @@ type Success = { id: string; development: boolean };
 const newLine = (): QuoteLine => ({
   key: Math.random().toString(36).slice(2),
   product: "",
-  quantity: "1",
+  quantity: 1,
 });
 
 function allowsDevelopmentFallback(status: number) {
-  return status === 404 || status === 501 || status >= 500;
+  return status === 404 || status === 501;
 }
 
 async function parseResponse(response: Response) {
@@ -43,7 +43,7 @@ export function QuoteForm({ initialProduct = "" }: { initialProduct?: string }) 
 
   const updateItem = (key: string, field: "product" | "quantity", value: string) => {
     setItems((current) =>
-      current.map((item) => (item.key === key ? { ...item, [field]: value } : item)),
+      current.map((item) => (item.key === key ? { ...item, [field]: field === "quantity" ? Math.max(1, Math.floor(Number(value) || 0)) : value } : item)),
     );
   };
 
@@ -54,7 +54,7 @@ export function QuoteForm({ initialProduct = "" }: { initialProduct?: string }) 
     if (!form.reportValidity()) return;
 
     const requestedItems = items
-      .map(({ product, quantity }) => ({ product: product.trim(), quantity: quantity.trim() }))
+      .map(({ product, quantity }) => ({ product: product.trim(), quantity }))
       .filter((item) => item.product && Number(item.quantity) > 0);
     if (requestedItems.length === 0) {
       setError("Add at least one product and a valid carton quantity.");

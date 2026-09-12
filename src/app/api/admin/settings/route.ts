@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
 import { settingsInputSchema, validationError } from "@/lib/validation";
 import { apiFailure, jsonError, noStoreHeaders, readJson, requireAdminRequest, serialize } from "@/app/api/_utils";
+import { deleteBlobs } from "@/lib/blob";
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,7 +20,12 @@ export async function PUT(request: NextRequest) {
     const parsed = settingsInputSchema.safeParse(await readJson(request, 32_000));
     if (!parsed.success) return NextResponse.json(validationError(parsed.error), { status: 400, headers: noStoreHeaders });
     const data = parsed.data;
-    const settings = await requireDatabase().siteSettings.upsert({
+    const database = requireDatabase();
+    const existing = await database.siteSettings.findUnique({
+      where: { id: "main" },
+      select: { logoUrl: true, homepageBannerUrl: true },
+    });
+    const settings = await database.siteSettings.upsert({
       where: { id: "main" },
       update: {
         ...data,
@@ -45,6 +51,11 @@ export async function PUT(request: NextRequest) {
         linkedinUrl: data.linkedinUrl || null,
       },
     });
+    // Clean up old Vercel Blob images that were replaced
+    const urlsToClean: string[] = [];
+    if (existing?.logoUrl && existing.logoUrl !== settings.logoUrl) urlsToClean.push(existing.logoUrl);
+    if (existing?.homepageBannerUrl && existing.homepageBannerUrl !== settings.homepageBannerUrl) urlsToClean.push(existing.homepageBannerUrl);
+    if (urlsToClean.length > 0) await deleteBlobs(urlsToClean);
     return NextResponse.json({ settings: serialize(settings) }, { headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);

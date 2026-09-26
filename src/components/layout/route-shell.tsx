@@ -10,6 +10,7 @@ import { Header } from "./header";
 
 export function RouteShell({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
+  const isHomeRoute = pathname === "/";
   const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
 
   if (isAdminRoute) {
@@ -23,7 +24,7 @@ export function RouteShell({ children }: Readonly<{ children: React.ReactNode }>
         {children}
       </main>
       <Footer />
-      <FloatingSupport />
+      {!isHomeRoute && <FloatingSupport />}
     </StoreProvider>
   );
 }

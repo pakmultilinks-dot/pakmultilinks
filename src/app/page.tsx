@@ -10,13 +10,8 @@ import {
   PackageCheck,
   School,
   ShieldCheck,
-  ShoppingBag,
-  ArrowRight,
-  FileText,
-  Leaf,
   Store,
   Tags,
-  Truck,
   UtensilsCrossed,
 } from "lucide-react";
 import Image from "next/image";
@@ -24,6 +19,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { ProductCard } from "@/components/catalog/product-card";
+import { HomeHero } from "@/components/home/home-hero";
 import { DealsSlider } from "@/components/home/deals-slider";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { isDevelopmentProduct, listPublicProducts } from "@/lib/catalog-server";
@@ -37,13 +33,6 @@ export const metadata: Metadata = {
 
 // Refresh catalog-led homepage sections after admin inventory changes.
 export const revalidate = 60;
-
-const trustItems = [
-  { icon: Truck, title: "Bulk orders", note: "Competitive quotations" },
-  { icon: ShieldCheck, title: "Trusted quality", note: "Practical supplies" },
-  { icon: Headphones, title: "Dedicated support", note: "For business buyers" },
-  { icon: Leaf, title: "Cleaner spaces", note: "Every working day" },
-];
 
 const industries = [
   { icon: BriefcaseBusiness, label: "Offices" }, { icon: HeartPulse, label: "Hospitals" },
@@ -62,28 +51,7 @@ export default async function HomePage() {
   const demoCatalog = homeProducts.length > 0 && homeProducts.every(isDevelopmentProduct);
   return (
     <>
-      <section className="home-hero" aria-labelledby="home-hero-title">
-        <div className="home-hero-image" aria-hidden="true">
-          <Image src="/images/hero-workspace-hygiene.png" alt="" fill priority sizes="100vw" className="object-cover" />
-        </div>
-        <div className="home-hero-wash" aria-hidden="true" />
-        <div className="site-shell home-hero-inner">
-          <div className="home-hero-copy">
-            <p className="home-hero-eyebrow">Pak Multilinks Hygiene <span aria-hidden="true">/</span> Corporate Supplies</p>
-            <h1 id="home-hero-title">Complete Hygiene<br />Solutions for <span>Every Workspace</span></h1>
-            <p className="home-hero-intro">From tissues to total facility care, we supply the essentials that keep offices clean, safe, and ready every day.</p>
-            <div className="home-hero-rule" aria-hidden="true" />
-            <p className="home-hero-detail">Bulk supply for offices, schools, clinics, restaurants, and commercial spaces.</p>
-            <div className="home-hero-actions">
-              <Link href="/shop" className="home-hero-button home-hero-button-primary focus-ring"><ShoppingBag aria-hidden="true" />Shop Products<ArrowRight aria-hidden="true" /></Link>
-              <Link href="/request-quote" className="home-hero-button home-hero-button-secondary focus-ring"><FileText aria-hidden="true" />Get a Bulk Quote</Link>
-            </div>
-          </div>
-          <div className="home-hero-trust" aria-label="Why choose Pak Multilinks Hygiene">
-            {trustItems.map(({ icon: Icon, title, note }) => <div key={title} className="home-hero-trust-item"><Icon aria-hidden="true" /><span><strong>{title}</strong><small>{note}</small></span></div>)}
-          </div>
-        </div>
-      </section>
+      <HomeHero />
 
       <DealsSlider deals={dealBanners} />
 

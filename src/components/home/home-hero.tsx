@@ -32,8 +32,8 @@ export function HomeHero() {
             <p className={styles.intro}>From tissues to total facility care, find the essentials that keep your spaces clean, comfortable, and ready for the day.</p>
 
             <div className={styles.actions}>
-              <Link href="/shop" className={`${styles.button} ${styles.primary} focus-ring`}>Explore products<ArrowRight aria-hidden="true" /></Link>
-              <Link href="/request-quote" className={`${styles.button} ${styles.secondary} focus-ring`}><FileText aria-hidden="true" />Get a bulk quote</Link>
+              <Link href="/shop" className={`commerce-button commerce-button-primary ${styles.button} focus-ring`}>Explore products<ArrowRight className="commerce-button-arrow" aria-hidden="true" /></Link>
+              <Link href="/request-quote" className={`commerce-button commerce-button-secondary ${styles.button} focus-ring`}><FileText aria-hidden="true" />Get a bulk quote</Link>
             </div>
 
             <ul className={styles.trust} aria-label="Why choose Pak Multilinks Hygiene">

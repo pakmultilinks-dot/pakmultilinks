@@ -55,25 +55,8 @@
 
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 
-.button {
-  display: inline-flex;
-  min-height: 52px;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 13px 21px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 650;
-  transition: background-color 160ms ease, border-color 160ms ease;
-}
-
-.button svg { width: 18px; height: 18px; flex: none; }
-.primary { background: #195b37; color: white; box-shadow: 0 5px 12px #174f3112; }
-.primary:hover { background: #103f27; }
-.secondary { color: #234e34; border-color: #c8d6c7; background: #ffffffa6; }
-.secondary:hover { border-color: #7f9b83; background: white; }
+.button { min-height: 56px; padding: 12px 22px; }
+.button > svg:not(:global(.commerce-button-arrow)) { width: 18px; height: 18px; }
 
 .trust {
   display: flex;

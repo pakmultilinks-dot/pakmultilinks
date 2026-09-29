@@ -47,7 +47,7 @@ export function WhatsAppOrderLink() {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-700 px-5 py-3 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
+      className="commerce-button commerce-button-secondary inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-700 px-5 py-3 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
     >
       <MessageCircle aria-hidden="true" className="size-4" />
       Ask about this order on WhatsApp

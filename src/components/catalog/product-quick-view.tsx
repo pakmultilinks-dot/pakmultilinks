@@ -35,7 +35,7 @@ export function ProductQuickView({
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
-        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#cbdacf] px-3 text-sm font-bold text-[#26543a] transition hover:border-[#17643a] hover:bg-[#f2f8f4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17643a] focus-visible:ring-offset-2"
+        className="commerce-button commerce-button-secondary commerce-button-sm inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#cbdacf] px-3 text-sm font-bold text-[#26543a] transition hover:border-[#17643a] hover:bg-[#f2f8f4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17643a] focus-visible:ring-offset-2"
         aria-haspopup="dialog"
         aria-label={`Quick view ${product.name}`}
       >

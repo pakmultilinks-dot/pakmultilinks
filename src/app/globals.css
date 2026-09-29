@@ -90,43 +90,92 @@ summary::-webkit-details-marker {
   outline-offset: 3px;
 }
 
-/* Restrained, consistent controls used across the customer storefront. */
+/* Shared storefront actions: consistent shape, depth and interaction states. */
 .commerce-button {
-  min-height: 2.75rem;
-  border-radius: 0.5rem !important;
-  padding: 0.7rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 650 !important;
-  line-height: 1.2;
-  letter-spacing: 0;
-  box-shadow: none !important;
-  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-
-.commerce-button:hover {
-  transform: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  min-height: 3rem;
+  padding: .8rem 1.35rem;
+  border: 1px solid transparent;
+  border-radius: .85rem;
+  font-size: .875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 2px 3px #17332808;
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .commerce-button-primary {
-  border: 1px solid #174f31;
-  background: #174f31;
+  border-color: #176139;
+  background: linear-gradient(135deg, #26854d, #155534);
   color: #fff;
-}
-
-.commerce-button-primary:hover {
-  border-color: #103b25;
-  background: #103b25;
+  box-shadow: inset 0 1px 0 #ffffff25, 0 4px 0 #0d4128, 0 8px 16px #14523120;
 }
 
 .commerce-button-secondary {
-  border: 1px solid #b8c9bd;
+  border-color: #bfd3c3;
   background: #fff;
-  color: #174f31;
+  color: #205f3b;
+  box-shadow: inset 0 1px 0 #fff, 0 3px 0 #e1eade, 0 6px 12px #17332806;
 }
 
-.commerce-button-secondary:hover {
-  border-color: #728f7a;
-  background: #f7faf8;
+.commerce-button-inverse {
+  border-color: #fff;
+  background: #f6fbf3;
+  color: #174c30;
+  box-shadow: 0 3px 0 #b7d1b8, 0 8px 16px #00000012;
+}
+
+.commerce-button-outline-light { border-color: #ffffff70; background: #ffffff0d; color: #fff; }
+.commerce-button-sm { min-height: 2.5rem; padding: .55rem 1rem; font-size: .8rem; border-radius: .7rem; }
+.commerce-button > svg { flex-shrink: 0; }
+.commerce-button-arrow { width: 30px; height: 30px; padding: 7px; border-radius: 50%; background: #ffffff20; transition: transform 180ms ease; }
+
+.commerce-icon-button {
+  border-radius: .85rem;
+  box-shadow: 0 3px 0 #17332812;
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.commerce-button:focus-visible, .commerce-icon-button:focus-visible {
+  outline: 3px solid #4c9b69;
+  outline-offset: 4px;
+}
+.commerce-button-inverse:focus-visible, .commerce-button-outline-light:focus-visible { outline-color: #c5e4ad; }
+
+@media (hover: hover) {
+  .commerce-button:not(:disabled):not([aria-disabled="true"]):hover,
+  .commerce-icon-button:not(:disabled):hover { transform: translateY(-2px); }
+  .commerce-button-primary:not(:disabled):hover { background: linear-gradient(135deg, #237b46, #10462b); box-shadow: inset 0 1px 0 #ffffff25, 0 5px 0 #0d4128, 0 10px 20px #14523128; }
+  .commerce-button-secondary:not(:disabled):hover { border-color: #8caf95; background: #f2f8ef; box-shadow: 0 4px 0 #d7e5d4, 0 8px 16px #1733280c; }
+  .commerce-button-inverse:hover { background: #eaf5e3; }
+  .commerce-button-outline-light:hover { background: #ffffff1f; border-color: #ffffffb3; }
+  .commerce-button:hover .commerce-button-arrow { transform: translateX(2px); }
+}
+
+.commerce-button:not(:disabled):not([aria-disabled="true"]):active,
+.commerce-icon-button:not(:disabled):active { transform: translateY(1px); box-shadow: inset 0 2px 4px #00000012; }
+.commerce-button:disabled, .commerce-button[aria-disabled="true"] {
+  background: #e5ebe6;
+  border-color: #d5dfd7;
+  color: #6c7b70;
+  box-shadow: none;
+  transform: none;
+  transition: none;
+  cursor: not-allowed;
+}
+.commerce-button:disabled[class*="cursor-wait"] { cursor: wait; }
+
+@media (prefers-reduced-motion: reduce) {
+  .commerce-button, .commerce-icon-button, .commerce-button-arrow { transition: none; }
+  .commerce-button:not(:disabled):not([aria-disabled="true"]):hover,
+  .commerce-button:not(:disabled):not([aria-disabled="true"]):active,
+  .commerce-icon-button:not(:disabled):hover, .commerce-icon-button:not(:disabled):active,
+  .commerce-button:hover .commerce-button-arrow { transform: none; }
 }
 
 @keyframes slide-up {

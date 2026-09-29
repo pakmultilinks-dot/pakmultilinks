@@ -152,8 +152,8 @@ export function Header() {
             )}
           </div>
 
-          <Link href="/account" className="focus-ring ml-auto grid size-11 shrink-0 place-items-center rounded-lg border border-[#d8e4db] bg-white text-[#234b34] transition hover:border-[#88b79a] hover:bg-[#f4faf6] md:ml-0" aria-label="Your account"><UserRound className="size-5" /></Link>
-          <button type="button" onClick={() => cartDialogRef.current?.showModal()} className="focus-ring relative grid size-11 shrink-0 place-items-center rounded-xl bg-[#17643a] text-white transition hover:bg-[#0f512e]" aria-label={`Open bulk cart with ${itemCount} cartons`} aria-haspopup="dialog">
+          <Link href="/account" className="commerce-icon-button focus-ring ml-auto grid size-11 shrink-0 place-items-center rounded-lg border border-[#d8e4db] bg-white text-[#234b34] transition hover:border-[#88b79a] hover:bg-[#f4faf6] md:ml-0" aria-label="Your account"><UserRound className="size-5" /></Link>
+          <button type="button" onClick={() => cartDialogRef.current?.showModal()} className="commerce-icon-button focus-ring relative grid size-11 shrink-0 place-items-center rounded-xl bg-[#17643a] text-white transition hover:bg-[#0f512e]" aria-label={`Open bulk cart with ${itemCount} cartons`} aria-haspopup="dialog">
             <ShoppingBag className="size-5" />
             {itemCount > 0 && <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full border-2 border-[#fbfaf5] bg-[#f3b941] px-1 text-[10px] font-black leading-4 text-[#173328]">{itemCount > 99 ? "99+" : itemCount}</span>}
           </button>
@@ -169,7 +169,7 @@ export function Header() {
               </div>
             </details>
             {nav.slice(2).map((item) => <NavLink key={item.href} {...item} active={pathname.startsWith(item.href)} />)}
-            <Link href="/request-quote" className="commerce-button commerce-button-secondary ml-auto inline-flex min-h-0 items-center px-4 py-2">Get a quote</Link>
+            <Link href="/request-quote" className="commerce-button commerce-button-primary commerce-button-sm ml-auto inline-flex min-h-0 items-center px-4 py-2">Get a quote</Link>
           </div>
         </nav>
       </header>
@@ -183,7 +183,7 @@ export function Header() {
             </nav>
             <p className="mb-2 mt-6 px-3 text-xs font-extrabold uppercase tracking-[0.14em] text-[#779083]">Shop categories</p>
             <div className="grid grid-cols-2 gap-1">{navigationCategories.map((category) => <Link key={category.slug} href={`/shop/${category.slug}`} onClick={() => mobileDialogRef.current?.close()} className="rounded-xl px-3 py-2 text-sm font-semibold text-[#4d6b59] hover:bg-[#eaf6ed]">{category.name}</Link>)}</div>
-            <Link href="/request-quote" onClick={() => mobileDialogRef.current?.close()} className="mt-7 flex min-h-12 items-center justify-center rounded-xl bg-[#17643a] px-4 text-sm font-extrabold text-white">Request bulk quote</Link>
+            <Link href="/request-quote" onClick={() => mobileDialogRef.current?.close()} className="commerce-button commerce-button-primary mt-7 flex min-h-12 items-center justify-center rounded-xl bg-[#17643a] px-4 text-sm font-extrabold text-white">Request bulk quote</Link>
           </div>
       </dialog>
 
@@ -193,7 +193,7 @@ export function Header() {
             <div className="flex-1 overflow-y-auto p-5">
               {cart.length === 0 ? <div className="grid min-h-72 place-items-center text-center"><div><span className="mx-auto grid size-16 place-items-center rounded-full bg-[#e7f4eb] text-[#17643a]"><ShoppingBag className="size-7" /></span><p className="mt-4 font-extrabold">Your bulk cart is empty</p><p className="mt-1 text-sm text-[#6c7b72]">Add wholesale cartons to get started.</p><Link href="/shop" onClick={() => cartDialogRef.current?.close()} className="mt-5 inline-flex rounded-xl border border-[#bfd3c5] px-4 py-2.5 text-sm font-bold text-[#17643a]">Browse products</Link></div></div> : <ul className="space-y-3">{cart.map((item) => <li key={item.product.id} className="rounded-2xl border border-[#dce8df] bg-white p-4"><div className="flex justify-between gap-4"><div><Link href={`/product/${item.product.slug}`} onClick={() => cartDialogRef.current?.close()} className="font-bold text-[#173c29] hover:text-[#17643a]">{item.product.name}</Link><p className="mt-1 text-xs text-[#718078]">{item.quantity} carton{item.quantity === 1 ? "" : "s"} · {formatProductPrice(item.product)}</p></div><button type="button" onClick={() => removeFromCart(item.product.id)} className="shrink-0 text-xs font-bold text-[#9c3f39] hover:underline">Remove</button></div><p className="mt-3 text-right font-extrabold">{item.product.priceOnRequest ? "Quoted after review" : formatPrice(getPrice(item.product) * item.quantity)}</p></li>)}</ul>}
             </div>
-            {cart.length > 0 && <div className="border-t border-[#dce8df] bg-white p-5"><div className="mb-4 flex items-center justify-between"><span className="text-sm text-[#627168]">Carton pricing</span><strong className="text-lg">{hasQuotePricing ? "Quote required" : formatPrice(subtotal)}</strong></div><p className="mb-4 text-xs leading-5 text-[#718078]">Packing, availability, price and delivery are confirmed after review.</p><div className="grid grid-cols-2 gap-2"><Link href="/cart" onClick={() => cartDialogRef.current?.close()} className="flex min-h-12 items-center justify-center rounded-xl border border-[#bfd3c5] text-sm font-extrabold text-[#17643a]">View cartons</Link><Link href="/checkout" onClick={() => cartDialogRef.current?.close()} className="flex min-h-12 items-center justify-center rounded-xl bg-[#17643a] text-sm font-extrabold text-white">Bulk checkout</Link></div></div>}
+            {cart.length > 0 && <div className="border-t border-[#dce8df] bg-white p-5"><div className="mb-4 flex items-center justify-between"><span className="text-sm text-[#627168]">Carton pricing</span><strong className="text-lg">{hasQuotePricing ? "Quote required" : formatPrice(subtotal)}</strong></div><p className="mb-4 text-xs leading-5 text-[#718078]">Packing, availability, price and delivery are confirmed after review.</p><div className="grid grid-cols-2 gap-2"><Link href="/cart" onClick={() => cartDialogRef.current?.close()} className="commerce-button commerce-button-secondary flex min-h-12 items-center justify-center rounded-xl border border-[#bfd3c5] text-sm font-extrabold text-[#17643a]">View cartons</Link><Link href="/checkout" onClick={() => cartDialogRef.current?.close()} className="commerce-button commerce-button-primary flex min-h-12 items-center justify-center rounded-xl bg-[#17643a] text-sm font-extrabold text-white">Bulk checkout</Link></div></div>}
           </aside>
       </dialog>
     </>

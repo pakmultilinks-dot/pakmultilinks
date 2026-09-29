@@ -169,7 +169,7 @@ export function QuoteForm({ initialProduct = "" }: { initialProduct?: string }) 
       <fieldset className="mt-8">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div><legend className="text-lg font-bold text-slate-950">Requested products</legend><p className="mt-1 text-sm text-slate-600">Add each item separately and enter the required number of cartons.</p></div>
-          <button type="button" onClick={() => setItems((current) => [...current, newLine()])} className="inline-flex items-center gap-2 rounded-xl border border-emerald-700 px-4 py-2.5 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"><Plus aria-hidden="true" className="size-4" /> Add product</button>
+          <button type="button" onClick={() => setItems((current) => [...current, newLine()])} className="commerce-button commerce-button-secondary inline-flex items-center gap-2 rounded-xl border border-emerald-700 px-4 py-2.5 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"><Plus aria-hidden="true" className="size-4" /> Add product</button>
         </div>
         <datalist id="quote-product-options">
           {products.map((product) => <option key={product.id} value={product.name} />)}

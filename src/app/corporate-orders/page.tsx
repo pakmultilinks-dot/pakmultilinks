@@ -26,7 +26,7 @@ export default function CorporateOrdersPage() {
             <ul className="mt-7 grid gap-3 text-sm sm:grid-cols-2">
               {["Multiple products in one request", "Bulk and repeat-order requirements", "Delivery details reviewed directly", "No payment required to request a quote"].map((item) => <li key={item} className="flex gap-2"><CheckCircle2 aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-emerald-300" />{item}</li>)}
             </ul>
-            <div className="mt-8 flex flex-wrap gap-3"><Link href="/request-quote" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-emerald-900 hover:bg-emerald-50">Request corporate quote <ArrowRight aria-hidden="true" className="size-4" /></Link><a href={`tel:${company.phoneHref}`} className="rounded-xl border border-emerald-500 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Call {company.phone}</a></div>
+            <div className="mt-8 flex flex-wrap gap-3"><Link href="/request-quote" className="commerce-button commerce-button-inverse inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-emerald-900 hover:bg-emerald-50">Request corporate quote <ArrowRight aria-hidden="true" className="size-4" /></Link><a href={`tel:${company.phoneHref}`} className="commerce-button commerce-button-outline-light rounded-xl border border-emerald-500 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Call {company.phone}</a></div>
           </div>
           <div className="bg-emerald-800/80 p-7 sm:p-10 lg:p-12">
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-emerald-200">Organisations we can discuss requirements with</p>

@@ -78,7 +78,7 @@ export function LoginForm({ nextPath = "/account" }: { nextPath?: string }) {
       </div>
       <StatusMessage error={error} />
       <div className="mt-5 flex justify-end"><Link href="/forgot-password" className="text-sm font-semibold text-emerald-800 hover:underline">Forgot password?</Link></div>
-      <button type="submit" disabled={submitting} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{submitting ? <><Loader2 aria-hidden="true" className="size-4 animate-spin" /> Signing in…</> : <><LockKeyhole aria-hidden="true" className="size-4" /> Sign in</>}</button>
+      <button type="submit" disabled={submitting} className="commerce-button commerce-button-primary mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{submitting ? <><Loader2 aria-hidden="true" className="size-4 animate-spin" /> Signing in…</> : <><LockKeyhole aria-hidden="true" className="size-4" /> Sign in</>}</button>
       <p className="mt-6 text-center text-sm text-slate-600">New customer? <Link href="/register" className="font-semibold text-emerald-800 hover:underline">Create an account</Link></p>
     </form>
   );
@@ -145,7 +145,7 @@ export function RegisterForm() {
       </div>
       <p id="password-help" className="mt-3 text-xs leading-5 text-slate-500">Use at least 10 characters with uppercase, lowercase, and a number.</p>
       <StatusMessage error={error} />
-      <button type="submit" disabled={submitting} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{submitting ? <><Loader2 aria-hidden="true" className="size-4 animate-spin" /> Creating account…</> : "Create account"}</button>
+      <button type="submit" disabled={submitting} className="commerce-button commerce-button-primary mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{submitting ? <><Loader2 aria-hidden="true" className="size-4 animate-spin" /> Creating account…</> : "Create account"}</button>
       <p className="mt-6 text-center text-sm text-slate-600">Already registered? <Link href="/login" className="font-semibold text-emerald-800 hover:underline">Sign in</Link></p>
     </form>
   );
@@ -207,7 +207,7 @@ export function PasswordRecoveryForm({ token = "" }: { token?: string }) {
       )}
       <StatusMessage error={error} success={success} />
       {developmentToken ? <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900"><strong>Development only:</strong> no email provider is used. Continue using the generated <Link href={`/forgot-password?token=${encodeURIComponent(developmentToken)}`} className="font-bold underline">local reset link</Link>. Do not use this workflow in production.</div> : null}
-      <button type="submit" disabled={submitting} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{submitting ? <><Loader2 aria-hidden="true" className="size-4 animate-spin" /> Submitting…</> : token ? "Update password" : "Request reset instructions"}</button>
+      <button type="submit" disabled={submitting} className="commerce-button commerce-button-primary mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{submitting ? <><Loader2 aria-hidden="true" className="size-4 animate-spin" /> Submitting…</> : token ? "Update password" : "Request reset instructions"}</button>
       <p className="mt-6 text-center text-sm"><Link href="/login" className="font-semibold text-emerald-800 hover:underline">Return to sign in</Link></p>
     </form>
   );

@@ -129,7 +129,7 @@ export function Header() {
         </div>
 
         <div className="site-shell flex h-[86px] items-center gap-3 lg:gap-7">
-          <button type="button" className="focus-ring -ml-2 grid size-11 place-items-center rounded-xl text-[#173c29] lg:hidden" onClick={() => mobileDialogRef.current?.showModal()} aria-label="Open navigation menu" aria-haspopup="dialog">
+          <button type="button" className="focus-ring -ml-2 grid size-11 shrink-0 place-items-center rounded-xl text-[#173c29] lg:hidden" onClick={() => mobileDialogRef.current?.showModal()} aria-label="Open navigation menu" aria-haspopup="dialog">
             <Menu className="size-6" />
           </button>
           <BrandMark />

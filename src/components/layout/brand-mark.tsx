@@ -10,7 +10,7 @@ export function BrandMark({ compact = false, light = false, onNavigate }: { comp
       href="/"
       onClick={onNavigate}
       className={cn(
-        "focus-ring inline-flex shrink-0 items-center rounded-xl",
+        "focus-ring inline-flex min-w-0 items-center rounded-xl",
         light && "bg-[#f5faf6] px-3 py-2 shadow-[0_10px_28px_rgba(0,0,0,.12)] ring-1 ring-white/20",
       )}
       aria-label={`${company.name} home`}

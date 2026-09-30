@@ -66,6 +66,33 @@ summary::-webkit-details-marker {
   margin-inline: auto;
 }
 
+.announcement-track {
+  display: flex;
+  width: max-content;
+  min-width: 200%;
+  animation: announcement-scroll 24s linear infinite;
+}
+
+.announcement-copy {
+  flex: 1 0 auto;
+  white-space: nowrap;
+}
+
+.announcement-marquee:hover .announcement-track,
+.announcement-marquee:focus .announcement-track {
+  animation-play-state: paused;
+}
+
+@keyframes announcement-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-track { animation: none; width: auto; min-width: 0; }
+  .announcement-copy { flex: 1 1 auto; white-space: normal; }
+  .announcement-copy + .announcement-copy { display: none; }
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;

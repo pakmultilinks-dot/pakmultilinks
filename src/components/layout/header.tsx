@@ -22,6 +22,8 @@ const nav = [
   { href: "/contact", label: "Contact" },
 ];
 
+const defaultAnnouncement = "Premium Hygiene Products, Great Bulk Rates — Request Your Quote Today!";
+
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
@@ -30,7 +32,7 @@ export function Header() {
   const [query, setQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
   const [runtimeDetails, setRuntimeDetails] = useState({
-    announcement: "Corporate hygiene supplies · Lahore",
+    announcement: defaultAnnouncement,
   });
   const [searchProducts, setSearchProducts] = useState<Product[]>(products);
   const [navigationCategories, setNavigationCategories] = useState<Category[]>(categories);
@@ -100,9 +102,10 @@ export function Header() {
         const values = settings as { announcement?: unknown };
         setRuntimeDetails({
           announcement:
-            typeof values.announcement === "string" && values.announcement.trim()
+            typeof values.announcement === "string" && values.announcement.trim() &&
+            !["Corporate hygiene supplies · Lahore", "Corporate and bulk enquiries are welcome."].includes(values.announcement.trim())
               ? values.announcement.trim()
-              : "Corporate hygiene supplies · Lahore",
+              : defaultAnnouncement,
         });
       })
       .catch(() => undefined);
@@ -121,10 +124,15 @@ export function Header() {
     <>
       <a href="#main-content" className="fixed left-3 top-3 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#17643a] shadow-xl focus:translate-y-0">Skip to content</a>
       <header className="sticky top-0 z-50 border-b border-[#dce8df] bg-[#fbfaf5]/95 backdrop-blur-xl">
-        <div className="bg-[#114b2f] text-white">
-          <div className="site-shell flex min-h-8 items-center justify-between gap-4 text-[11px] font-semibold sm:text-xs">
-            <p className="truncate">{runtimeDetails.announcement}</p>
-            <a className="shrink-0 text-[#d5f0de] hover:text-white" href={`tel:${company.phoneHref}`}><span className="hidden sm:inline">Zohair Ahmed · </span>Call {company.phone}</a>
+        <div className="bg-[#c8202f] text-white">
+          <div className="site-shell flex min-h-10 items-center justify-between gap-4 text-[11px] font-semibold sm:text-xs">
+            <Link href="/request-quote" className="announcement-marquee min-w-0 flex-1 overflow-hidden py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              <span className="sr-only">{runtimeDetails.announcement}</span>
+              <span className="announcement-track" aria-hidden="true">
+                {[0, 1].map((copy) => <span key={copy} className="announcement-copy">{runtimeDetails.announcement}<span className="px-8" aria-hidden="true">✦</span></span>)}
+              </span>
+            </Link>
+            <a className="shrink-0 text-white hover:underline" href={`tel:${company.phoneHref}`}><span className="hidden sm:inline">Zohair Ahmed · </span>Call {company.phone}</a>
           </div>
         </div>
 

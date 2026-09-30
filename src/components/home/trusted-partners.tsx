@@ -7,6 +7,7 @@ const partners = [
   { name: "Lahore Garrison University", image: "/images/partners/lgu.png" },
   { name: "Ramay Clinic", image: "/images/partners/ramay-clinic.jpg" },
   { name: "Aroma Hair Salon", image: null },
+  { name: "Moon Banquet Hall", image: "/images/partners/moon-banquet-hall.png" },
 ];
 
 export function TrustedPartners() {

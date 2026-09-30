@@ -35,7 +35,7 @@
 
 .group {
   display: flex;
-  width: max(660px, min(80rem, calc(100vw - 2rem)));
+  width: max(880px, min(80rem, calc(100vw - 2rem)));
   flex-shrink: 0;
   list-style: none;
   padding: 0;

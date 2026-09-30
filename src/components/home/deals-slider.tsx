@@ -26,18 +26,10 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
   if (!deals.length) return null;
 
   return (
-    <section className="bg-[#fbfaf5] pb-10 pt-7 sm:pb-14 sm:pt-10" aria-labelledby="deals-heading">
+    <section className="w-full bg-[#fbfaf5]" aria-label="Featured offers">
       <div className="w-full">
-        <div className="site-shell mb-7 flex items-end justify-between gap-5">
-          <div>
-            <p className="eyebrow">Featured offers</p>
-            <h1 id="deals-heading" className="mt-2 text-3xl font-black tracking-[-.04em] text-[#173c29] sm:text-4xl">Deals &amp; highlights</h1>
-          </div>
-          <Link href="/shop" className="hidden text-sm font-extrabold text-[#17643a] hover:underline sm:inline-flex">View all products →</Link>
-        </div>
-
         <div
-          className="group relative isolate aspect-[16/10] overflow-hidden rounded-[1.75rem] border border-[#cfe0d3] bg-[#dbe9dd] shadow-[0_24px_65px_rgba(20,72,43,.14)] sm:aspect-[16/9]"
+          className="group relative isolate aspect-[16/9] w-full overflow-hidden bg-[#dbe9dd]"
           role="region"
           aria-roledescription="carousel"
           aria-label="Current deals"
@@ -58,21 +50,12 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
             >
               <Image
                 src={deal.imageUrl}
-                alt=""
-                fill
-                aria-hidden="true"
-                unoptimized={deal.imageUrl.startsWith("https://")}
-                sizes="(max-width: 640px) 100vw, 1px"
-                className="scale-110 object-cover opacity-35 blur-xl sm:hidden"
-              />
-              <Image
-                src={deal.imageUrl}
                 alt={deal.alt}
                 fill
                 priority={index === 0}
                 unoptimized={deal.imageUrl.startsWith("https://")}
-                sizes="(max-width: 1536px) 100vw, 1440px"
-                className="object-contain object-center sm:object-cover"
+                sizes="100vw"
+                className="object-cover object-center"
               />
               <span className="sr-only">{deal.title}</span>
             </Link>

@@ -1,0 +1,92 @@
+.section {
+  padding: 48px 0 28px;
+  background: #fff;
+  color: #202020;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.heading h2 {
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 650;
+  letter-spacing: -.025em;
+  text-align: center;
+}
+
+
+.viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: partner-scroll 28s linear infinite;
+}
+
+.viewport:hover .track { animation-play-state: paused; }
+
+.group {
+  display: flex;
+  width: max(660px, min(80rem, calc(100vw - 2rem)));
+  flex-shrink: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.partner {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px;
+  text-align: center;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+}
+
+.image {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: contain;
+  filter: grayscale(1);
+}
+
+.salonIcon { width: 56px; height: 56px; color: #333; }
+.partner p { max-width: 200px; font-size: 13px; font-weight: 500; line-height: 1.5; color: #525252; }
+
+@keyframes partner-scroll { to { transform: translateX(-50%); } }
+
+@media (max-width: 640px) {
+  .section { padding: 32px 0 20px; }
+  .heading { gap: 16px; margin-bottom: 24px; }
+  .logo { width: 108px; height: 108px; }
+  .image { width: 80px; height: 80px; }
+  .salonIcon { width: 44px; height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport { mask-image: none; }
+  .track { animation: none; width: 100%; }
+  .group { width: 100%; flex-wrap: wrap; gap: 24px 0; }
+  .group[aria-hidden="true"] { display: none; }
+  .partner { flex: 1 0 160px; }
+}

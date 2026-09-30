@@ -26,12 +26,12 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
   if (!deals.length) return null;
 
   return (
-    <section className="bg-[#fbfaf5] py-14 sm:py-18" aria-labelledby="deals-heading">
+    <section className="bg-[#fbfaf5] pb-10 pt-7 sm:pb-14 sm:pt-10" aria-labelledby="deals-heading">
       <div className="w-full">
         <div className="site-shell mb-7 flex items-end justify-between gap-5">
           <div>
             <p className="eyebrow">Featured offers</p>
-            <h2 id="deals-heading" className="mt-2 text-3xl font-black tracking-[-.04em] text-[#173c29] sm:text-4xl">Deals &amp; highlights</h2>
+            <h1 id="deals-heading" className="mt-2 text-3xl font-black tracking-[-.04em] text-[#173c29] sm:text-4xl">Deals &amp; highlights</h1>
           </div>
           <Link href="/shop" className="hidden text-sm font-extrabold text-[#17643a] hover:underline sm:inline-flex">View all products →</Link>
         </div>

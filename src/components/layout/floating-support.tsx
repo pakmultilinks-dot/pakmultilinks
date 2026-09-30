@@ -1,53 +1,112 @@
 "use client";
 
-import { Bot, BriefcaseBusiness, MessageCircle, Phone, ShoppingBag, Sparkles, X } from "lucide-react";
+import { Bot, LoaderCircle, MessageCircle, Send, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import { company } from "@/lib/company";
 
-const supportPhone = company.phoneHref;
+type Message = { role: "user" | "assistant"; content: string };
 
 export function FloatingSupport() {
   const [open, setOpen] = useState(false);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const [draft, setDraft] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
+  const requestRef = useRef<AbortController | null>(null);
+
+  function close() {
+    setOpen(false);
+    launcherRef.current?.focus();
+  }
 
   useEffect(() => {
+    if (!open) return;
+    inputRef.current?.focus();
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") close();
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [open]);
+
+  useEffect(() => {
+    const log = logRef.current;
+    if (log) log.scrollTop = log.scrollHeight;
+  }, [messages, pending, open]);
+
+  useEffect(() => () => requestRef.current?.abort(), []);
+
+  async function sendMessage(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const content = draft.trim();
+    if (!content || pending) return;
+    const nextMessages: Message[] = [...messages, { role: "user", content }];
+    const controller = new AbortController();
+    requestRef.current = controller;
+    setMessages(nextMessages);
+    setDraft("");
+    setError("");
+    setPending(true);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: nextMessages.slice(-12) }),
+        signal: controller.signal,
+      });
+      const data = await response.json();
+      if (!response.ok || typeof data.reply !== "string" || !data.reply.trim()) {
+        throw new Error(typeof data.error === "string" ? data.error : "We couldn't send your message. Please try again.");
+      }
+      setMessages([...nextMessages, { role: "assistant", content: data.reply }]);
+    } catch (cause) {
+      if (controller.signal.aborted) return;
+      setMessages(nextMessages.slice(0, -1));
+      setDraft(content);
+      setError(cause instanceof Error ? cause.message : "Please try again or contact us on WhatsApp.");
+    } finally {
+      setPending(false);
+      inputRef.current?.focus();
+    }
+  }
 
   return (
     <>
       {open && (
-        <div id="support-assistant" ref={panelRef} role="dialog" aria-modal="false" aria-labelledby="support-assistant-title" className="fixed bottom-[13rem] left-4 z-[70] w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-[1.5rem] border border-[#c9ddcf] bg-white shadow-[0_24px_70px_rgba(10,57,34,.22)] animate-slide-up">
-          <div className="relative overflow-hidden bg-[linear-gradient(135deg,#0f5634,#176c40)] px-5 py-5 text-white">
-            <div className="absolute -right-7 -top-8 size-28 rounded-full bg-white/10" />
-            <div className="relative flex items-start gap-3">
-              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/20"><Bot className="size-5" /></span>
-              <div><p className="text-[10px] font-black uppercase tracking-[.16em] text-emerald-100/75">Online support</p><h2 id="support-assistant-title" className="mt-1 text-lg font-extrabold">Pak Multilinks Assistant</h2></div>
-              <button type="button" onClick={() => setOpen(false)} className="ml-auto grid size-8 shrink-0 place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white" aria-label="Close assistant"><X className="size-4" /></button>
-            </div>
+        <section id="support-assistant" role="dialog" aria-modal="false" aria-labelledby="support-assistant-title" className="fixed bottom-24 left-4 z-[70] flex max-h-[calc(100dvh-7rem)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border border-[#c9ddcf] bg-white shadow-[0_24px_70px_rgba(10,57,34,.24)] animate-slide-up sm:left-6">
+          <div className="flex shrink-0 items-center gap-3 bg-gradient-to-br from-[#104d31] to-[#21804d] p-5 text-white">
+            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/15"><Bot className="size-6" aria-hidden="true" /></span>
+            <div><p className="text-[10px] font-bold uppercase tracking-[.16em] text-emerald-100">A little help, anytime</p><h2 id="support-assistant-title" className="mt-1 text-base font-extrabold">Pak Multilinks Assistant</h2></div>
+            <button type="button" onClick={close} className="ml-auto grid size-9 shrink-0 place-items-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white" aria-label="Close assistant"><X className="size-5" /></button>
           </div>
-          <div className="p-4">
-            <div className="rounded-2xl rounded-tl-md bg-[#eef7f0] px-4 py-3 text-sm leading-6 text-[#315943]">Assalam-o-Alaikum! Bulk hygiene supplies ke liye kis cheez mein help chahiye?</div>
-            <div className="mt-4 grid gap-2">
-              <Link href="/shop" onClick={() => setOpen(false)} className="flex min-h-12 items-center gap-3 rounded-xl border border-[#d7e6db] px-4 text-sm font-bold text-[#174c30] transition hover:border-[#8db89a] hover:bg-[#f3faf5]"><ShoppingBag className="size-4 text-[#20814f]" />Browse products <span className="ml-auto">→</span></Link>
-              <Link href="/request-quote" onClick={() => setOpen(false)} className="flex min-h-12 items-center gap-3 rounded-xl border border-[#d7e6db] px-4 text-sm font-bold text-[#174c30] transition hover:border-[#8db89a] hover:bg-[#f3faf5]"><BriefcaseBusiness className="size-4 text-[#20814f]" />Request bulk quote <span className="ml-auto">→</span></Link>
-              <a href={`tel:${supportPhone}`} className="flex min-h-12 items-center gap-3 rounded-xl bg-[#17643a] px-4 text-sm font-bold text-white transition hover:bg-[#10522f]"><Phone className="size-4" />Call {company.contactPerson} <span className="ml-auto">→</span></a>
-            </div>
-            <p className="mt-3 text-center text-[11px] leading-5 text-[#718077]">Packing, price and delivery are confirmed with your requirement.</p>
+          <div ref={logRef} role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions text" className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain bg-[#fafcf9] p-4">
+            <p className="mr-5 rounded-2xl rounded-tl-sm border border-[#e1ebe3] bg-white p-3 text-sm leading-6 text-[#315943]">Assalam-o-Alaikum! Welcome to Pak Multilinks. How can we help with your hygiene supplies today?</p>
+            {messages.map((message, index) => <p key={index} className={`whitespace-pre-wrap break-words rounded-2xl p-3 text-sm leading-6 ${message.role === "user" ? "ml-8 rounded-br-sm bg-[#17643a] text-white" : "mr-5 rounded-tl-sm border border-[#e1ebe3] bg-white text-[#315943]"}`}><span className="sr-only">{message.role === "user" ? "You: " : "Assistant: "}</span>{message.content}</p>)}
+            {pending && <p className="flex items-center gap-2 text-xs text-[#66756c]"><LoaderCircle className="size-4 animate-spin" aria-hidden="true" />Preparing a reply…</p>}
           </div>
-        </div>
+          <div className="shrink-0 border-t border-[#e0e9e2] p-4">
+            <div className="mb-3 flex flex-wrap gap-2 text-xs font-bold text-[#17643a]">
+              <Link href="/shop" onClick={close} className="focus-ring rounded-full bg-[#eef7f0] px-3 py-2">Browse products</Link>
+              <Link href="/request-quote" onClick={close} className="focus-ring rounded-full bg-[#eef7f0] px-3 py-2">Get a bulk quote ↗</Link>
+            </div>
+            {error && <p role="alert" className="mb-3 text-xs leading-5 text-[#a1242c]">{error}</p>}
+            <form onSubmit={sendMessage} className="flex gap-2">
+              <label htmlFor="support-message" className="sr-only">Your message</label>
+              <input ref={inputRef} id="support-message" value={draft} onChange={(event) => setDraft(event.target.value)} maxLength={2000} readOnly={pending} placeholder="Type your message…" autoComplete="off" className="min-w-0 flex-1 rounded-xl border border-[#ceddd2] px-3 py-3 text-base outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#dff2e5]" />
+              <button type="submit" disabled={pending || !draft.trim()} aria-label="Send message" className="focus-ring grid size-12 shrink-0 place-items-center rounded-xl bg-[#17643a] text-white disabled:cursor-not-allowed disabled:opacity-40"><Send className="size-4" /></button>
+            </form>
+            <p className="mt-2 text-center text-[10px] text-[#718077]">Need a person? <a className="underline" href={`tel:${company.phoneHref}`}>Call our team</a></p>
+          </div>
+        </section>
       )}
-
-      <div className="fixed bottom-20 left-4 z-[65] flex flex-col items-start gap-2.5">
-        <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="support-assistant" aria-label="Ask assistant" title="Ask assistant" className="focus-ring group relative grid size-12 place-items-center rounded-full border border-white/60 bg-gradient-to-br from-[#28a760] via-[#177a46] to-[#0b4f2e] text-white shadow-[0_12px_30px_rgba(12,91,49,.3)] transition hover:-translate-y-0.5 hover:from-[#32b86c] hover:via-[#1c8a50] hover:to-[#0d5b35] hover:shadow-[0_16px_36px_rgba(12,91,49,.38)]"><Sparkles className="size-5" /><span className="absolute right-1.5 top-1.5 size-2 rounded-full border-2 border-[#177a46] bg-[#8ff0ad]" /></button>
-
-        <a href={`https://wa.me/${supportPhone.replace("+", "")}`} target="_blank" rel="noreferrer" className="focus-ring grid size-12 place-items-center rounded-full border border-white/60 bg-gradient-to-br from-[#2fbd69] via-[#209451] to-[#116638] text-white shadow-[0_12px_30px_rgba(12,91,49,.3)] transition hover:-translate-y-0.5 hover:from-[#39ca75] hover:via-[#25a35b] hover:to-[#147441] hover:shadow-[0_16px_36px_rgba(12,91,49,.38)]" aria-label="Chat on WhatsApp with +92 300 6917 385" title="WhatsApp · +92 300 6917 385"><MessageCircle className="size-6" strokeWidth={2.4} /></a>
+      <div className="fixed bottom-5 left-4 z-[65] flex items-center sm:left-6">
+        <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls={open ? "support-assistant" : undefined} aria-label={open ? "Close assistant" : "Open chat assistant"} className="focus-ring flex h-12 items-center gap-2 rounded-full bg-[#7CFC00] px-5 text-sm font-bold text-[#173328] shadow-sm transition-colors hover:bg-[#70e600]">{open ? <X className="size-5" /> : <Bot className="size-6" />}<span>Let’s chat</span></button>
+        <a href={`https://wa.me/${company.phoneHref.replace("+", "")}`} target="_blank" rel="noreferrer" className="focus-ring fixed bottom-5 right-4 grid size-11 place-items-center sm:right-6 rounded-full border border-white/60 bg-[#238b4e] text-white shadow-lg" aria-label="Chat with our team on WhatsApp" title="Chat on WhatsApp"><MessageCircle className="size-5" /></a>
       </div>
     </>
   );

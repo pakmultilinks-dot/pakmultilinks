@@ -19,7 +19,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { ProductCard } from "@/components/catalog/product-card";
-import { HomeHero } from "@/components/home/home-hero";
+import { TrustedPartners } from "@/components/home/trusted-partners";
 import { DealsSlider } from "@/components/home/deals-slider";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { isDevelopmentProduct, listPublicProducts } from "@/lib/catalog-server";
@@ -51,9 +51,8 @@ export default async function HomePage() {
   const demoCatalog = homeProducts.length > 0 && homeProducts.every(isDevelopmentProduct);
   return (
     <>
-      <HomeHero />
-
       <DealsSlider deals={dealBanners} />
+      <TrustedPartners />
 
       <section className="bg-white py-20 sm:py-24">
         <div className="site-shell">

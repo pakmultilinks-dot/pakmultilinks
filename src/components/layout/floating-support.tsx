@@ -1,8 +1,7 @@
 "use client";
 
-import { Bot, LoaderCircle, MessageCircle, Send, X } from "lucide-react";
-import Link from "next/link";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { ArrowUp, LoaderCircle, MessageCircle, MessagesSquare, X } from "lucide-react";
+import { FormEvent, KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from "react";
 
 import { company } from "@/lib/company";
 
@@ -15,7 +14,7 @@ export function FloatingSupport() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const launcherRef = useRef<HTMLButtonElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<AbortController | null>(null);
 
@@ -26,7 +25,8 @@ export function FloatingSupport() {
 
   useEffect(() => {
     if (!open) return;
-    inputRef.current?.focus();
+    // Avoid opening the on-screen keyboard as soon as the panel appears on mobile.
+    if (window.matchMedia("(min-width: 640px)").matches) inputRef.current?.focus();
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") close();
     }
@@ -38,6 +38,13 @@ export function FloatingSupport() {
     const log = logRef.current;
     if (log) log.scrollTop = log.scrollHeight;
   }, [messages, pending, open]);
+
+  useEffect(() => {
+    const input = inputRef.current;
+    if (!input) return;
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, 112)}px`;
+  }, [draft, open]);
 
   useEffect(() => () => requestRef.current?.abort(), []);
 
@@ -71,43 +78,44 @@ export function FloatingSupport() {
       setError(cause instanceof Error ? cause.message : "Please try again or contact us on WhatsApp.");
     } finally {
       setPending(false);
-      inputRef.current?.focus();
+      requestRef.current = null;
+    }
+  }
+
+  function onInputKeyDown(event: ReactKeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+      event.preventDefault();
+      event.currentTarget.form?.requestSubmit();
     }
   }
 
   return (
     <>
       {open && (
-        <section id="support-assistant" role="dialog" aria-modal="false" aria-labelledby="support-assistant-title" className="fixed bottom-24 left-4 z-[70] flex max-h-[calc(100dvh-7rem)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border border-[#c9ddcf] bg-white shadow-[0_24px_70px_rgba(10,57,34,.24)] animate-slide-up sm:left-6">
-          <div className="flex shrink-0 items-center gap-3 bg-gradient-to-br from-[#104d31] to-[#21804d] p-5 text-white">
-            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/15"><Bot className="size-6" aria-hidden="true" /></span>
-            <div><p className="text-[10px] font-bold uppercase tracking-[.16em] text-emerald-100">A little help, anytime</p><h2 id="support-assistant-title" className="mt-1 text-base font-extrabold">Pak Multilinks Assistant</h2></div>
-            <button type="button" onClick={close} className="ml-auto grid size-9 shrink-0 place-items-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white" aria-label="Close assistant"><X className="size-5" /></button>
+        <section id="support-assistant" role="dialog" aria-modal="false" aria-labelledby="support-assistant-title" className="fixed bottom-[5.25rem] left-3 z-[70] flex h-[min(25rem,calc(100dvh-6rem))] w-[min(23rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-[1.25rem] border border-[#d5e5d9] bg-white shadow-[0_18px_55px_rgba(17,75,47,.22)] animate-slide-up sm:left-6">
+          <div className="flex shrink-0 items-center gap-3 bg-[#145c38] px-4 py-3.5 text-white">
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/15"><MessagesSquare className="size-5" aria-hidden="true" /></span>
+            <div className="min-w-0 flex-1"><h2 id="support-assistant-title" className="text-sm font-bold leading-5">Let’s talk now</h2><p className="text-[11px] leading-4 text-white/75">Pak Multilinks support</p></div>
+            <button type="button" onClick={close} className="grid size-9 shrink-0 place-items-center rounded-lg transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white" aria-label="Close chat"><X className="size-5" /></button>
           </div>
-          <div ref={logRef} role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions text" className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain bg-[#fafcf9] p-4">
-            <p className="mr-5 rounded-2xl rounded-tl-sm border border-[#e1ebe3] bg-white p-3 text-sm leading-6 text-[#315943]">Assalam-o-Alaikum! Welcome to Pak Multilinks. How can we help with your hygiene supplies today?</p>
-            {messages.map((message, index) => <p key={index} className={`whitespace-pre-wrap break-words rounded-2xl p-3 text-sm leading-6 ${message.role === "user" ? "ml-8 rounded-br-sm bg-[#17643a] text-white" : "mr-5 rounded-tl-sm border border-[#e1ebe3] bg-white text-[#315943]"}`}><span className="sr-only">{message.role === "user" ? "You: " : "Assistant: "}</span>{message.content}</p>)}
-            {pending && <p className="flex items-center gap-2 text-xs text-[#66756c]"><LoaderCircle className="size-4 animate-spin" aria-hidden="true" />Preparing a reply…</p>}
+          <div ref={logRef} role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions text" className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain bg-[#fbfdfb] px-4 py-5">
+            <p className="w-fit max-w-[90%] rounded-2xl rounded-tl-md border border-[#e0ebe2] bg-white px-3.5 py-3 text-sm leading-5 text-[#315943] shadow-sm">Assalam-o-Alaikum! How can we help you?</p>
+            {messages.map((message, index) => <p key={index} className={`w-fit max-w-[90%] whitespace-pre-wrap break-words rounded-2xl px-3.5 py-2.5 text-sm leading-5 ${message.role === "user" ? "ml-auto rounded-br-md bg-[#17643a] text-white" : "rounded-tl-md border border-[#e0ebe2] bg-white text-[#315943] shadow-sm"}`}><span className="sr-only">{message.role === "user" ? "You: " : "Assistant: "}</span>{message.content}</p>)}
+            {pending && <p className="flex items-center gap-2 text-xs text-[#66756c]"><LoaderCircle className="size-4 animate-spin" aria-hidden="true" />Thinking…</p>}
           </div>
-          <div className="shrink-0 border-t border-[#e0e9e2] p-4">
-            <div className="mb-3 flex flex-wrap gap-2 text-xs font-bold text-[#17643a]">
-              <Link href="/shop" onClick={close} className="focus-ring rounded-full bg-[#eef7f0] px-3 py-2">Browse products</Link>
-              <Link href="/request-quote" onClick={close} className="focus-ring rounded-full bg-[#eef7f0] px-3 py-2">Get a bulk quote ↗</Link>
-            </div>
-            {error && <p role="alert" className="mb-3 text-xs leading-5 text-[#a1242c]">{error}</p>}
-            <form onSubmit={sendMessage} className="flex gap-2">
+          <div className="shrink-0 border-t border-[#e3ece5] bg-white px-3 py-3">
+            {error && <p role="alert" className="mb-2 rounded-lg bg-[#fff1f0] px-3 py-2 text-xs leading-5 text-[#a1242c]">{error}</p>}
+            <form onSubmit={sendMessage} className="flex items-end gap-2">
               <label htmlFor="support-message" className="sr-only">Your message</label>
-              <input ref={inputRef} id="support-message" value={draft} onChange={(event) => setDraft(event.target.value)} maxLength={2000} readOnly={pending} placeholder="Type your message…" autoComplete="off" className="min-w-0 flex-1 rounded-xl border border-[#ceddd2] px-3 py-3 text-base outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#dff2e5]" />
-              <button type="submit" disabled={pending || !draft.trim()} aria-label="Send message" className="focus-ring grid size-12 shrink-0 place-items-center rounded-xl bg-[#17643a] text-white disabled:cursor-not-allowed disabled:opacity-40"><Send className="size-4" /></button>
+              <textarea ref={inputRef} id="support-message" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={onInputKeyDown} maxLength={2000} readOnly={pending} rows={1} placeholder="Write a message…" className="max-h-28 min-h-11 min-w-0 flex-1 resize-none overflow-y-auto rounded-xl border border-[#ceddd2] bg-white px-3.5 py-2.5 text-sm leading-6 text-[#173328] outline-none transition-colors placeholder:text-[#8b9890] focus:border-[#17643a] focus:ring-2 focus:ring-[#dff2e5]" />
+              <button type="submit" disabled={pending || !draft.trim()} aria-label="Send message" className="focus-ring grid size-11 shrink-0 place-items-center rounded-xl bg-[#17643a] text-white transition-colors hover:bg-[#104d31] disabled:cursor-not-allowed disabled:bg-[#b7cbbd]"><ArrowUp className="size-5" /></button>
             </form>
-            <p className="mt-2 text-center text-[10px] text-[#718077]">Need a person? <a className="underline" href={`tel:${company.phoneHref}`}>Call our team</a></p>
+            <p className="mt-2 text-center text-[11px] leading-4 text-[#718077]">Need a person? <a className="font-semibold text-[#17643a] underline underline-offset-2" href={`tel:${company.phoneHref}`}>Call our team</a></p>
           </div>
         </section>
       )}
-      <div className="fixed bottom-5 left-4 z-[65] flex items-center sm:left-6">
-        <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls={open ? "support-assistant" : undefined} aria-label={open ? "Close assistant" : "Open chat assistant"} className="focus-ring flex h-12 items-center gap-2 rounded-full bg-[#7CFC00] px-5 text-sm font-bold text-[#173328] shadow-sm transition-colors hover:bg-[#70e600]">{open ? <X className="size-5" /> : <Bot className="size-6" />}<span>Let’s chat</span></button>
-        <a href={`https://wa.me/${company.phoneHref.replace("+", "")}`} target="_blank" rel="noreferrer" className="focus-ring fixed bottom-5 right-4 grid size-11 place-items-center sm:right-6 rounded-full border border-white/60 bg-[#238b4e] text-white shadow-lg" aria-label="Chat with our team on WhatsApp" title="Chat on WhatsApp"><MessageCircle className="size-5" /></a>
-      </div>
+      <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls={open ? "support-assistant" : undefined} aria-label={open ? "Close chat" : "Let’s talk now"} className="focus-ring fixed bottom-5 left-3 z-[65] flex h-12 items-center gap-2.5 rounded-full bg-[#145c38] py-1.5 pl-1.5 pr-4 text-sm font-bold text-white shadow-[0_8px_24px_rgba(17,75,47,.24)] transition hover:bg-[#0f4d2e] sm:left-6"><span className="grid size-9 place-items-center rounded-full bg-white/15">{open ? <X className="size-4" /> : <MessageCircle className="size-4" />}</span><span>Let’s talk now</span></button>
+      <a href={`https://wa.me/${company.phoneHref.replace("+", "")}`} target="_blank" rel="noreferrer" className="focus-ring fixed bottom-5 right-4 z-[65] grid size-11 place-items-center rounded-full border border-white/60 bg-[#238b4e] text-white shadow-lg sm:right-6" aria-label="Chat with our team on WhatsApp" title="Chat on WhatsApp"><MessageCircle className="size-5" /></a>
     </>
   );
 }

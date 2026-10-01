@@ -31,6 +31,8 @@ export function Header() {
   const hasQuotePricing = cart.some(({ product }) => product.priceOnRequest);
   const [query, setQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const [runtimeDetails, setRuntimeDetails] = useState({
     announcement: defaultAnnouncement,
   });
@@ -40,6 +42,44 @@ export function Header() {
   const mobileDialogRef = useRef<HTMLDialogElement>(null);
   const cartDialogRef = useRef<HTMLDialogElement>(null);
   const categoryMenuRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    let previousY = window.scrollY;
+    let frame = window.requestAnimationFrame(() => setHeaderHidden(false));
+
+    function updateHeader() {
+      frame = 0;
+      const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const currentY = Math.min(maxY, Math.max(0, window.scrollY));
+      const header = headerRef.current;
+      const activeElement = document.activeElement;
+      const interacting = mobileDialogRef.current?.open || cartDialogRef.current?.open ||
+        categoryMenuRef.current?.open ||
+        (header?.contains(activeElement) && activeElement?.matches("input, :focus-visible"));
+
+      if (currentY <= (header?.offsetHeight ?? 180) || interacting) {
+        setHeaderHidden(false);
+        previousY = currentY;
+        return;
+      }
+
+      // Ignore tiny scroll movements so the header does not flicker.
+      if (Math.abs(currentY - previousY) < 10) return;
+      setHeaderHidden(currentY > previousY);
+      previousY = currentY;
+    }
+
+    function onScroll() {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(updateHeader);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [pathname]);
 
   const suggestions = useMemo(() => {
     const clean = query.trim().toLowerCase();
@@ -123,7 +163,7 @@ export function Header() {
   return (
     <>
       <a href="#main-content" className="fixed left-3 top-3 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#17643a] shadow-xl focus:translate-y-0">Skip to content</a>
-      <header className="sticky top-0 z-50 border-b border-[#dce8df] bg-[#fbfaf5]/95 backdrop-blur-xl">
+      <header ref={headerRef} onFocusCapture={() => setHeaderHidden(false)} className={`sticky top-0 z-50 border-b border-[#dce8df] bg-[#fbfaf5]/95 backdrop-blur-xl transition-transform duration-300 ease-out motion-reduce:transition-none ${headerHidden ? "-translate-y-full" : "translate-y-0"}`}>
         <div className="bg-[#f3bb43] text-[#183528]">
           <div className="site-shell flex min-h-10 items-center justify-between gap-4 text-[11px] font-semibold sm:text-xs">
             <Link href="/request-quote" className="announcement-marquee min-w-0 flex-1 overflow-hidden py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#183528]">

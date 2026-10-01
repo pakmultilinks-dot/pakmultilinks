@@ -9,7 +9,9 @@ const chatSchema = z.object({
     content: z.string().trim().min(1).max(6000),
   })).min(1).max(12),
 });
-const replySchema = z.object({ reply: z.string().trim().min(1).max(6000) });
+const openRouterReplySchema = z.object({
+  choices: z.array(z.object({ message: z.object({ content: z.string() }) })).min(1),
+});
 const headers = { "Cache-Control": "no-store" };
 const failure = (error: string, status: number) => NextResponse.json({ error }, { status, headers });
 
@@ -30,27 +32,32 @@ export async function POST(request: NextRequest) {
     return failure("Please enter a message of up to 2,000 characters.", 400);
   }
 
-  // Provider adapter: POST { messages: [{ role, content }] }; expect { reply: string }.
-  // Keep credentials here on the server, never in NEXT_PUBLIC_* variables.
-  const endpoint = process.env.CHATBOT_API_URL;
-  if (!endpoint) return failure("Live chat is coming soon. Please use WhatsApp or request a bulk quote and our team will help you.", 503);
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) return failure("Live chat is coming soon. Please use WhatsApp or request a bulk quote and our team will help you.", 503);
 
   try {
-    const upstream = await fetch(endpoint, {
+    const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(process.env.CHATBOT_API_KEY ? { Authorization: `Bearer ${process.env.CHATBOT_API_KEY}` } : {}),
+        Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify(payload.data),
+      body: JSON.stringify({
+        model: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are Pak Multilinks' helpful support assistant. Answer questions about hygiene supplies and bulk orders briefly. Do not invent prices, stock, delivery promises, or policies. Suggest contacting the team when details need confirmation." },
+          ...payload.data.messages,
+        ],
+      }),
       cache: "no-store",
       redirect: "error",
       signal: AbortSignal.timeout(20_000),
     });
     if (!upstream.ok) return failure("Our assistant is unavailable right now. Please try again or contact our team.", 502);
-    const result = replySchema.safeParse(await upstream.json());
-    if (!result.success) return failure("Our assistant couldn't reply. Please try again.", 502);
-    return NextResponse.json(result.data, { headers });
+    const result = openRouterReplySchema.safeParse(await upstream.json());
+    const reply = result.success ? result.data.choices[0].message.content.trim() : "";
+    if (!reply) return failure("Our assistant couldn't reply. Please try again.", 502);
+    return NextResponse.json({ reply }, { headers });
   } catch {
     return failure("Our assistant couldn't connect. Please try again or contact us on WhatsApp.", 502);
   }

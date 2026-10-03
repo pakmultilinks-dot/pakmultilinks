@@ -13,6 +13,7 @@ import { formatPrice, formatProductPrice } from "@/lib/utils";
 import { getPrice } from "@/lib/catalog";
 
 import { BrandMark } from "./brand-mark";
+import { CategoryNavigation } from "./category-navigation";
 
 const nav = [
   { href: "/", label: "Home" },
@@ -22,7 +23,7 @@ const nav = [
   { href: "/contact", label: "Contact" },
 ];
 
-const defaultAnnouncement = "Premium Hygiene Products, Great Bulk Rates — Request Your Quote Today!";
+const defaultAnnouncement = "Tissue & hygiene essentials · Wholesale supply from Lahore";
 
 export function Header() {
   const pathname = usePathname();
@@ -90,6 +91,7 @@ export function Header() {
   useEffect(() => {
     function onPointerDown(event: MouseEvent) {
       if (!searchWrap.current?.contains(event.target as Node)) setSearchFocused(false);
+      if (!categoryMenuRef.current?.contains(event.target as Node)) categoryMenuRef.current?.removeAttribute("open");
     }
     document.addEventListener("mousedown", onPointerDown);
     return () => document.removeEventListener("mousedown", onPointerDown);
@@ -112,7 +114,7 @@ export function Header() {
               "name" in value &&
               typeof value.name === "string",
           );
-          if (validProducts.length) setSearchProducts(validProducts);
+          setSearchProducts(validProducts);
         }
         if (Array.isArray(data.categories)) {
           const validCategories = data.categories.filter(
@@ -124,7 +126,7 @@ export function Header() {
               "name" in value &&
               typeof value.name === "string",
           );
-          if (validCategories.length) setNavigationCategories(validCategories);
+          setNavigationCategories(validCategories);
         }
       })
       .catch(() => undefined);
@@ -163,20 +165,17 @@ export function Header() {
   return (
     <>
       <a href="#main-content" className="fixed left-3 top-3 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#17643a] shadow-xl focus:translate-y-0">Skip to content</a>
-      <header ref={headerRef} onFocusCapture={() => setHeaderHidden(false)} className={`sticky top-0 z-50 border-b border-[#dce8df] bg-[#fbfaf5]/95 backdrop-blur-xl transition-transform duration-300 ease-out motion-reduce:transition-none ${headerHidden ? "-translate-y-full" : "translate-y-0"}`}>
-        <div className="bg-[#f3bb43] text-[#183528]">
+      <header ref={headerRef} onFocusCapture={() => setHeaderHidden(false)} className={`sticky top-0 z-50 border-b border-[#dce8df] bg-white transition-transform duration-300 ease-out motion-reduce:transition-none ${headerHidden ? "-translate-y-full" : "translate-y-0"}`}>
+        <div className="bg-[#f2f1ec] text-neutral-700">
           <div className="site-shell flex min-h-10 items-center justify-between gap-4 text-[11px] font-semibold sm:text-xs">
             <Link href="/request-quote" className="announcement-marquee min-w-0 flex-1 overflow-hidden py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#183528]">
-              <span className="sr-only">{runtimeDetails.announcement}</span>
-              <span className="announcement-track" aria-hidden="true">
-                {[0, 1].map((copy) => <span key={copy} className="announcement-copy">{runtimeDetails.announcement}<span className="px-8" aria-hidden="true">✦</span></span>)}
-              </span>
+              <span className="block truncate">{runtimeDetails.announcement}</span>
             </Link>
             <a className="shrink-0 text-[#183528] hover:underline" href={`tel:${company.phoneHref}`}><span className="hidden sm:inline">Zohair Ahmed · </span>Call {company.phone}</a>
           </div>
         </div>
 
-        <div className="site-shell flex h-[86px] items-center gap-3 lg:gap-7">
+        <div className="site-shell flex h-[72px] items-center gap-2 sm:h-[86px] sm:gap-3 lg:gap-7">
           <button type="button" className="focus-ring -ml-2 grid size-11 shrink-0 place-items-center rounded-xl text-[#173c29] lg:hidden" onClick={() => mobileDialogRef.current?.showModal()} aria-label="Open navigation menu" aria-haspopup="dialog">
             <Menu className="size-6" />
           </button>
@@ -207,13 +206,25 @@ export function Header() {
           </button>
         </div>
 
+        <form onSubmit={submitSearch} role="search" className="site-shell relative mb-3 md:hidden">
+          <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#6d7c72]" aria-hidden="true" />
+          <input aria-label="Search the catalog" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search products, SKU or category" className="h-11 w-full rounded-xl border border-[#d8e4db] bg-white pl-11 pr-16 text-base outline-none focus:border-[#17643a]" />
+          <button type="submit" className="focus-ring absolute right-1 top-1 min-h-9 rounded-lg px-3 text-sm font-bold text-[#17643a]">Find</button>
+        </form>
+
         <nav className="hidden border-t border-[#e6ede8] lg:block" aria-label="Main navigation">
-          <div className="site-shell flex h-12 items-center gap-8">
+          <div className="site-shell relative flex h-12 items-center gap-6 xl:gap-8">
             {nav.slice(0, 2).map((item) => <NavLink key={item.href} {...item} active={item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)} />)}
-            <details ref={categoryMenuRef} className="group relative h-full">
-              <summary className="focus-ring flex h-full list-none items-center gap-1 rounded-md text-sm font-bold text-[#355c45] hover:text-[#17643a]">Categories <ChevronDown className="size-3.5 transition group-open:rotate-180" /></summary>
-              <div className="absolute left-0 top-[calc(100%+1px)] grid w-[580px] grid-cols-2 gap-1 rounded-b-2xl border border-t-0 border-[#dce8df] bg-white p-3 shadow-[0_20px_50px_rgba(19,58,37,.14)]">
-                {navigationCategories.map((category) => <Link key={category.slug} href={`/shop/${category.slug}`} onClick={() => categoryMenuRef.current?.removeAttribute("open")} className="rounded-xl px-3 py-2.5 text-sm font-semibold text-[#355c45] hover:bg-[#eef8f1] hover:text-[#17643a]">{category.name}</Link>)}
+            <details ref={categoryMenuRef} className="group h-full" onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                categoryMenuRef.current?.removeAttribute("open");
+                categoryMenuRef.current?.querySelector("summary")?.focus();
+              }
+            }}>
+              <summary className="focus-ring flex h-full list-none items-center gap-1 rounded-md text-sm font-bold text-[#355c45] hover:text-[#17643a]">Collections <ChevronDown className="size-3.5 transition group-open:rotate-180" /></summary>
+              <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-190px)] overflow-y-auto border border-neutral-200 bg-white px-8 py-8 shadow-sm">
+                <div className="mb-5 flex items-center justify-between border-b border-[#e0e9df] pb-4"><p className="text-sm font-medium text-neutral-900">Collections</p><Link href="/shop" onClick={() => categoryMenuRef.current?.removeAttribute("open")} className="focus-ring rounded-lg px-3 py-2 text-sm font-bold text-[#17643a]">Shop all products →</Link></div>
+                <CategoryNavigation categories={navigationCategories} onNavigate={() => categoryMenuRef.current?.removeAttribute("open")} />
               </div>
             </details>
             {nav.slice(2).map((item) => <NavLink key={item.href} {...item} active={pathname.startsWith(item.href)} />)}
@@ -230,7 +241,7 @@ export function Header() {
               {nav.map((item) => <Link key={item.href} href={item.href} onClick={() => mobileDialogRef.current?.close()} className="rounded-xl px-3 py-3 text-[15px] font-bold text-[#294d36] hover:bg-[#eaf6ed]">{item.label}</Link>)}
             </nav>
             <p className="mb-2 mt-6 px-3 text-xs font-extrabold uppercase tracking-[0.14em] text-[#779083]">Shop categories</p>
-            <div className="grid grid-cols-2 gap-1">{navigationCategories.map((category) => <Link key={category.slug} href={`/shop/${category.slug}`} onClick={() => mobileDialogRef.current?.close()} className="rounded-xl px-3 py-2 text-sm font-semibold text-[#4d6b59] hover:bg-[#eaf6ed]">{category.name}</Link>)}</div>
+            <CategoryNavigation categories={navigationCategories} mobile onNavigate={() => mobileDialogRef.current?.close()} />
             <Link href="/request-quote" onClick={() => mobileDialogRef.current?.close()} className="commerce-button commerce-button-primary mt-7 flex min-h-12 items-center justify-center rounded-xl bg-[#17643a] px-4 text-sm font-extrabold text-white">Request bulk quote</Link>
           </div>
       </dialog>

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const database = requireDatabase();
     const [totalOrders, revenue, totalProducts, customers, pendingOrders, quoteRequests, lowStockProducts] = await database.$transaction([
       database.order.count(),
-      database.order.aggregate({ where: { status: { not: OrderStatus.CANCELLED } }, _sum: { total: true } }),
+      database.order.aggregate({ where: { status: { not: OrderStatus.CANCELLED }, paymentStatus: "PAID" }, _sum: { total: true } }),
       database.product.count({ where: { status: { not: "ARCHIVED" } } }),
       database.user.count({ where: { role: "CUSTOMER" } }),
       database.order.count({ where: { status: OrderStatus.PENDING } }),

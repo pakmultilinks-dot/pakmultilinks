@@ -91,7 +91,7 @@ export function CatalogExplorer({
 
       return (
         (!query || searchableText.includes(query)) &&
-        (!selectedCategory || product.categorySlug === selectedCategory) &&
+        (!selectedCategory || (product.categorySlug === selectedCategory || product.parentCategorySlug === selectedCategory)) &&
         (!brand || product.brand === brand) &&
         (!inStockOnly || product.stock >= minimumCartons(product) || Boolean(product.allowBackorder)) &&
         productPrice >= floor &&
@@ -171,7 +171,7 @@ export function CatalogExplorer({
               }}
               list={`${idPrefix}-product-suggestions`}
               placeholder="Name, SKU or category"
-              className="min-h-11 w-full rounded-xl border border-[#cad9ce] bg-white py-2 pl-9 pr-3 text-sm text-[#173c29] outline-none transition placeholder:text-[#8a978e] focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
+              className="min-h-11 w-full rounded-md border border-[#cad9ce] bg-white py-2 pl-9 pr-3 text-sm text-[#173c29] outline-none transition placeholder:text-[#8a978e] focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
             />
             <datalist id={`${idPrefix}-product-suggestions`}>
               {products.map((product) => (
@@ -186,9 +186,9 @@ export function CatalogExplorer({
         {!fixedCategorySlug && (
           <div>
             <label htmlFor={`${idPrefix}-category`} className="mb-2 block text-sm font-bold text-[#244b35]">Category</label>
-            <select id={`${idPrefix}-category`} value={category} onChange={(event) => { setCategory(event.target.value); resetVisibleCount(); }} className="min-h-11 w-full rounded-xl border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15">
+            <select id={`${idPrefix}-category`} value={category} onChange={(event) => { setCategory(event.target.value); resetVisibleCount(); }} className="min-h-11 w-full rounded-md border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15">
               <option value="">All categories</option>
-              {categoryOptions.map((item) => <option value={item.slug} key={item.id}>{item.name}</option>)}
+              {categoryOptions.map((item) => <option value={item.slug} key={item.id}>{item.parentId ? "↳ " : ""}{item.name}</option>)}
             </select>
           </div>
         )}
@@ -207,7 +207,7 @@ export function CatalogExplorer({
               setBrand(event.target.value);
               resetVisibleCount();
             }}
-            className="min-h-11 w-full rounded-xl border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
+            className="min-h-11 w-full rounded-md border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
           >
             <option value="">All brands</option>
             {availableBrands.map((item) => (
@@ -236,7 +236,7 @@ export function CatalogExplorer({
                   resetVisibleCount();
                 }}
                 placeholder="Min"
-                className="min-h-11 w-full rounded-xl border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
+                className="min-h-11 w-full rounded-md border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
               />
             </div>
             <div>
@@ -254,7 +254,7 @@ export function CatalogExplorer({
                   resetVisibleCount();
                 }}
                 placeholder={`Max ${priceCeiling}`}
-                className="min-h-11 w-full rounded-xl border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
+                className="min-h-11 w-full rounded-md border border-[#cad9ce] bg-white px-3 text-sm text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
               />
             </div>
           </div>
@@ -263,7 +263,7 @@ export function CatalogExplorer({
           </p>
         </fieldset>}
 
-        <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-[#dce6df] bg-white px-3 py-3 text-sm font-semibold text-[#315841]">
+        <label className="flex cursor-pointer items-center gap-3 rounded-md border border-[#dce6df] bg-white px-3 py-3 text-sm font-semibold text-[#315841]">
           <input
             type="checkbox"
             checked={inStockOnly}
@@ -292,14 +292,14 @@ export function CatalogExplorer({
 
   return (
     <>
-      {hideHero && <section className="border-b border-[#dce8df] bg-white"><div className="mx-auto max-w-[1500px] px-4 py-7 sm:px-6 lg:px-8"><nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-2 text-xs font-semibold text-[#6d7e73]"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/shop">Shop</Link><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav><h1 className="text-2xl font-extrabold tracking-[-.025em] text-[#153b28] sm:text-3xl">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-[#596c61]">{description}</p></div></section>}
-      {!hideHero && <section className="border-b border-[#dce8df] bg-[#f4f7ed]">
+      {hideHero && <section className="border-b border-[#dce8df] bg-white"><div className="mx-auto max-w-[1500px] px-4 py-7 sm:px-6 lg:px-8"><nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-2 text-xs font-semibold text-[#6d7e73]"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/shop">Shop</Link><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav><h1 className="font-serif text-2xl font-normal tracking-tight text-[#153b28] sm:text-3xl">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-[#596c61]">{description}</p></div></section>}
+      {!hideHero && <section className="border-b border-[#dce8df] bg-[#f4f3ee]">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs font-semibold text-[#6d7e73]"><Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">Shop</span></nav>
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#2f754a]">
             {eyebrow}
           </p>
-          <h1 className="mt-3 max-w-4xl text-4xl font-extrabold tracking-[-0.035em] text-[#153b28] sm:text-5xl">
+          <h1 className="mt-3 max-w-4xl font-serif text-3xl font-normal tracking-tight text-[#153b28] sm:text-4xl">
             {title}
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-[#596c61] sm:text-lg">
@@ -308,9 +308,9 @@ export function CatalogExplorer({
         </div>
       </section>}
 
-      <section className="bg-[#fbfcf8] py-8 sm:py-12">
+      <section className="bg-white py-8 sm:py-12">
         <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
-          <details className="mb-5 rounded-2xl border border-[#d9e6dc] bg-[#f3f8f4] p-4 lg:hidden">
+          <details className="mb-5 rounded-md border border-[#d9e6dc] bg-white p-4 lg:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold text-[#244b35] marker:hidden">
               <span className="inline-flex items-center gap-2">
                 <SlidersHorizontal className="size-4" aria-hidden="true" />
@@ -331,7 +331,7 @@ export function CatalogExplorer({
           <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
             <aside
               aria-label="Product filters"
-              className="sticky top-28 hidden h-fit rounded-2xl border border-[#d9e6dc] bg-[#f3f8f4] p-5 lg:block"
+              className="sticky top-28 hidden h-fit rounded-md border border-[#d9e6dc] bg-white p-5 lg:block"
             >
               <div className="mb-5 flex items-center gap-2 border-b border-[#d9e6dc] pb-4">
                 <SlidersHorizontal className="size-4 text-[#17643a]" aria-hidden="true" />
@@ -346,7 +346,7 @@ export function CatalogExplorer({
             </aside>
 
             <div className="min-w-0">
-              <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-[#e0e9e2] bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mb-6 flex flex-col gap-4 rounded-md border border-[#e0e9e2] bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-[#596b60]" role="status" aria-live="polite">
                   <span className="font-extrabold text-[#173c29]">{filteredProducts.length}</span>{" "}
                   {filteredProducts.length === 1 ? "product" : "products"} found
@@ -362,7 +362,7 @@ export function CatalogExplorer({
                         setSort(event.target.value as SortOption);
                         resetVisibleCount();
                       }}
-                      className="min-h-10 rounded-xl border border-[#cad9ce] bg-white px-3 text-sm font-semibold text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
+                      className="min-h-10 rounded-md border border-[#cad9ce] bg-white px-3 text-sm font-semibold text-[#244b35] outline-none focus:border-[#17643a] focus:ring-2 focus:ring-[#17643a]/15"
                     >
                       <option value="featured">Featured</option>
                       <option value="newest">Newest</option>
@@ -373,7 +373,7 @@ export function CatalogExplorer({
                   </label>
 
                   <div
-                    className="flex rounded-xl border border-[#cad9ce] bg-[#f7faf7] p-1"
+                    className="flex rounded-md border border-[#cad9ce] bg-[#f7faf7] p-1"
                     role="group"
                     aria-label="Product layout"
                   >
@@ -414,7 +414,7 @@ export function CatalogExplorer({
                   id="product-results"
                   className={cn(
                     "grid gap-5",
-                    view === "grid" ? "sm:grid-cols-2 xl:grid-cols-3" : "grid-cols-1",
+                    view === "grid" ? "grid-cols-2 xl:grid-cols-3" : "grid-cols-1",
                   )}
                 >
                   {visibleProducts.map((product, index) => (
@@ -428,7 +428,7 @@ export function CatalogExplorer({
                 </div>
               ) : (
                 <div className="rounded-3xl border border-dashed border-[#bfd0c3] bg-white px-6 py-16 text-center">
-                  <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#edf5ef] text-[#17643a]">
+                  <span className="mx-auto flex size-14 items-center justify-center rounded-md bg-[#edf5ef] text-[#17643a]">
                     <PackageSearch className="size-7" aria-hidden="true" />
                   </span>
                   <h2 className="mt-5 text-xl font-extrabold text-[#173c29]">

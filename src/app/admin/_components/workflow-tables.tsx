@@ -9,7 +9,7 @@ export type AdminQuoteRow = { id: string; quoteNumber: string; customerName: str
 const orderStatuses = ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"];
 const quoteStatuses = ["NEW", "CONTACTED", "QUOTED", "WON", "LOST"];
 const title = (status: string) => status.charAt(0) + status.slice(1).toLowerCase();
-const moneyFormatter = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", maximumFractionDigits: 0 });
+const moneyFormatter = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", minimumFractionDigits: 0, maximumFractionDigits: 2 });
 const money = { format: (value: number | string) => typeof value === "string" ? value : moneyFormatter.format(value) };
 
 /** Format a date string consistently to avoid server/client hydration mismatches. */

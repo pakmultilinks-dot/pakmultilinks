@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Plus, Search } from "lucide-react";
 import { products as seedProducts } from "@/lib/catalog";
 import { db, isDatabaseConfigured } from "@/lib/db";
-import { DemoNotice, EmptyState, PageHeading, panelClass } from "../../_components/ui";
+import { DemoNotice, EmptyState, PageHeading, panelClass, buttonClass } from "../../_components/ui";
 import { ProductActions } from "../../_components/product-actions";
 
-const money = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", maximumFractionDigits: 0 });
+const money = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;
@@ -30,7 +30,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
   return (
     <>
-      <PageHeading eyebrow="Catalogue" title="Products" description="Manage pricing, visibility, flexible specifications, and inventory levels." action={<Link href="/admin/products/new" className="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-900 px-4 text-sm font-bold text-white hover:bg-emerald-800"><Plus className="size-4" />Add product</Link>} />
+      <PageHeading eyebrow="Catalogue" title="Products" description="Manage pricing, visibility, flexible specifications, and inventory levels." action={<div className="flex gap-2"><Link href="/admin/pricing" className="inline-flex h-9 items-center rounded-lg border border-neutral-300 bg-white px-3 text-[13px] font-medium">Edit prices & stock</Link><Link href="/admin/products/new" className={buttonClass}><Plus className="size-4" />Add product</Link></div>} />
       {!connected && <DemoNotice />}
       <form className="mb-5 flex max-w-md items-center rounded-xl border border-slate-200 bg-white px-3 shadow-sm focus-within:border-emerald-700">
         <Search className="size-4 text-slate-400" /><input name="q" defaultValue={q} placeholder="Search name or SKU" className="h-11 min-w-0 flex-1 px-3 text-sm outline-none" /><button className="text-xs font-bold text-emerald-800">Search</button>

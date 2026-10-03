@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   const products = await listPublicProducts();
   const hasVerifiedProduct = products.some(
-    (product) => product.categorySlug === category.slug && !isDevelopmentProduct(product),
+    (product) => (product.categorySlug === category.slug || product.parentCategorySlug === category.slug) && !isDevelopmentProduct(product),
   );
 
   return {
@@ -54,7 +54,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     listPublicProducts(),
     listPublicCategories(),
   ]);
-  const categoryProducts = products.filter((product) => product.categorySlug === category.slug);
+  const categoryProducts = products.filter((product) => (product.categorySlug === category.slug || product.parentCategorySlug === category.slug));
   const indexableProducts = categoryProducts.filter((product) => !isDevelopmentProduct(product));
   const structuredData = [
     breadcrumbStructuredData([{ name: "Home", path: "/" }, { name: "Shop", path: "/shop" }, { name: category.name, path: `/shop/${category.slug}` }]),

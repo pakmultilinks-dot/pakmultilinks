@@ -1,3 +1,6 @@
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd());
+
 import { PrismaClient, ProductStatus, UserRole } from "@prisma/client";
 import { categories, products } from "../src/lib/catalog";
 
@@ -14,15 +17,10 @@ async function main() {
   for (const [sortOrder, category] of categories.entries()) {
     const saved = await prisma.category.upsert({
       where: { slug: category.slug },
-      update: {
-        name: category.name,
-        description: category.description,
-        icon: category.icon,
-        sortOrder,
-        isActive: true,
-      },
+      update: {},
       create: {
         id: category.id,
+        parentId: category.parentId ? categoryIds.get(categories.find(parent => parent.id === category.parentId)!.slug) : null,
         name: category.name,
         slug: category.slug,
         description: category.description,
@@ -40,34 +38,7 @@ async function main() {
 
     await prisma.product.upsert({
       where: { sku: product.sku },
-      update: {
-        name: product.name,
-        slug: product.slug,
-        shortDescription: product.shortDescription,
-        description: product.description,
-        price: product.price,
-        salePrice: product.salePrice ?? null,
-        priceOnRequest: product.priceOnRequest,
-        unitsPerCarton: product.unitsPerCarton,
-        minimumOrderCartons: product.minimumOrderCartons,
-        stock: product.stock,
-        lowStockThreshold: product.lowStockThreshold,
-        allowBackorder: product.allowBackorder ?? false,
-        featured: product.featured ?? false,
-        bestSeller: product.bestSeller ?? false,
-        bulkPricing: product.bulkPricing ?? false,
-        status: ProductStatus.ACTIVE,
-        categoryId,
-        brandId: brand.id,
-        images: {
-          deleteMany: {},
-          create: product.gallery.map((url, sortOrder) => ({ url, alt: product.name, sortOrder })),
-        },
-        attributes: {
-          deleteMany: {},
-          create: product.attributes.map((attribute, sortOrder) => ({ ...attribute, sortOrder })),
-        },
-      },
+      update: {},
       create: {
         id: product.id,
         name: product.name,

@@ -2,68 +2,46 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { BadgePercent, BarChart3, Boxes, Building2, FileText, FolderTree, LogOut, Menu, PackageSearch, Settings, ShoppingBag, Users, X } from "lucide-react";
+import { useRef, useState } from "react";
+import { BadgePercent, Home, Boxes, Building2, FileText, FolderTree, LogOut, Menu, Package, Settings, ShoppingBag, Users, X, Search, ExternalLink, SlidersHorizontal } from "lucide-react";
 
 const links = [
-  { href: "/admin", label: "Overview", icon: BarChart3 },
+  { href: "/admin", label: "Home", icon: Home },
+  { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { href: "/admin/products", label: "Products", icon: Boxes },
-  { href: "/admin/deals", label: "Deals", icon: BadgePercent },
+  { href: "/admin/pricing", label: "Pricing & inventory", icon: SlidersHorizontal },
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
   { href: "/admin/brands", label: "Brands", icon: Building2 },
-  { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
-  { href: "/admin/quotes", label: "Quotes", icon: FileText },
   { href: "/admin/customers", label: "Customers", icon: Users },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin/quotes", label: "Quotations", icon: FileText },
+  { href: "/admin/deals", label: "Offers & banners", icon: BadgePercent },
 ];
 
 export function AdminShell({ userName, children }: { userName: string; children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-
+  const menu = useRef<HTMLDialogElement>(null);
+  const [error, setError] = useState("");
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.replace("/admin/login");
-    router.refresh();
+    try {
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      if (!response.ok) throw new Error();
+      router.replace("/admin/login"); router.refresh();
+    } catch { setError("Could not sign out. Please try again."); }
   }
-
-  const navigation = (
-    <>
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-6">
-        <Link href="/admin" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <span className="grid size-10 place-items-center rounded-xl bg-emerald-400/15 text-emerald-300"><PackageSearch className="size-5" /></span>
-          <span><strong className="block text-sm text-white">Pak Multilinks</strong><small className="text-xs text-emerald-100/60">Store administration</small></span>
-        </Link>
-        <button className="rounded-lg p-2 text-white lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu"><X className="size-5" /></button>
-      </div>
-      <nav className="flex-1 space-y-1 p-3" aria-label="Administration">
-        {links.map(({ href, label, icon: Icon }) => {
-          const active = href === "/admin" ? pathname === href : pathname.startsWith(href);
-          return (
-            <Link key={href} href={href} onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition ${active ? "bg-white text-emerald-950 shadow-sm" : "text-emerald-50/75 hover:bg-white/10 hover:text-white"}`}>
-              <Icon className="size-4" aria-hidden="true" />{label}
-            </Link>
-          );
-        })}
-      </nav>
-      <div className="border-t border-white/10 p-4">
-        <p className="truncate px-2 text-xs text-emerald-100/60">Signed in as</p>
-        <p className="truncate px-2 pb-3 text-sm font-semibold text-white">{userName}</p>
-        <button onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-emerald-50/80 hover:bg-white/10 hover:text-white"><LogOut className="size-4" />Sign out</button>
-      </div>
-    </>
-  );
-
-  return (
-    <div className="min-h-screen bg-[#f5f7f6] text-slate-950">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col bg-emerald-950 lg:flex">{navigation}</aside>
-      {open && <div className="fixed inset-0 z-50 bg-slate-950/45 lg:hidden" onClick={() => setOpen(false)}><aside className="flex h-full w-[min(19rem,88vw)] flex-col bg-emerald-950" onClick={(event) => event.stopPropagation()}>{navigation}</aside></div>}
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur lg:ml-64 lg:px-8">
-        <button onClick={() => setOpen(true)} className="rounded-xl border border-slate-200 p-2 lg:hidden" aria-label="Open menu"><Menu className="size-5" /></button>
-        <div className="ml-auto flex items-center gap-3"><Link href="/" className="text-sm font-semibold text-emerald-800 hover:underline">View storefront</Link><span className="size-2 rounded-full bg-emerald-500" title="Authenticated" /></div>
-      </header>
-      <main className="px-4 py-7 sm:px-6 lg:ml-64 lg:px-8 lg:py-9">{children}</main>
-    </div>
-  );
+  const navigation = <>
+    <div className="flex items-center justify-between px-5 py-5"><div className="flex items-center gap-3"><span className="grid size-8 place-items-center rounded-lg border border-neutral-300 bg-white text-xs font-bold">PM</span><div><strong className="block text-[13px]">Pak Multilinks</strong><span className="text-[11px] text-neutral-500">Store administration</span></div></div><button onClick={() => menu.current?.close()} className="p-2 lg:hidden" aria-label="Close menu"><X className="size-4" /></button></div>
+    <nav aria-label="Administration" className="space-y-1 px-3">{links.map(({ href, label, icon: Icon }) => {
+      const active = href === "/admin" ? pathname === href : pathname.startsWith(href);
+      return <Link key={href} href={href} aria-current={active ? "page" : undefined} onClick={() => menu.current?.close()} className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] transition ${active ? "bg-white font-semibold text-neutral-950 shadow-sm" : "text-neutral-600 hover:bg-neutral-200/70"}`}><Icon className="size-[17px]" />{label}</Link>;
+    })}</nav>
+    <div className="mx-5 mt-7 border-t border-neutral-300 pt-5"><p className="mb-3 text-[11px] font-medium text-neutral-500">SALES CHANNEL</p><Link href="/" className="flex items-center gap-3 text-[13px] text-neutral-700"><Package className="size-4" />Online store<ExternalLink className="ml-auto size-3.5" /></Link></div>
+    <div className="mt-auto space-y-1 p-3"><Link href="/admin/settings" onClick={() => menu.current?.close()} className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] ${pathname === "/admin/settings" ? "bg-white font-semibold" : "text-neutral-600 hover:bg-neutral-200"}`}><Settings className="size-4" />Settings</Link><button onClick={logout} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] text-neutral-600 hover:bg-neutral-200"><LogOut className="size-4" />Sign out</button>{error && <p role="alert" className="p-2 text-xs text-red-700">{error}</p>}</div>
+  </>;
+  return <div className="admin-workspace min-h-screen bg-[#f1f1f1] text-[#303030]">
+    <header className="fixed inset-x-0 top-0 z-40 flex h-14 items-center gap-4 bg-[#1a1a1a] px-4 text-white lg:px-5"><button aria-label="Open menu" onClick={() => menu.current?.showModal()} className="grid size-9 place-items-center lg:hidden"><Menu className="size-5" /></button><Link href="/admin" className="flex w-auto shrink-0 items-center gap-2 text-sm font-semibold lg:w-52"><Package className="size-5 text-[#c5ddbc]" /><span className="hidden sm:inline">Pak Multilinks</span></Link><form action="/admin/products" className="mx-auto flex h-9 min-w-0 flex-1 max-w-xl items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3"><Search className="size-4 shrink-0 text-neutral-400" /><input name="q" aria-label="Search admin products" placeholder="Search products…" className="min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-neutral-400" /><button type="submit" className="text-[11px] text-neutral-300">Search</button></form><span className="ml-auto hidden text-xs text-neutral-300 md:block">{userName}</span><span className="grid size-8 shrink-0 place-items-center rounded-lg bg-[#d4e7c5] text-xs font-semibold text-neutral-900">{userName.slice(0, 2).toUpperCase()}</span></header>
+    <aside className="fixed bottom-0 left-0 top-14 z-30 hidden w-60 flex-col border-r border-neutral-200 bg-[#ebebeb] lg:flex">{navigation}</aside>
+    <dialog ref={menu} aria-label="Admin navigation" className="m-0 h-dvh max-h-none w-72 max-w-[88vw] bg-[#ebebeb] p-0 backdrop:bg-black/40"><div className="flex min-h-full flex-col">{navigation}</div></dialog>
+    <main className="min-w-0 px-4 pb-10 pt-20 sm:px-6 lg:ml-60 lg:px-8"><div className="mx-auto max-w-[1280px]">{children}</div></main>
+  </div>;
 }

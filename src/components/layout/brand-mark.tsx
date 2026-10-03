@@ -23,7 +23,7 @@ export function BrandMark({ compact = false, light = false, onNavigate }: { comp
         priority
         sizes={compact ? "142px" : light ? "250px" : "210px"}
         className={cn(
-          "h-auto w-[178px] object-contain sm:w-[210px]",
+          "h-auto w-[145px] object-contain sm:w-[210px]",
           compact && "w-[142px] sm:w-[160px]",
           light && "w-[220px] sm:w-[250px]",
         )}

@@ -25,7 +25,7 @@ export function StockStatus({
   const label = isOutOfStock
     ? "Out of stock"
     : isBackorder
-      ? "Availability confirmed on request"
+      ? "Available on request"
       : isLowStock
         ? showQuantity
           ? `Only ${stock} cartons left`
@@ -37,7 +37,7 @@ export function StockStatus({
   return (
     <span
       className={cn(
-        "inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
+        "inline-flex w-fit items-center gap-1.5 rounded-sm px-2 py-1 text-[10px] font-medium",
         isOutOfStock && "bg-stone-100 text-stone-600",
         isBackorder && "bg-amber-50 text-amber-800",
         isLowStock && "bg-amber-50 text-amber-800",

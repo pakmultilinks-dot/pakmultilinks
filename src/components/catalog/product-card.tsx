@@ -55,7 +55,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group overflow-hidden rounded-3xl border border-[#dce8df] bg-white shadow-[0_10px_35px_rgba(21,65,42,0.06)] transition duration-300 hover:-translate-y-0.5 hover:border-[#b9d2c0] hover:shadow-[0_16px_45px_rgba(21,65,42,0.1)]",
+        "product-card group flex flex-col overflow-hidden bg-white",
         layout === "list" &&
           "grid gap-0 sm:grid-cols-[210px_minmax(0,1fr)] lg:grid-cols-[230px_minmax(0,1fr)_220px]",
       )}
@@ -63,7 +63,7 @@ export function ProductCard({
       <Link
         href={`/product/${product.slug}`}
         className={cn(
-          "relative block aspect-square overflow-hidden bg-[#f5f8f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#17643a]",
+          "relative block aspect-square overflow-hidden bg-[#f6f5f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#17643a]",
           layout === "list" && "sm:aspect-auto sm:min-h-56",
         )}
         aria-label={`View ${product.name}`}
@@ -77,7 +77,7 @@ export function ProductCard({
           sizes={layout === "list" ? "(max-width: 640px) 100vw, 230px" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
           className="object-contain p-4 sm:p-5 transition duration-500 group-hover:scale-[1.04]"
         /> : <ProductMediaPlaceholder />}
-        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+        <div className="absolute left-2 top-2 flex flex-wrap gap-1">
           {hasSale && (
             <span className="rounded-full bg-[#17643a] px-2.5 py-1 text-xs font-bold text-white">
               {discount}% off
@@ -91,11 +91,11 @@ export function ProductCard({
         </div>
       </Link>
 
-      <div className={cn("flex min-w-0 flex-col p-5", layout === "list" && "sm:p-6")}>
+      <div className={cn("flex min-w-0 flex-col px-0 py-4", layout === "list" && "sm:p-6")}>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <Link
             href={`/shop/${product.categorySlug}`}
-            className="text-xs font-semibold uppercase tracking-[0.14em] text-[#48705a] hover:text-[#17643a] hover:underline"
+            className="text-[10px] font-normal tracking-wide text-[#48705a] hover:text-[#17643a] hover:underline"
           >
             {product.category}
           </Link>
@@ -107,7 +107,7 @@ export function ProductCard({
           />
         </div>
 
-        <Heading className="text-lg font-bold leading-snug text-[#173c29]">
+        <Heading className="text-sm font-medium leading-snug sm:text-base text-[#173c29]">
           <Link
             href={`/product/${product.slug}`}
             className="rounded-sm hover:text-[#17643a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17643a]"
@@ -117,7 +117,7 @@ export function ProductCard({
         </Heading>
         <p
           className={cn(
-            "mt-2 text-sm leading-6 text-[#617067]",
+            "mt-2 text-xs leading-5 text-[#617067]",
             layout === "grid" && "line-clamp-2",
           )}
         >
@@ -127,7 +127,7 @@ export function ProductCard({
         <div className="mt-3 space-y-1 text-xs font-semibold text-[#17643a]"><p>{cartonPacking(product)}</p><p>MOQ: {minimumCartons(product)} carton{minimumCartons(product) === 1 ? "" : "s"}</p></div>
 
         <div className="mt-auto flex items-end gap-2 pt-5">
-          <span className="text-xl font-extrabold tracking-tight text-[#173c29]">
+          <span className="text-sm font-semibold tracking-tight sm:text-base text-[#173c29]">
             {formatProductPrice(product)}
           </span>
           {hasSale && (
@@ -140,7 +140,7 @@ export function ProductCard({
 
       <div
         className={cn(
-          "grid grid-cols-[1fr_auto] gap-2 border-t border-[#e7eee9] p-5 pt-4",
+          "mt-auto grid grid-cols-[1fr_auto] gap-2 border-t border-neutral-200 pt-3",
           layout === "list" &&
             "sm:col-span-2 lg:col-span-1 lg:flex lg:flex-col lg:justify-center lg:border-l lg:border-t-0 lg:p-6",
         )}

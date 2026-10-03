@@ -114,3 +114,21 @@ Product images are optional. Products without media use an intentional storefron
 
 For multi-instance production deployment, replace local upload storage with Cloudinary, S3 or equivalent durable object storage while keeping the stored URL model.
 # Pak-Multilinks
+
+## Store management update
+
+- `/admin/pricing`: edit carton regular/sale prices, quote visibility, stock, units per carton and minimum quantities; select products for percentage adjustments and export the saved prices as CSV. Changes are validated and saved atomically. Stale edits return a conflict rather than overwriting a newer update.
+- `/admin/categories`: main categories and one level of subcategories. Archiving a parent hides its children and their products from the storefront. Product records remain intact.
+- Product editing includes a storefront price preview and decimal pricing. Parent collections include products assigned to their subcategories.
+
+For a local PostgreSQL database, put a random `LOCAL_DB_PASSWORD` in `.env.local` and set `DATABASE_URL` to `postgresql://pakmultilinks:<the same password>@127.0.0.1:54329/pakmultilinks?schema=public`. Then run:
+
+```bash
+npm run db:local
+npm run db:push
+npm run db:seed
+```
+
+Docker is required. The database binds only to localhost and persists in the `pakmultilinks-local-data` Docker volume. `db:local` can be run again to start the existing container. The seed adds missing catalogue records while preserving existing product pricing and media. The seven supplied starter products remain quote-only until actual prices and stock are entered.
+
+For an existing deployed database, apply the additive category schema with `npm run db:push` using that deployment's `DATABASE_URL` before deploying this code. This adds nullable `Category.parentId`, its index and foreign key; existing categories remain main categories. Create/reorganize subcategories in Admin. Do not point a hosted deployment at the local Docker database.

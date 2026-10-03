@@ -4,6 +4,7 @@ export type ProductAttribute = {
 };
 
 export type Category = {
+  parentId?: string | null;
   id: string;
   name: string;
   slug: string;
@@ -22,6 +23,7 @@ export type Product = {
   shortDescription: string;
   category: string;
   categorySlug: string;
+  parentCategorySlug?: string;
   brand: string;
   price: number;
   salePrice?: number;

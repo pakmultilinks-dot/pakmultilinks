@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Pause, Play } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -24,7 +25,7 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
     <section className="w-full bg-[#fbfaf5]" aria-label="Featured offers">
       <div className="w-full">
         <div
-          className="group relative isolate aspect-[16/9] w-full overflow-hidden bg-[#dbe9dd]"
+          className="group relative isolate aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden bg-[#dbe9dd]"
           role="region"
           aria-roledescription="carousel"
           aria-label="Current deals"
@@ -50,13 +51,17 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
                 priority={index === 0}
                 unoptimized={deal.imageUrl.startsWith("https://")}
                 sizes="100vw"
-                className="object-cover object-center"
+                className="object-contain object-center md:object-cover"
               />
               <span className="sr-only">{deal.title}</span>
             </Link>
           ))}
 
         </div>
+        {deals.length > 1 && <div className="flex items-center justify-center gap-1 border-b border-[#dce8df] py-2" aria-label="Offer controls">
+          {deals.map((deal, index) => <button key={deal.id} type="button" onClick={() => { setCurrent(index); setPaused(true); }} aria-label={`Show ${deal.title}`} aria-current={index === current ? "true" : undefined} className="focus-ring grid size-11 place-items-center rounded-full"><span className={`h-2 rounded-full ${index === current ? "w-6 bg-[#17643a]" : "w-2 bg-[#9ab6a1]"}`} /></button>)}
+          <button type="button" onClick={() => setPaused(!paused)} aria-label={paused ? "Play offers" : "Pause offers"} className="focus-ring grid size-11 place-items-center rounded-full text-[#17643a]">{paused ? <Play className="size-4" /> : <Pause className="size-4" />}</button>
+        </div>}
       </div>
     </section>
   );

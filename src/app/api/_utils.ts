@@ -55,6 +55,7 @@ export function apiFailure(error: unknown) {
   if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
     return jsonError("The requested record was not found or has already been removed.", 404);
   }
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2034") return jsonError("Another update was saved at the same time. Refresh and try again.", 409);
   console.error("API request failed", error);
   return jsonError("The request could not be completed.", 500);
 }

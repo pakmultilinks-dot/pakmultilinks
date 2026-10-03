@@ -7,6 +7,6 @@ export default async function NewProductPage() {
   let connected = isDatabaseConfigured;
   let categories = seedCategories.map(({ id, name }) => ({ id, name }));
   let brands: Array<{ id: string; name: string }> = [];
-  if (connected) try { [categories, brands] = await Promise.all([db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, select: { id: true, name: true } }), db.brand.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, select: { id: true, name: true } })]); } catch { connected = false; }
+  if (connected) try { [categories, brands] = await Promise.all([db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, select: { id: true, name: true, parentId: true } }), db.brand.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, select: { id: true, name: true } })]); } catch { connected = false; }
   return <><PageHeading eyebrow="Catalogue" title="Add product" description="Create a product record with inventory, pricing, media, and flexible specifications." />{!connected && <DemoNotice />}<ProductEditor categories={categories} brands={brands} disabled={!connected} /></>;
 }

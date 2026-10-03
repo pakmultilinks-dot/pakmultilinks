@@ -1,12 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { authenticateCredentials, checkRateLimit, createSessionToken, requestFingerprint, sessionCookie } from "@/lib/auth";
+import { authenticateCredentials, checkRateLimit, createSessionToken, requestFingerprint, resetRateLimit, sessionCookie } from "@/lib/auth";
 import { loginSchema, validationError } from "@/lib/validation";
 import { apiFailure, jsonError, noStoreHeaders, readJson } from "@/app/api/_utils";
 
 export async function POST(request: NextRequest) {
-  const rate = checkRateLimit(`login:${requestFingerprint(request)}`, 8, 15 * 60_000);
+  const rateKey = `login:${requestFingerprint(request)}`;
+  const rate = checkRateLimit(rateKey, 8, 15 * 60_000);
   if (!rate.allowed) {
-    return jsonError("Too many sign-in attempts. Please try again later.", 429, { retryAfter: rate.retryAfter });
+    return NextResponse.json(
+      { error: "Too many sign-in attempts. Please wait before trying again.", retryAfter: rate.retryAfter },
+      { status: 429, headers: { ...noStoreHeaders, "Retry-After": String(rate.retryAfter) } },
+    );
   }
   try {
     const parsed = loginSchema.safeParse(await readJson(request, 4_000));
@@ -16,6 +20,7 @@ export async function POST(request: NextRequest) {
     const token = await createSessionToken(session);
     const response = NextResponse.json({ user: session }, { headers: noStoreHeaders });
     response.cookies.set(sessionCookie.name, token, sessionCookie.options);
+    resetRateLimit(rateKey);
     return response;
   } catch (error) {
     return apiFailure(error);

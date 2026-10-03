@@ -43,6 +43,18 @@ export const categories: Category[] = [
   },
 ];
 
+// Two-level collection structure; packing and prices are managed separately.
+categories.push(
+  { id: "cat-facial", parentId: "cat-paper", name: "Facial Tissues", slug: "facial-tissues", description: "Boxed tissues and pop-up packs for everyday use.", icon: "PackageCheck", tone: "sand" },
+  { id: "cat-soft", parentId: "cat-paper", name: "Soft Pack Tissues", slug: "soft-pack-tissues", description: "Soft pack tissues supplied by the carton.", icon: "PackageCheck", tone: "sand" },
+  { id: "cat-rolls", parentId: "cat-paper", name: "Tissue Rolls", slug: "tissue-rolls", description: "Paper rolls for washrooms and shared facilities.", icon: "PackageCheck", tone: "sand" },
+  { id: "cat-napkins", parentId: "cat-paper", name: "Paper Napkins", slug: "paper-napkins", description: "Paper essentials for tables, pantries and food service.", icon: "PackageCheck", tone: "sand" },
+  { id: "cat-handwash", parentId: "cat-washroom", name: "Hand Wash", slug: "hand-wash", description: "Hand wash for washrooms and everyday care.", icon: "Droplets", tone: "mint" },
+  { id: "cat-dispensers", parentId: "cat-washroom", name: "Dispensers", slug: "dispensers", description: "Dispensers for shared washrooms and workplaces.", icon: "Droplets", tone: "mint" },
+  { id: "cat-floor", parentId: "cat-cleaning", name: "Floor & Surface Care", slug: "floor-surface-care", description: "Cleaning supplies for floors and everyday surfaces.", icon: "Sparkles", tone: "sky" },
+  { id: "cat-bags", parentId: "cat-disposable", name: "Garbage Bags", slug: "garbage-bags", description: "Waste bags for everyday workplace requirements.", icon: "Trash2", tone: "sand" },
+);
+
 const sharedProduct = {
   category: "Tissue & Paper Wholesale",
   categorySlug: "tissue-paper-products",
@@ -77,6 +89,9 @@ export const products: Product[] = [
     id: "prod-pop-up",
     slug: "pop-up",
     name: "Pop Up",
+    category: "Facial Tissues",
+    categorySlug: "facial-tissues",
+    parentCategorySlug: "tissue-paper-products",
     sku: "DEMO-POP-UP",
     shortDescription: "Wholesale Pop Up tissue supplied by carton.",
     featured: true,
@@ -105,6 +120,9 @@ export const products: Product[] = [
     id: "prod-mambo-roll",
     slug: "mambo-roll",
     name: "Mambo Roll",
+    category: "Tissue Rolls",
+    categorySlug: "tissue-rolls",
+    parentCategorySlug: "tissue-paper-products",
     sku: "DEMO-MAMBO-ROLL",
     shortDescription: "Mambo Roll supplied carton-wise for business customers.",
     featured: true,
@@ -122,6 +140,9 @@ export const products: Product[] = [
     id: "prod-soft-pack-p",
     slug: "soft-pack-p",
     name: "Soft Pack P",
+    category: "Soft Pack Tissues",
+    categorySlug: "soft-pack-tissues",
+    parentCategorySlug: "tissue-paper-products",
     sku: "DEMO-SOFT-PACK-P",
     shortDescription: "Soft Pack P available for carton-based bulk supply.",
   },
@@ -130,6 +151,9 @@ export const products: Product[] = [
     id: "prod-soft-pack-regular",
     slug: "soft-pack-regular",
     name: "Soft Pack Regular",
+    category: "Soft Pack Tissues",
+    categorySlug: "soft-pack-tissues",
+    parentCategorySlug: "tissue-paper-products",
     sku: "DEMO-SOFT-PACK-REG",
     shortDescription: "Soft Pack Regular supplied in wholesale cartons.",
   },

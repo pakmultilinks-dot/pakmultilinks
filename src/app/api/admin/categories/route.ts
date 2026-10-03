@@ -1,3 +1,4 @@
+import { categoryParentError } from "@/lib/category-tree";
 import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
@@ -20,8 +21,13 @@ export async function POST(request: NextRequest) {
     const parsed = categoryInputSchema.safeParse(await readJson(request, 12_000));
     if (!parsed.success) return NextResponse.json(validationError(parsed.error), { status: 400, headers: noStoreHeaders });
     const data = parsed.data;
-    const category = await requireDatabase().category.create({ data: { ...data, description: data.description || null, imageUrl: data.imageUrl || null, icon: data.icon || null } });
-    revalidatePath("/");
+    const category = await requireDatabase().$transaction(async (tx) => {
+      const error = await categoryParentError(tx, data.parentId);
+      if (error) return { error };
+      return tx.category.create({ data: { ...data, parentId: data.parentId || null, description: data.description || null, imageUrl: data.imageUrl || null, icon: data.icon || null } });
+    }, { isolationLevel: "Serializable" });
+    if ("error" in category) return jsonError(category.error, 400);
+    revalidatePath("/", "layout");
     revalidatePath("/shop");
     return NextResponse.json({ category: serialize(category) }, { status: 201, headers: noStoreHeaders });
   } catch (error) {

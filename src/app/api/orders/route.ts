@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     const created = await database.$transaction(
       async (tx) => {
         const products = await tx.product.findMany({
-          where: { id: { in: normalizedItems.map((item) => item.productId) }, status: ProductStatus.ACTIVE },
+          where: { id: { in: normalizedItems.map((item) => item.productId) }, status: ProductStatus.ACTIVE, category: { isActive: true, OR: [{ parentId: null }, { parent: { isActive: true } }] } },
           include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
         });
         if (products.length !== normalizedItems.length) throw new OrderInputError("One or more products are no longer available.");

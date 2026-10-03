@@ -30,7 +30,7 @@ const publicProductSelect = {
   bestSeller: true,
   bulkPricing: true,
   updatedAt: true,
-  category: { select: { name: true, slug: true } },
+  category: { select: { name: true, slug: true, parent: { select: { slug: true } } } },
   brand: { select: { name: true } },
   images: { orderBy: { sortOrder: "asc" as const }, select: { url: true, alt: true } },
   attributes: {
@@ -66,6 +66,7 @@ function mapProduct(row: PublicProductRow): Product {
     bulkPricing: row.bulkPricing,
     category: row.category.name,
     categorySlug: row.category.slug,
+    parentCategorySlug: row.category.parent?.slug,
     brand: row.brand?.name || "Unbranded",
     image,
     imageAlt: row.images.find((item) => item.url === image)?.alt || row.name,
@@ -83,7 +84,7 @@ export async function listPublicProducts(): Promise<Product[]> {
   if (!isDatabaseConfigured) return developmentProducts;
   try {
     const rows = await db.product.findMany({
-      where: { status: "ACTIVE", category: { isActive: true } },
+      where: { status: "ACTIVE", category: { isActive: true, OR: [{ parentId: null }, { parent: { isActive: true } }] } },
       orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
       select: publicProductSelect,
     });
@@ -99,7 +100,7 @@ export async function getPublicProduct(slug: string): Promise<Product | undefine
   if (!isDatabaseConfigured) return getDevelopmentProduct(slug);
   try {
     const row = await db.product.findFirst({
-      where: { slug, status: "ACTIVE", category: { isActive: true } },
+      where: { slug, status: "ACTIVE", category: { isActive: true, OR: [{ parentId: null }, { parent: { isActive: true } }] } },
       select: publicProductSelect,
     });
     return row ? mapProduct(row) : undefined;
@@ -113,10 +114,11 @@ export async function listPublicCategories(): Promise<Category[]> {
   if (!isDatabaseConfigured) return developmentCategories;
   try {
     const rows = await db.category.findMany({
-      where: { isActive: true },
+      where: { isActive: true, OR: [{ parentId: null }, { parent: { isActive: true } }] },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: {
         id: true,
+        parentId: true,
         name: true,
         slug: true,
         description: true,
@@ -126,6 +128,7 @@ export async function listPublicCategories(): Promise<Category[]> {
     });
     return rows.map((row) => ({
       id: row.id,
+      parentId: row.parentId,
       name: row.name,
       slug: row.slug,
       description: row.description || "Professional hygiene and workplace supplies.",

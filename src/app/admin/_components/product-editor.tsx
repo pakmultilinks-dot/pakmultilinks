@@ -19,7 +19,7 @@ import { useRef, useState, type FormEvent } from "react";
 
 import { buttonClass, inputClass, panelClass, textareaClass } from "./ui";
 
-type Option = { id: string; name: string };
+type Option = { id: string; name: string; parentId?: string | null };
 type EditableImage = { url: string; alt: string };
 
 export type EditableProduct = {
@@ -192,6 +192,7 @@ export function ProductEditor({
       <input
         type={type}
         min={type === "number" ? min : undefined}
+        step={type === "number" ? (key === "price" || key === "salePrice" ? "0.01" : "1") : undefined}
         value={String(value[key] ?? "")}
         onChange={(event) => {
           const raw = event.target.value;
@@ -211,8 +212,8 @@ export function ProductEditor({
   );
 
   return (
-    <form onSubmit={submit} className="space-y-6">
-      <div className="flex items-center justify-between gap-3">
+    <form onSubmit={submit} className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
+      <div className="flex items-center justify-between gap-3 lg:col-span-2">
         <Link href="/admin/products" className="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-emerald-800">
           <ArrowLeft className="size-4" /> Products
         </Link>
@@ -222,9 +223,9 @@ export function ProductEditor({
         </button>
       </div>
 
-      {message && <p role="alert" className="rounded-xl bg-red-50 p-4 text-sm text-red-800">{message}</p>}
+      {message && <p role="alert" className="rounded-xl bg-red-50 p-4 text-sm text-red-800 lg:col-span-2">{message}</p>}
 
-      <section className={`${panelClass} p-5 sm:p-6`}>
+      <section className={`${panelClass} p-5 sm:p-6 lg:col-start-1`}>
         <h2 className="mb-5 font-bold">Product information</h2>
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="block text-sm font-semibold text-slate-700">Name<input value={value.name} onChange={(event) => setSlugFromName(event.target.value)} disabled={disabled} required className={inputClass} /></label>
@@ -236,8 +237,8 @@ export function ProductEditor({
         </div>
       </section>
 
-      <section className={`${panelClass} p-5 sm:p-6`}>
-        <div className="mb-5"><h2 className="font-bold">Carton pricing & inventory</h2><p className="mt-1 text-xs text-slate-500">All prices and stock quantities are managed per carton—not per piece.</p></div>
+      <section className={`${panelClass} p-5 sm:p-6 lg:col-start-1`}>
+        <div className="mb-5"><h2 className="font-bold">Carton pricing & inventory</h2><p className="mt-1 text-xs text-slate-500">Prices are in PKR per carton. Clear sale price to end a discount; turn off “Price on request” to publish a price.</p></div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {field("Carton price (PKR)", "price", "number")}
           {field("Sale price per carton", "salePrice", "number")}
@@ -246,6 +247,7 @@ export function ProductEditor({
           {field("Available stock (cartons)", "stock", "number")}
           {field("Low-stock alert (cartons)", "lowStockThreshold", "number")}
         </div>
+        <div className="mt-5 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm"><span className="text-neutral-500">Customer sees </span><strong>{value.priceOnRequest ? "Price on request" : `Rs ${(value.salePrice ?? value.price).toLocaleString("en-PK")} / carton`}</strong>{!value.priceOnRequest && value.unitsPerCarton > 0 && <span className="ml-3 text-xs text-neutral-500">Rs {((value.salePrice ?? value.price) / value.unitsPerCarton).toFixed(2)} per unit</span>}{value.salePrice !== null && value.price > 0 && <span className="ml-3 text-xs text-neutral-500">{Math.round((1 - value.salePrice / value.price) * 100)}% discount</span>}</div>
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {([
             ["priceOnRequest", "Price on request"],
@@ -259,15 +261,15 @@ export function ProductEditor({
         </div>
       </section>
 
-      <section className={`${panelClass} p-5 sm:p-6`}>
+      <section className={`${panelClass} p-5 sm:p-6 lg:col-start-2 lg:row-span-2 ${message ? "lg:row-start-3" : "lg:row-start-2"}`}>
         <h2 className="mb-5 font-bold">Organization</h2>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <label className="block text-sm font-semibold text-slate-700">Category<select value={value.categoryId} onChange={(event) => set("categoryId", event.target.value)} disabled={disabled} required className={inputClass}><option value="">Select a category</option>{categories.map((option) => <option key={option.id} value={option.id}>{option.name}</option>)}</select></label>
+        <div className="grid gap-5">
+          <label className="block text-sm font-semibold text-slate-700">Category<select value={value.categoryId} onChange={(event) => set("categoryId", event.target.value)} disabled={disabled} required className={inputClass}><option value="">Select a category</option>{categories.map((option) => <option key={option.id} value={option.id}>{option.parentId ? `${categories.find(parent => parent.id === option.parentId)?.name || "Category"} / ` : ""}{option.name}</option>)}</select></label>
           <label className="block text-sm font-semibold text-slate-700">Brand<select value={value.brandId || ""} onChange={(event) => set("brandId", event.target.value || null)} disabled={disabled} className={inputClass}><option value="">No brand / unbranded</option>{brands.map((option) => <option key={option.id} value={option.id}>{option.name}</option>)}</select></label>
         </div>
       </section>
 
-      <section className={`${panelClass} p-5 sm:p-6`}>
+      <section className={`${panelClass} p-5 sm:p-6 lg:col-start-1`}>
         <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
           <div><h2 className="font-bold">Product media</h2><p className="mt-1 text-xs leading-5 text-slate-500">Optional. JPG, PNG or WebP; maximum 5 MB each and 12 images per product. The first image is primary.</p></div>
           <div className="flex gap-2"><button type="button" disabled={disabled || value.images.length >= 12} onClick={() => set("images", [...value.images, { url: "", alt: value.name }])} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-3 text-sm font-bold text-slate-700"><Plus className="size-4" />Add URL</button><button type="button" disabled={disabled || uploading || value.images.length >= 12} onClick={() => fileInputRef.current?.click()} className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-800 px-3 text-sm font-bold text-white disabled:opacity-50">{uploading ? <LoaderCircle className="size-4 animate-spin" /> : <Upload className="size-4" />}{uploading ? "Uploading…" : "Upload"}</button></div>
@@ -286,7 +288,7 @@ export function ProductEditor({
         </div>
       </section>
 
-      <section className={`${panelClass} p-5 sm:p-6`}>
+      <section className={`${panelClass} p-5 sm:p-6 lg:col-start-1`}>
         <div className="mb-5 flex items-center justify-between"><div><h2 className="font-bold">Specifications</h2><p className="text-xs text-slate-500">Flexible details such as ply, sheet count, size, or material.</p></div><button type="button" disabled={disabled || value.attributes.length >= 30} onClick={() => set("attributes", [...value.attributes, { name: "", value: "" }])} className="inline-flex items-center gap-1 text-sm font-bold text-emerald-800"><Plus className="size-4" />Add</button></div>
         <div className="space-y-3">{value.attributes.map((attribute, index) => <div key={index} className="grid gap-3 rounded-xl bg-slate-50 p-3 sm:grid-cols-[1fr_2fr_auto]"><input aria-label={`Specification ${index + 1} name`} placeholder="Ply / sheet count" value={attribute.name} onChange={(event) => set("attributes", value.attributes.map((item, itemIndex) => itemIndex === index ? { ...item, name: event.target.value } : item))} className={inputClass.replace("mt-1.5 ", "")} /><input aria-label={`Specification ${index + 1} value`} placeholder="Verified value" value={attribute.value} onChange={(event) => set("attributes", value.attributes.map((item, itemIndex) => itemIndex === index ? { ...item, value: event.target.value } : item))} className={inputClass.replace("mt-1.5 ", "")} /><button type="button" onClick={() => set("attributes", value.attributes.filter((_, itemIndex) => itemIndex !== index))} className="grid size-11 place-items-center rounded-xl text-red-700 hover:bg-red-50"><Trash2 className="size-4" /></button></div>)}</div>
       </section>

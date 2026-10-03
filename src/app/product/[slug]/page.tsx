@@ -116,7 +116,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const developmentProduct = isDevelopmentProduct(product);
 
   return (
-    <div className="bg-[#fbfcf8]">
+    <div className="bg-white">
       {!developmentProduct && (
         <script
           type="application/ld+json"
@@ -191,10 +191,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
             </div>
 
-            <h1 className="mt-4 text-4xl font-extrabold leading-[1.08] tracking-[-0.04em] text-[#153b28] sm:text-5xl">
+            <h1 className="mt-4 font-serif text-3xl font-normal leading-tight tracking-tight text-[#153b28] sm:text-4xl">
               {product.name}
             </h1>
-            <p className="mt-4 text-lg leading-8 text-[#5b6d61]">
+            <p className="mt-4 text-sm leading-7 text-[#5b6d61]">
               {product.shortDescription}
             </p>
 
@@ -216,19 +216,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         <section className="mt-14 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,.85fr)] lg:gap-8" aria-labelledby="product-information-heading">
-          <div className="rounded-3xl border border-[#dce8df] bg-white p-6 sm:p-8">
+          <div className="rounded-md border border-[#dce8df] bg-white p-6 sm:p-8">
             <div className="flex items-center gap-3">
               <span className="inline-flex size-10 items-center justify-center rounded-xl bg-[#eaf4ec] text-[#17643a]">
                 <PackageCheck className="size-5" aria-hidden="true" />
               </span>
-              <h2 id="product-information-heading" className="text-2xl font-extrabold tracking-tight text-[#173c29]">
+              <h2 id="product-information-heading" className="text-xl font-semibold tracking-tight text-[#173c29]">
                 Product information
               </h2>
             </div>
             <p className="mt-5 leading-8 text-[#5d6d63]">{product.description}</p>
 
             {product.bulkPricing && (
-              <div className="mt-7 flex items-start gap-3 rounded-2xl bg-[#f2f7ef] p-4">
+              <div className="mt-7 flex items-start gap-3 rounded-md bg-[#f2f7ef] p-4">
                 <Building2 className="mt-0.5 size-5 shrink-0 text-[#277144]" aria-hidden="true" />
                 <div>
                   <p className="font-bold text-[#294d36]">Corporate supply support</p>
@@ -240,12 +240,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
           </div>
 
-          <div className="rounded-3xl border border-[#dce8df] bg-white p-6 sm:p-8">
+          <div className="rounded-md border border-[#dce8df] bg-white p-6 sm:p-8">
             <div className="flex items-center gap-3">
               <span className="inline-flex size-10 items-center justify-center rounded-xl bg-[#eaf4ec] text-[#17643a]">
                 <Tag className="size-5" aria-hidden="true" />
               </span>
-              <h2 className="text-2xl font-extrabold tracking-tight text-[#173c29]">
+              <h2 className="text-xl font-semibold tracking-tight text-[#173c29]">
                 Specifications
               </h2>
             </div>

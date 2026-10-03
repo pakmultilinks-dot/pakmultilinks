@@ -13,13 +13,13 @@ export default async function AdminLoginPage() {
   );
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f4f8f5] px-4 py-12">
-      <section className="w-full max-w-md rounded-[2rem] border border-emerald-950/10 bg-white p-7 shadow-[0_24px_70px_rgba(16,66,45,0.12)] sm:p-10">
+    <main className="flex min-h-screen items-center justify-center bg-[#f1f1f1] px-4 py-12">
+      <section className="w-full max-w-md rounded-xl border border-neutral-200 bg-white p-7 shadow-sm sm:p-10">
         <div className="mb-8 flex items-center gap-3">
-          <span className="grid size-12 place-items-center rounded-2xl bg-emerald-900 text-white"><ShieldCheck aria-hidden="true" /></span>
+          <span className="grid size-12 place-items-center rounded-lg bg-neutral-900 text-white"><ShieldCheck aria-hidden="true" /></span>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Secure area</p>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-950">Administration</h1>
+            <p className="text-xs font-medium text-neutral-500">Pak Multilinks</p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-950">Log in to your store</h1>
           </div>
         </div>
         <p className="mb-7 text-sm leading-6 text-slate-600">Sign in to manage products, inventory, orders, quotation requests, and store details.</p>
@@ -29,7 +29,7 @@ export default async function AdminLoginPage() {
           </div>
         )}
         <AdminLoginForm disabled={!configured} />
-        <Link href="/" className="mt-7 block text-center text-sm font-semibold text-emerald-800 hover:underline">Return to storefront</Link>
+        <Link href="/" className="mt-7 block text-center text-sm font-semibold text-neutral-600 hover:underline">Return to storefront</Link>
       </section>
     </main>
   );

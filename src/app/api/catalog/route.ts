@@ -17,9 +17,7 @@ export async function GET() {
     { products, categories, demoMode },
     {
       headers: {
-        "Cache-Control": demoMode
-          ? "public, max-age=30"
-          : "public, s-maxage=60, stale-while-revalidate=300",
+        "Cache-Control": "no-store",
       },
     },
   );

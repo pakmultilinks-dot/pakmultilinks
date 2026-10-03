@@ -125,8 +125,8 @@ export const productInputSchema = z
     sku: z.string().trim().toUpperCase().min(2).max(80).regex(/^[A-Z0-9._-]+$/),
     shortDescription: optionalText(300),
     description: text(10, 5_000),
-    price: z.coerce.number().nonnegative().max(100_000_000),
-    salePrice: z.coerce.number().nonnegative().max(100_000_000).nullable().optional(),
+    price: z.coerce.number().nonnegative().max(100_000_000).multipleOf(0.01),
+    salePrice: z.coerce.number().nonnegative().max(100_000_000).multipleOf(0.01).nullable().optional(),
     priceOnRequest: z.boolean().default(false),
     unitsPerCarton: z.coerce.number().int().min(0).max(1_000_000).default(0),
     minimumOrderCartons: z.coerce.number().int().min(1).max(100_000).default(1),
@@ -148,6 +148,7 @@ export const productInputSchema = z
   });
 
 export const categoryInputSchema = z.object({
+  parentId: z.string().min(1).max(80).nullable().optional(),
   name: text(2, 100),
   slug,
   description: optionalText(500),
@@ -199,3 +200,17 @@ export function validationError(error: z.ZodError) {
     issues: error.issues.map((issue) => ({ path: issue.path.join("."), message: issue.message })),
   };
 }
+
+const moneyInput = z.number().finite().nonnegative().max(100_000_000).refine(value => Math.abs(value * 100 - Math.round(value * 100)) < 0.00001, "Use at most two decimal places");
+export const pricingBatchSchema = z.object({
+  products: z.array(z.object({
+    id: z.string().min(1).max(80),
+    updatedAt: z.iso.datetime(),
+    price: moneyInput,
+    salePrice: moneyInput.nullable(),
+    priceOnRequest: z.boolean(),
+    stock: z.number().int().min(0).max(10_000_000),
+    unitsPerCarton: z.number().int().min(0).max(1_000_000),
+    minimumOrderCartons: z.number().int().min(1).max(100_000),
+  }).refine(row => row.salePrice === null || row.salePrice <= row.price, { path: ["salePrice"], message: "Sale price cannot exceed regular price" })).min(1).max(100),
+}).refine(data => new Set(data.products.map(row => row.id)).size === data.products.length, "Duplicate products are not allowed");

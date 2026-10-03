@@ -2,7 +2,7 @@ import { Search, UserRound } from "lucide-react";
 import { db, isDatabaseConfigured } from "@/lib/db";
 import { DemoNotice, EmptyState, PageHeading, panelClass } from "../../_components/ui";
 
-const money = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", maximumFractionDigits: 0 });
+const money = new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
 export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;

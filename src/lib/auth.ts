@@ -170,6 +170,11 @@ export function checkRateLimit(key: string, limit: number, windowMs: number) {
   };
 }
 
+/** Clear consecutive failed attempts after a successful sign-in. */
+export function resetRateLimit(key: string) {
+  limiterStore.delete(key);
+}
+
 export function requestFingerprint(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   return forwarded || request.headers.get("x-real-ip") || "unknown";

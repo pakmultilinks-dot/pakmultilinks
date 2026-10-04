@@ -1,0 +1,362 @@
+[
+  {
+    "id": "faq-001",
+    "category": "Products",
+    "question": "What tissue products do you sell?",
+    "answer": ""
+  },
+  {
+    "id": "faq-002",
+    "category": "Products",
+    "question": "Which brands are available?",
+    "answer": ""
+  },
+  {
+    "id": "faq-003",
+    "category": "Products",
+    "question": "Do you sell facial tissues?",
+    "answer": ""
+  },
+  {
+    "id": "faq-004",
+    "category": "Products",
+    "question": "Do you sell pocket tissues?",
+    "answer": ""
+  },
+  {
+    "id": "faq-005",
+    "category": "Products",
+    "question": "Do you sell toilet rolls?",
+    "answer": ""
+  },
+  {
+    "id": "faq-006",
+    "category": "Products",
+    "question": "Do you sell kitchen towels?",
+    "answer": ""
+  },
+  {
+    "id": "faq-007",
+    "category": "Products",
+    "question": "Do you sell paper napkins?",
+    "answer": ""
+  },
+  {
+    "id": "faq-008",
+    "category": "Products",
+    "question": "Do you sell hand towel tissues?",
+    "answer": ""
+  },
+  {
+    "id": "faq-009",
+    "category": "Products",
+    "question": "Do you sell jumbo tissue rolls?",
+    "answer": ""
+  },
+  {
+    "id": "faq-010",
+    "category": "Products",
+    "question": "Do you sell cleaning supplies?",
+    "answer": ""
+  },
+  {
+    "id": "faq-011",
+    "category": "Products",
+    "question": "Do you sell food wrapping products?",
+    "answer": ""
+  },
+  {
+    "id": "faq-012",
+    "category": "Products",
+    "question": "Do you sell dispensers?",
+    "answer": ""
+  },
+  {
+    "id": "faq-013",
+    "category": "Product details",
+    "question": "What is the difference between 1-ply, 2-ply and 3-ply tissues?",
+    "answer": ""
+  },
+  {
+    "id": "faq-014",
+    "category": "Product details",
+    "question": "How many sheets are in each tissue box?",
+    "answer": ""
+  },
+  {
+    "id": "faq-015",
+    "category": "Product details",
+    "question": "How many rolls are in a carton?",
+    "answer": ""
+  },
+  {
+    "id": "faq-016",
+    "category": "Product details",
+    "question": "What sizes of napkins are available?",
+    "answer": ""
+  },
+  {
+    "id": "faq-017",
+    "category": "Product details",
+    "question": "Are your tissues scented or unscented?",
+    "answer": ""
+  },
+  {
+    "id": "faq-018",
+    "category": "Product details",
+    "question": "Are your tissues suitable for sensitive skin?",
+    "answer": ""
+  },
+  {
+    "id": "faq-019",
+    "category": "Product details",
+    "question": "Are your products suitable for restaurants?",
+    "answer": ""
+  },
+  {
+    "id": "faq-020",
+    "category": "Product details",
+    "question": "Are your products suitable for offices?",
+    "answer": ""
+  },
+  {
+    "id": "faq-021",
+    "category": "Product details",
+    "question": "Are your products suitable for hospitals?",
+    "answer": ""
+  },
+  {
+    "id": "faq-022",
+    "category": "Product details",
+    "question": "Can I request a product sample?",
+    "answer": ""
+  },
+  {
+    "id": "faq-023",
+    "category": "Product details",
+    "question": "Can you share product specifications?",
+    "answer": ""
+  },
+  {
+    "id": "faq-024",
+    "category": "Product details",
+    "question": "Can I see the product catalogue?",
+    "answer": ""
+  },
+  {
+    "id": "faq-025",
+    "category": "Pricing and wholesale",
+    "question": "What is the price of this product?",
+    "answer": ""
+  },
+  {
+    "id": "faq-026",
+    "category": "Pricing and wholesale",
+    "question": "Are prices per piece, pack or carton?",
+    "answer": ""
+  },
+  {
+    "id": "faq-027",
+    "category": "Pricing and wholesale",
+    "question": "Are taxes included in the price?",
+    "answer": ""
+  },
+  {
+    "id": "faq-028",
+    "category": "Pricing and wholesale",
+    "question": "Do you offer wholesale prices?",
+    "answer": ""
+  },
+  {
+    "id": "faq-029",
+    "category": "Pricing and wholesale",
+    "question": "What is the minimum order quantity?",
+    "answer": ""
+  },
+  {
+    "id": "faq-030",
+    "category": "Pricing and wholesale",
+    "question": "Do you offer discounts on bulk orders?",
+    "answer": ""
+  },
+  {
+    "id": "faq-031",
+    "category": "Pricing and wholesale",
+    "question": "Can I request a quotation?",
+    "answer": ""
+  },
+  {
+    "id": "faq-032",
+    "category": "Pricing and wholesale",
+    "question": "How long is a quotation valid?",
+    "answer": ""
+  },
+  {
+    "id": "faq-033",
+    "category": "Pricing and wholesale",
+    "question": "Can you supply businesses regularly?",
+    "answer": ""
+  },
+  {
+    "id": "faq-034",
+    "category": "Pricing and wholesale",
+    "question": "Do you offer distributor pricing?",
+    "answer": ""
+  },
+  {
+    "id": "faq-035",
+    "category": "Pricing and wholesale",
+    "question": "Do you offer private label products?",
+    "answer": ""
+  },
+  {
+    "id": "faq-036",
+    "category": "Pricing and wholesale",
+    "question": "Can I order custom branded packaging?",
+    "answer": ""
+  },
+  {
+    "id": "faq-037",
+    "category": "Orders and payment",
+    "question": "How do I place an order?",
+    "answer": ""
+  },
+  {
+    "id": "faq-038",
+    "category": "Orders and payment",
+    "question": "Can I order through WhatsApp?",
+    "answer": ""
+  },
+  {
+    "id": "faq-039",
+    "category": "Orders and payment",
+    "question": "Can I order without creating an account?",
+    "answer": ""
+  },
+  {
+    "id": "faq-040",
+    "category": "Orders and payment",
+    "question": "Which payment methods do you accept?",
+    "answer": ""
+  },
+  {
+    "id": "faq-041",
+    "category": "Orders and payment",
+    "question": "Do you offer cash on delivery?",
+    "answer": ""
+  },
+  {
+    "id": "faq-042",
+    "category": "Orders and payment",
+    "question": "Can I pay by bank transfer?",
+    "answer": ""
+  },
+  {
+    "id": "faq-043",
+    "category": "Orders and payment",
+    "question": "Do you provide invoices?",
+    "answer": ""
+  },
+  {
+    "id": "faq-044",
+    "category": "Orders and payment",
+    "question": "Can I change my order after placing it?",
+    "answer": ""
+  },
+  {
+    "id": "faq-045",
+    "category": "Orders and payment",
+    "question": "Can I cancel my order?",
+    "answer": ""
+  },
+  {
+    "id": "faq-046",
+    "category": "Orders and payment",
+    "question": "How can I check whether a product is in stock?",
+    "answer": ""
+  },
+  {
+    "id": "faq-047",
+    "category": "Orders and payment",
+    "question": "Can I pre-order an out-of-stock product?",
+    "answer": ""
+  },
+  {
+    "id": "faq-048",
+    "category": "Orders and payment",
+    "question": "How do I track my order?",
+    "answer": ""
+  },
+  {
+    "id": "faq-049",
+    "category": "Delivery and support",
+    "question": "Which cities do you deliver to?",
+    "answer": ""
+  },
+  {
+    "id": "faq-050",
+    "category": "Delivery and support",
+    "question": "Do you deliver across Pakistan?",
+    "answer": ""
+  },
+  {
+    "id": "faq-051",
+    "category": "Delivery and support",
+    "question": "What are your delivery charges?",
+    "answer": ""
+  },
+  {
+    "id": "faq-052",
+    "category": "Delivery and support",
+    "question": "How long does delivery take?",
+    "answer": ""
+  },
+  {
+    "id": "faq-053",
+    "category": "Delivery and support",
+    "question": "Do you offer same-day delivery?",
+    "answer": ""
+  },
+  {
+    "id": "faq-054",
+    "category": "Delivery and support",
+    "question": "Can I collect an order from your warehouse?",
+    "answer": ""
+  },
+  {
+    "id": "faq-055",
+    "category": "Delivery and support",
+    "question": "Do you offer free delivery on bulk orders?",
+    "answer": ""
+  },
+  {
+    "id": "faq-056",
+    "category": "Delivery and support",
+    "question": "What should I do if my order arrives damaged?",
+    "answer": ""
+  },
+  {
+    "id": "faq-057",
+    "category": "Delivery and support",
+    "question": "What should I do if an item is missing?",
+    "answer": ""
+  },
+  {
+    "id": "faq-058",
+    "category": "Delivery and support",
+    "question": "What is your return policy?",
+    "answer": ""
+  },
+  {
+    "id": "faq-059",
+    "category": "Delivery and support",
+    "question": "What are your business hours?",
+    "answer": ""
+  },
+  {
+    "id": "faq-060",
+    "category": "Delivery and support",
+    "question": "How can I contact your team?",
+    "answer": ""
+  }
+]

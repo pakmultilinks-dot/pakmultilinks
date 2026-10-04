@@ -12,7 +12,7 @@ export function HomeHero() {
         <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"><Link href="/shop" className="commerce-button commerce-button-primary">Shop the collection<ArrowRight className="size-4" /></Link><Link href="/request-quote" className="commerce-button commerce-button-secondary">Request a bulk quote</Link></div>
         <p className="mt-6 text-xs text-neutral-500">Based in Lahore · Wholesale & business supply</p>
       </div>
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#e9e8e2] lg:aspect-square"><Image src="/images/hero-products-green.png" alt="Tissue boxes, soft packs and paper rolls from the Pak Multilinks range" fill preload sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" /></div>
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#e9e8e2] lg:aspect-square"><Image src="/images/warehouse-team.webp" alt="Warehouse staff packing tissue cartons and checking inventory, with colleagues organizing stock in the background" fill preload sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" /></div>
     </div>
   </section>;
 }

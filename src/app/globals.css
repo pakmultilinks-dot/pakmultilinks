@@ -169,3 +169,12 @@ summary::-webkit-details-marker {
 @media (max-width: 639px) {
   .admin-workspace :is(input, select, textarea) { font-size: 16px; }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

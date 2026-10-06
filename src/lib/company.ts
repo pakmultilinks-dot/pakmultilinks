@@ -8,7 +8,8 @@ export const company = {
   phoneHref: "+923006917385",
   email: "zohair.shah8@gmail.com",
   address: "Shop No LG-9, Rehman Tower Main Market Gulberg II, Lahore",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") || "",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") || "923006917385",
+  facebookUrl: process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://www.facebook.com/pakmultilinks",
   currency: "PKR",
 };
 

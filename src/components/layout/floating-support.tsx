@@ -113,8 +113,8 @@ export function FloatingSupport() {
           </div>
         </section>
       )}
-      <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls={open ? "support-assistant" : undefined} aria-label={open ? "Close chat" : "Chat with us"} className="focus-ring fixed bottom-5 left-3 z-[65] flex h-11 items-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium text-[#23372d] shadow-sm transition hover:bg-neutral-50 sm:left-6">{open ? <X className="size-4" /> : <MessageCircle className="size-4" />}<span>Chat</span></button>
-      <a href={`https://wa.me/${company.phoneHref.replace("+", "")}`} target="_blank" rel="noreferrer" className="focus-ring fixed bottom-5 right-4 z-[65] grid size-11 place-items-center rounded-full border border-white/60 bg-[#238b4e] text-white shadow-lg sm:right-6" aria-label="Chat with our team on WhatsApp" title="Chat on WhatsApp"><MessageCircle className="size-5" /></a>
+      <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls={open ? "support-assistant" : undefined} aria-label={open ? "Close chat" : "Chat with us"} className="focus-ring fixed bottom-16 left-3 z-[65] flex h-10 items-center gap-2 rounded-full border border-neutral-300 bg-white/95 px-3 text-xs font-semibold text-[#23372d] shadow-md backdrop-blur-sm transition hover:bg-neutral-50 sm:bottom-5 sm:left-6 sm:h-11 sm:rounded-md sm:text-sm sm:font-medium">{open ? <X className="size-4" /> : <MessageCircle className="size-4" />}<span>Chat</span></button>
+      <a href={`https://wa.me/${company.phoneHref.replace("+", "")}`} target="_blank" rel="noreferrer" className="focus-ring fixed bottom-5 right-6 z-[65] hidden size-12 place-items-center rounded-full border border-white/60 bg-[#25D366] text-white shadow-lg transition hover:bg-[#1fb355] sm:grid" aria-label="Chat with our team on WhatsApp" title="Chat on WhatsApp"><MessageCircle className="size-6" /></a>
     </>
   );
 }

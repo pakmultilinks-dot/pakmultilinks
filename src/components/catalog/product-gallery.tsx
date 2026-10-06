@@ -8,18 +8,18 @@ import { cn } from "@/lib/utils";
 
 import { ProductMediaPlaceholder } from "./product-media-placeholder";
 
+import { getProductImage } from "@/lib/category-meta";
+
 type ProductGalleryProps = {
   images: string[];
   productName: string;
 };
 
 export function ProductGallery({ images, productName }: ProductGalleryProps) {
+  const fallback = getProductImage({ name: productName });
   const uniqueImages = [...new Set(images.filter(Boolean))];
-  const [selectedImage, setSelectedImage] = useState(uniqueImages[0]);
-
-  if (!selectedImage) {
-    return <div className="aspect-square overflow-hidden rounded-3xl border border-[#dce8df]"><ProductMediaPlaceholder /></div>;
-  }
+  const effectiveImages = uniqueImages.length > 0 ? uniqueImages : [fallback];
+  const [selectedImage, setSelectedImage] = useState(effectiveImages[0]);
 
   return (
     <div

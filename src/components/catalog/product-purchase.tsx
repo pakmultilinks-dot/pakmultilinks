@@ -11,6 +11,7 @@ import { cartonPacking, formatPrice, formatProductPrice, minimumCartons } from "
 import { trackStorefrontEvent } from "@/lib/analytics";
 
 import { StockStatus } from "./stock-status";
+import { SalesContactLink } from "@/components/commerce/sales-contact";
 
 type ProductPurchaseProps = {
   product: Product;
@@ -139,6 +140,17 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             Buy now
           </button>
         </div>
+      </div>
+
+      {/* Prominent WhatsApp to Order Action */}
+      <div className="mt-3.5">
+        <SalesContactLink
+          product={product}
+          quantity={quantity}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-[#1ebc56] active:scale-[0.98]"
+        >
+          WhatsApp to Order / Get Bulk Price
+        </SalesContactLink>
       </div>
 
       <p className="sr-only" aria-live="polite">

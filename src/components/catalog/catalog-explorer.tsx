@@ -310,6 +310,39 @@ export function CatalogExplorer({
 
       <section className="bg-white py-8 sm:py-12">
         <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
+          {/* Mobile Quick Category Slider */}
+          {!fixedCategorySlug && (
+            <div className="mb-3.5 lg:hidden">
+              <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-1 pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => { setCategory(""); resetVisibleCount(); }}
+                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold transition active:scale-95 ${
+                    category === ""
+                      ? "bg-[#17643a] text-white shadow-xs"
+                      : "border border-[#d2dfd6] bg-white text-[#2a4d38]"
+                  }`}
+                >
+                  All Products
+                </button>
+                {categoryOptions.filter(c => !c.parentId).map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => { setCategory(item.slug); resetVisibleCount(); }}
+                    className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold transition active:scale-95 ${
+                      category === item.slug
+                        ? "bg-[#17643a] text-white shadow-xs"
+                        : "border border-[#d2dfd6] bg-white text-[#2a4d38]"
+                    }`}
+                  >
+                    {item.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <details className="mb-5 rounded-md border border-[#d9e6dc] bg-white p-4 lg:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold text-[#244b35] marker:hidden">
               <span className="inline-flex items-center gap-2">

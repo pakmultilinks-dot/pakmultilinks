@@ -116,7 +116,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const developmentProduct = isDevelopmentProduct(product);
 
   return (
-    <div className="bg-white">
+    <div className="product-page bg-white">
       {!developmentProduct && (
         <script
           type="application/ld+json"
@@ -168,7 +168,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </ol>
         </nav>
 
-        <div className="grid gap-9 lg:grid-cols-[minmax(0,1.04fr)_minmax(380px,.96fr)] lg:gap-12">
+        <div className="product-overview grid gap-9 lg:grid-cols-[minmax(0,1.04fr)_minmax(380px,.96fr)] lg:gap-12">
           <ProductGallery key={product.id} images={productImages} productName={product.name} />
 
           <div className="min-w-0">
@@ -289,7 +289,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 View {product.category}
               </Link>
             </div>
-            <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-7 grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-4">
               {relatedProducts.map((relatedProduct) => (
                 <ProductCard key={relatedProduct.id} product={relatedProduct} headingLevel="h3" />
               ))}

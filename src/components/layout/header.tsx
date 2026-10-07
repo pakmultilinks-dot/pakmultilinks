@@ -165,7 +165,7 @@ export function Header() {
   return (
     <>
       <a href="#main-content" className="fixed left-3 top-3 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#17643a] shadow-xl focus:translate-y-0">Skip to content</a>
-      <header ref={headerRef} onFocusCapture={() => setHeaderHidden(false)} className={`sticky top-0 z-50 border-b border-[#dce8df] bg-white transition-transform duration-300 ease-out motion-reduce:transition-none ${headerHidden ? "-translate-y-full" : "translate-y-0"}`}>
+      <header ref={headerRef} onFocusCapture={() => setHeaderHidden(false)} className={`hidden md:block sticky top-0 z-50 border-b border-[#dce8df] bg-white transition-transform duration-300 ease-out motion-reduce:transition-none ${headerHidden ? "-translate-y-full" : "translate-y-0"}`}>
         <div className="bg-[#f2f1ec] text-neutral-700">
           <div className="site-shell flex min-h-10 items-center justify-between gap-4 text-[11px] font-semibold sm:text-xs">
             <Link href="/request-quote" className="announcement-marquee min-w-0 flex-1 overflow-hidden py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#183528]">

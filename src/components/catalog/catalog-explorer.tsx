@@ -149,7 +149,7 @@ export function CatalogExplorer({
   function renderFilterFields(idPrefix: string) {
     return (
       <div className="space-y-6">
-        <div>
+        <div className="hidden md:block">
           <label
             htmlFor={`${idPrefix}-catalog-search`}
             className="mb-2 block text-sm font-bold text-[#244b35]"
@@ -292,8 +292,8 @@ export function CatalogExplorer({
 
   return (
     <>
-      {hideHero && <section className="border-b border-[#dce8df] bg-white"><div className="mx-auto max-w-[1500px] px-4 py-7 sm:px-6 lg:px-8"><nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-2 text-xs font-semibold text-[#6d7e73]"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/shop">Shop</Link><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav><h1 className="font-serif text-2xl font-normal tracking-tight text-[#153b28] sm:text-3xl">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-[#596c61]">{description}</p></div></section>}
-      {!hideHero && <section className="border-b border-[#dce8df] bg-[#f4f3ee]">
+      {hideHero && <section className="catalog-heading catalog-category-heading border-b border-[#dce8df] bg-white"><div className="mx-auto max-w-[1500px] px-4 py-7 sm:px-6 lg:px-8"><nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-2 text-xs font-semibold text-[#6d7e73]"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/shop">Shop</Link><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav><h1 className="font-serif text-2xl font-normal tracking-tight text-[#153b28] sm:text-3xl">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-[#596c61]">{description}</p></div></section>}
+      {!hideHero && <section className="catalog-heading border-b border-[#dce8df] bg-[#f4f3ee]">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs font-semibold text-[#6d7e73]"><Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">Shop</span></nav>
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#2f754a]">
@@ -308,15 +308,22 @@ export function CatalogExplorer({
         </div>
       </section>}
 
-      <section className="bg-white py-8 sm:py-12">
+      <section className="catalog-body bg-white py-8 sm:py-12">
         <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
+          <div className="catalog-mobile-search md:hidden" role="search">
+            <Search size={20} aria-hidden="true" />
+            <label htmlFor="catalog-mobile-query" className="sr-only">Search products</label>
+            <input id="catalog-mobile-query" type="search" value={search} onChange={event => { setSearch(event.target.value); resetVisibleCount(); }} placeholder="Search products" enterKeyHint="search" />
+            {search && <button type="button" onClick={() => { setSearch(""); resetVisibleCount(); }} className="focus-ring" aria-label="Clear search"><X size={18} /></button>}
+          </div>
           {/* Mobile Quick Category Slider */}
           {!fixedCategorySlug && (
             <div className="mb-3.5 lg:hidden">
-              <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-1 pt-0.5">
+              <div className="catalog-category-chips no-scrollbar flex items-center gap-2 overflow-x-auto pb-1 pt-0.5">
                 <button
                   type="button"
                   onClick={() => { setCategory(""); resetVisibleCount(); }}
+                  aria-pressed={category === ""}
                   className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold transition active:scale-95 ${
                     category === ""
                       ? "bg-[#17643a] text-white shadow-xs"
@@ -330,6 +337,7 @@ export function CatalogExplorer({
                     key={item.id}
                     type="button"
                     onClick={() => { setCategory(item.slug); resetVisibleCount(); }}
+                    aria-pressed={category === item.slug}
                     className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold transition active:scale-95 ${
                       category === item.slug
                         ? "bg-[#17643a] text-white shadow-xs"
@@ -343,7 +351,7 @@ export function CatalogExplorer({
             </div>
           )}
 
-          <details className="mb-5 rounded-md border border-[#d9e6dc] bg-white p-4 lg:hidden">
+          <details className="catalog-mobile-filters group mb-5 rounded-md border border-[#d9e6dc] bg-white p-4 lg:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold text-[#244b35] marker:hidden">
               <span className="inline-flex items-center gap-2">
                 <SlidersHorizontal className="size-4" aria-hidden="true" />
@@ -354,7 +362,7 @@ export function CatalogExplorer({
                   </span>
                 )}
               </span>
-              <span className="text-xs font-semibold text-[#63746a]">Tap to open</span>
+              <span className="text-xs font-semibold text-[#63746a]"><span className="group-open:hidden">Show filters</span><span className="hidden group-open:inline">Hide filters</span></span>
             </summary>
             <div className="mt-5 border-t border-[#d9e6dc] pt-5">
               {renderFilterFields("mobile")}
@@ -379,7 +387,7 @@ export function CatalogExplorer({
             </aside>
 
             <div className="min-w-0">
-              <div className="mb-6 flex flex-col gap-4 rounded-md border border-[#e0e9e2] bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="catalog-toolbar mb-6 flex flex-col gap-4 rounded-md border border-[#e0e9e2] bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-[#596b60]" role="status" aria-live="polite">
                   <span className="font-extrabold text-[#173c29]">{filteredProducts.length}</span>{" "}
                   {filteredProducts.length === 1 ? "product" : "products"} found
@@ -406,7 +414,7 @@ export function CatalogExplorer({
                   </label>
 
                   <div
-                    className="flex rounded-md border border-[#cad9ce] bg-[#f7faf7] p-1"
+                    className="catalog-view-toggle flex rounded-md border border-[#cad9ce] bg-[#f7faf7] p-1"
                     role="group"
                     aria-label="Product layout"
                   >
@@ -446,7 +454,7 @@ export function CatalogExplorer({
                 <div
                   id="product-results"
                   className={cn(
-                    "grid gap-5",
+                    "catalog-products grid gap-5",
                     view === "grid" ? "grid-cols-2 xl:grid-cols-3" : "grid-cols-1",
                   )}
                 >

@@ -56,7 +56,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   }
 
   return (
-    <div className="rounded-3xl border border-[#dce8df] bg-white p-5 shadow-[0_16px_50px_rgba(21,65,42,0.08)] sm:p-7">
+    <div className="product-purchase rounded-3xl border border-[#dce8df] bg-white p-5 shadow-[0_16px_50px_rgba(21,65,42,0.08)] sm:p-7">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-3xl font-extrabold tracking-[-0.03em] text-[#173c29]">

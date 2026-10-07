@@ -6,8 +6,6 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { ProductMediaPlaceholder } from "./product-media-placeholder";
-
 import { getProductImage } from "@/lib/category-meta";
 
 type ProductGalleryProps = {
@@ -60,7 +58,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
         </div>
       )}
 
-      <div className="relative order-1 aspect-square overflow-hidden rounded-3xl border border-[#dce8df] bg-[#f5f8f2] sm:order-2">
+      <div className="product-gallery-main relative order-1 aspect-square overflow-hidden rounded-3xl border border-[#dce8df] bg-[#f5f8f2] sm:order-2">
         <Image
           key={selectedImage}
           src={selectedImage}

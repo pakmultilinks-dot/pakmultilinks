@@ -1,0 +1,36 @@
+.home { padding: max(18px, env(safe-area-inset-top)) 16px 24px; background: #f6f8f5; color: #173c29; }
+.welcome { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.logo { width: 150px; height: auto; }
+.account { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #e0e7df; border-radius: 50%; background: white; }
+.search { display: flex; align-items: center; gap: 10px; min-height: 52px; padding-left: 14px; border: 1px solid #dde5de; border-radius: 16px; background: white; color: #718277; }
+.search:focus-within { border-color: #197a48; box-shadow: 0 0 0 3px #197a4814; }
+.search > svg { flex-shrink: 0; }
+.search input { width: 100%; min-width: 0; padding: 12px 0; font-size: 16px; color: #173c29; outline: none; }
+.search input::placeholder { color: #78847c; }
+.search button { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; margin: 3px; border-radius: 12px; background: #edf3ed; color: #235638; }
+.hero { position: relative; isolation: isolate; overflow: hidden; min-height: 222px; margin-top: 18px; border-radius: 22px; background: #dfecda; }
+.heroImage { object-fit: cover; object-position: 68% center; z-index: -2; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #e8f0e2 0%, #e8f0e2f5 28%, #e8f0e2a8 47%, #e8f0e200 72%); }
+.heroContent { padding: 21px 20px; }
+.eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .04em; color: #45654b; }
+.hero h1 { margin: 10px 0 8px; font-size: clamp(28px, 7.6vw, 36px); font-weight: 700; letter-spacing: -.05em; line-height: 1.05; }
+.heroDescription { font-size: 12px; line-height: 1.6; color: #436049; }
+.heroAction { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 15px; padding: 10px 14px; border-radius: 12px; background: #194e32; color: white; font-size: 12px; font-weight: 600; }
+.section { margin-top: 24px; }
+.sectionHeading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.sectionHeading h2 { font-size: 18px; font-weight: 700; letter-spacing: -.035em; }
+.sectionHeading > a { display: inline-flex; align-items: center; justify-content: flex-end; gap: 2px; flex-shrink: 0; min-height: 44px; font-size: 12px; font-weight: 600; color: #54745b; }
+.categories { display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 10px; scroll-snap-type: x proximity; scrollbar-width: none; }
+.categories::-webkit-scrollbar { display: none; }
+.category { flex: 0 0 80px; display: flex; align-items: center; flex-direction: column; gap: 9px; scroll-snap-align: center; text-align: center; font-size: 12px; font-weight: 500; line-height: 1.4; }
+.categoryImage { position: relative; display: block; width: 76px; height: 76px; overflow: hidden; border: 1px solid #e3e8df; border-radius: 22px; background: #fff; }
+.category:nth-child(3n + 2) .categoryImage { background: #edf3ee; }
+.category:nth-child(3n + 3) .categoryImage { background: #f2efe6; }
+.products { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.empty { display: grid; justify-items: center; gap: 14px; border: 1px dashed #c8d8cb; border-radius: 18px; padding: 24px; font-size: 14px; text-align: center; }
+.business { display: flex; align-items: center; gap: 12px; margin-top: 24px; padding: 18px 14px; border: 1px solid #dce6d9; border-radius: 18px; background: #edf3e8; }
+.businessIcon { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: white; }
+.business strong { display: block; font-size: 13px; font-weight: 600; }
+.business span span { display: block; margin-top: 4px; font-size: 12px; line-height: 1.5; color: #63755f; }
+.business > svg { margin-left: auto; flex-shrink: 0; }
+@media (max-width: 359px) { .home { padding-inline: 12px; } .sectionHeading h2 { font-size: 17px; } .products { gap: 8px; } .heroContent { padding-inline: 16px; } .business { gap: 8px; padding-inline: 10px; } }

@@ -33,7 +33,7 @@ export function CartPageClient() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-start">
+    <div className="cart-layout grid gap-8 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-start">
       <section aria-labelledby="cart-items-heading" className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-200 px-5 py-4 sm:px-7">
           <h2 id="cart-items-heading" className="font-semibold text-slate-950">
@@ -45,7 +45,7 @@ export function CartPageClient() {
             const max = product.allowBackorder ? undefined : product.stock;
             const atLimit = typeof max === "number" && quantity >= max;
             return (
-              <li key={product.id} className="p-5 sm:p-7">
+              <li key={product.id} className="cart-item p-5 sm:p-7">
                 <div className="flex gap-4 sm:gap-6">
                   <Link href={`/product/${product.slug}`} className="relative size-24 shrink-0 overflow-hidden rounded-2xl bg-emerald-50 sm:size-32">
                     {product.image ? <Image src={product.image} alt={product.imageAlt || product.name} fill sizes="128px" className="object-contain p-3" /> : <ProductMediaPlaceholder compact />}

@@ -12,7 +12,7 @@ export function CommerceShell({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-[65vh] bg-[#fafaf8] py-10 sm:py-14">
+    <div className="commerce-page min-h-[65vh] bg-[#fafaf8] py-10 sm:py-14">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <header className="mb-8 max-w-3xl">
           {eyebrow ? (

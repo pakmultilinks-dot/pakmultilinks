@@ -31,6 +31,7 @@ const nav = [
   { href: "/shop", label: "Shop" },
   { href: "/rate-list", label: "Rate List" },
   { href: "/corporate-orders", label: "Corporate Orders" },
+  { href: "/blog", label: "Blogs" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
 ];

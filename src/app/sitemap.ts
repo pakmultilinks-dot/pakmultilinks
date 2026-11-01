@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllBrandSlugs } from "@/lib/brands";
+import { BLOG_ARTICLES } from "@/lib/blog-data";
 import { isDevelopmentProduct, listPublicCategories, listPublicProducts } from "@/lib/catalog-server";
 import { absoluteUrl } from "@/lib/seo";
 
@@ -30,6 +31,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const brandSlugs = getAllBrandSlugs();
 
   return [
+    ...BLOG_ARTICLES.map((article) => ({
+      url: absoluteUrl(`/blog/${article.slug}`),
+      lastModified: article.updatedAt,
+      images: [absoluteUrl(article.image)],
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     ...routes.map((route) => ({
       url: absoluteUrl(route || "/"),
       changeFrequency: route === "" || route === "/shop" ? ("weekly" as const) : ("monthly" as const),

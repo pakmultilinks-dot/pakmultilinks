@@ -1,246 +1,340 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
-  CheckCircle2,
-  ChevronRight,
-  Clock,
-  FileText,
-  MessageSquare,
-  ShieldCheck,
-  Sparkles,
+  ArrowUpRight,
+  Check,
+  Clock3,
+  List,
+  MessageCircle,
 } from "lucide-react";
-
-import { getAllBlogSlugs, getBlogArticleBySlug } from "@/lib/blog-data";
+import { CartonCalculator } from "@/components/blog/carton-calculator";
+import styles from "@/components/blog/blog.module.css";
+import {
+  formatBlogDate,
+  getAllBlogSlugs,
+  getArticleReadTime,
+  getArticleWordCount,
+  getBlogArticleBySlug,
+} from "@/lib/blog-data";
 import { company } from "@/lib/company";
 import { absoluteUrl, breadcrumbStructuredData, safeJsonLd } from "@/lib/seo";
 
-type BlogArticlePageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export const revalidate = 86400;
-
+type Props = { params: Promise<{ slug: string }> };
+export const dynamicParams = false;
 export function generateStaticParams() {
   return getAllBlogSlugs().map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: BlogArticlePageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const article = getBlogArticleBySlug(slug);
-
-  if (!article) {
-    return { title: "Article not found", robots: { index: false, follow: true } };
-  }
-
-  const title = `${article.title} | Pak Multilinks Blog`;
-  const description = article.metaDescription;
-
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const article = getBlogArticleBySlug((await params).slug);
+  if (!article)
+    return { title: "Guide not found", robots: { index: false, follow: true } };
   return {
-    title,
-    description,
+    title: article.title,
+    description: article.metaDescription,
     alternates: { canonical: `/blog/${article.slug}` },
+    authors: [{ name: company.name, url: absoluteUrl("/about") }],
     openGraph: {
-      title,
-      description,
+      title: article.title,
+      description: article.metaDescription,
       type: "article",
       url: `/blog/${article.slug}`,
       siteName: company.name,
+      locale: "en_PK",
+      publishedTime: article.publishedAt,
+      modifiedTime: article.updatedAt,
+      authors: [absoluteUrl("/about")],
+      section: article.category,
+      images: [{ url: article.image, alt: article.imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: article.title,
+      description: article.metaDescription,
+      images: [article.image],
     },
   };
 }
 
-export default async function BlogArticlePage({ params }: BlogArticlePageProps) {
-  const { slug } = await params;
-  const article = getBlogArticleBySlug(slug);
-
+export default async function BlogArticlePage({ params }: Props) {
+  const article = getBlogArticleBySlug((await params).slug);
   if (!article) notFound();
-
   const pageUrl = absoluteUrl(`/blog/${article.slug}`);
-
-  const breadcrumbs = breadcrumbStructuredData([
-    { name: "Home", path: "/" },
-    { name: "Blog", path: "/blog" },
-    { name: article.title, path: `/blog/${article.slug}` },
-  ]);
-
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: article.title,
-    description: article.metaDescription,
-    url: pageUrl,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": pageUrl,
-    },
-    author: {
-      "@type": "Organization",
-      name: "Pak Multilinks Hygiene Editorial Team",
-      url: absoluteUrl("/about"),
-    },
-    publisher: {
-      "@type": "Organization",
-      name: company.name,
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl("/icon.png"),
+  const related = article.relatedSlugs
+    .map(getBlogArticleBySlug)
+    .filter((item) => item !== undefined);
+  const structuredData = [
+    breadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "Buying guides", path: "/blog" },
+      { name: article.title, path: `/blog/${article.slug}` },
+    ]),
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": `${pageUrl}#article`,
+      headline: article.title,
+      description: article.metaDescription,
+      url: pageUrl,
+      mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+      author: {
+        "@type": "Organization",
+        "@id": `${absoluteUrl("/")}#business`,
+        name: company.name,
+        url: absoluteUrl("/about"),
       },
+      publisher: { "@id": `${absoluteUrl("/")}#business` },
+      datePublished: article.publishedAt,
+      dateModified: article.updatedAt,
+      image: absoluteUrl(article.image),
+      inLanguage: "en-PK",
+      articleSection: article.category,
+      wordCount: getArticleWordCount(article),
+      isPartOf: {
+        "@type": "CollectionPage",
+        "@id": `${absoluteUrl("/blog")}#collection`,
+        url: absoluteUrl("/blog"),
+        name: "Wholesale Tissue & Hygiene Buying Guides",
+      },
+      citation: article.sources.map((source) =>
+        source.url.startsWith("/") ? absoluteUrl(source.url) : source.url,
+      ),
     },
-    datePublished: "2026-10-25T00:00:00.000Z",
-    dateModified: "2026-10-25T00:00:00.000Z",
-  };
-
+  ];
   return (
-    <article className="blog-article-page bg-surface-soft/40 min-h-screen">
+    <article className={styles.page}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: safeJsonLd([breadcrumbs, articleSchema]),
-        }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
       />
-
-      {/* Top Breadcrumb Navigation */}
-      <div className="border-b border-line bg-surface py-3">
-        <div className="site-shell">
-          <nav aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-xs font-semibold text-muted">
-              <li>
-                <Link href="/" className="hover:text-accent transition">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <ChevronRight className="size-3 text-muted/60" />
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-accent transition">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <ChevronRight className="size-3 text-muted/60" />
-              </li>
-              <li className="text-accent font-bold truncate max-w-xs sm:max-w-md" aria-current="page">
-                {article.title}
-              </li>
-            </ol>
-          </nav>
-        </div>
-      </div>
-
-      {/* Article Header */}
-      <section className="border-b border-line bg-surface py-10 sm:py-14">
-        <div className="site-shell max-w-3xl">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-action hover:underline mb-4"
-          >
-            <ArrowLeft className="size-3.5" />
-            <span>Back to All Guides</span>
+      <div className={styles.shell}>
+        <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
+          <Link href="/">Home</Link>
+          <span aria-hidden="true">/</span>
+          <Link href="/blog">Buying guides</Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{article.category}</span>
+        </nav>
+        <header className={styles.articleHeader}>
+          <Link href="/blog" className={styles.backLink}>
+            <ArrowLeft size={15} aria-hidden="true" /> All buying guides
           </Link>
-
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="rounded-full bg-surface-soft px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-action">
-              {article.category}
+          <p className={styles.eyebrow}>{article.category}</p>
+          <h1>{article.title}</h1>
+          <p className={styles.articleDek}>{article.abstract}</p>
+          <div className={styles.byline}>
+            <span className={styles.authorMark} aria-hidden="true">
+              PM
             </span>
-            <span className="inline-flex items-center gap-1 text-xs font-medium text-muted">
-              <Clock className="size-3.5" />
-              {article.readTime}
+            <span>
+              By <Link href="/about">{company.name}</Link>
             </span>
-            <span className="rounded-full border border-amber-300 bg-amber-50 px-2.5 py-0.5 text-[11px] font-bold text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200">
-              Draft Scaffold
+            <span>
+              <time dateTime={article.publishedAt}>
+                {formatBlogDate(article.publishedAt)}
+              </time>
+            </span>
+            <span>
+              <Clock3 size={14} aria-hidden="true" />
+              {getArticleReadTime(article)}
             </span>
           </div>
-
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-content tracking-tight leading-tight">
-            {article.title}
-          </h1>
-
-          <p className="mt-4 text-sm sm:text-base leading-relaxed text-secondary">
-            {article.metaDescription}
-          </p>
-        </div>
-      </section>
-
-      {/* Article Body Scaffold Content */}
-      <section className="py-12 sm:py-16">
-        <div className="site-shell max-w-3xl space-y-8">
-          {/* Editorial Note */}
-          <div className="rounded-3xl border border-amber-300/80 bg-amber-50/70 p-6 sm:p-8 dark:border-amber-700/50 dark:bg-amber-950/30">
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-amber-900 dark:text-amber-200 mb-2">
-              <Sparkles className="size-4" />
-              <span>Article Scaffold in Preparation</span>
-            </div>
-            <h2 className="text-base sm:text-lg font-bold text-content">
-              Full editorial copy is currently in editorial review
-            </h2>
-            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-secondary">
-              This guide is being compiled with live procurement data from our commercial sales desk
-              in Gulberg II, Lahore. Below is the verified structural outline and topics that will be published.
-            </p>
-          </div>
-
-          {/* Abstract / Scope */}
-          <div className="rounded-3xl border border-line bg-surface p-6 sm:p-8">
-            <h2 className="font-serif text-xl sm:text-2xl font-extrabold text-content mb-3">
-              Executive Summary &amp; Scope
-            </h2>
-            <p className="text-sm sm:text-base leading-relaxed text-secondary">
-              {article.abstract}
-            </p>
-          </div>
-
-          {/* Key Topics Section */}
-          <div className="rounded-3xl border border-line bg-surface p-6 sm:p-8">
-            <h2 className="font-serif text-xl sm:text-2xl font-extrabold text-content mb-4">
-              Core Topics &amp; Procurement Analysis Included
-            </h2>
-            <ul className="space-y-3">
-              {article.keyTopics.map((topic, index) => (
-                <li key={index} className="flex items-start gap-3 text-xs sm:text-sm text-secondary">
-                  <CheckCircle2 className="size-4 text-action shrink-0 mt-0.5" />
-                  <span>{topic}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Procurement Inquiries Banner */}
-          <div className="rounded-3xl border border-action/30 bg-action/5 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
-            <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-action flex items-center justify-center sm:justify-start gap-1.5 mb-1">
-                <MessageSquare className="size-4" />
-                Direct Procurement Desk
-              </span>
-              <h3 className="text-lg font-extrabold text-content">
-                Need wholesale carton pricing right now?
-              </h3>
-              <p className="mt-1 text-xs text-secondary">
-                Our sales department is available on WhatsApp for instant carton quotations and delivery coordination in Lahore.
+        </header>
+        <div className={styles.articleLayout}>
+          <aside className={styles.articleSidebar}>
+            <nav aria-label="In this guide" className={styles.toc}>
+              <p>
+                <List size={17} aria-hidden="true" /> In this guide
               </p>
+              <a href="#quick-answer">The short answer</a>
+              {article.sections.map((section, index) => (
+                <a key={section.id} href={`#${section.id}`}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {section.heading}
+                </a>
+              ))}
+              <a href="#questions">Common questions</a>
+              <a href="#references">Sources &amp; references</a>
+            </nav>
+            <div className={styles.sideQuote}>
+              <MessageCircle size={22} aria-hidden="true" />
+              <h2>Buying for your business?</h2>
+              <p>Send us your list for a current carton quotation.</p>
+              <Link href="/request-quote">
+                Talk to our team <ArrowUpRight size={16} aria-hidden="true" />
+              </Link>
             </div>
-            <a
-              href={`https://wa.me/923006917385?text=${encodeURIComponent(
-                `Hello Pak Multilinks, I am inquiring regarding topic: "${article.title}" and would like a wholesale quote.`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-action px-6 text-xs sm:text-sm font-extrabold text-white transition hover:bg-action-hover shadow-xs shrink-0"
-            >
-              <span>Inquire on WhatsApp</span>
-            </a>
+          </aside>
+          <div className={styles.articleBody}>
+            <section id="quick-answer" className={styles.quickAnswer}>
+              <p className={styles.eyebrow}>The short answer</p>
+              <h2>What you need to know</h2>
+              <p>{article.quickAnswer}</p>
+            </section>
+            <div className={styles.articleCover}>
+              <Image
+                src={article.image}
+                alt={article.imageAlt}
+                fill
+                sizes="(max-width: 900px) 100vw, 760px"
+                preload
+              />
+            </div>
+            <div className={styles.takeaways}>
+              <h2>Before you buy</h2>
+              <ul>
+                {article.takeaways.map((item) => (
+                  <li key={item}>
+                    <Check size={17} aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {article.sections.map((section, index) => (
+              <section
+                key={section.id}
+                id={section.id}
+                className={styles.proseSection}
+              >
+                <span className={styles.sectionNumber}>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h2>{section.heading}</h2>
+                {section.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+                {section.checklist && (
+                  <ul className={styles.checklist}>
+                    {section.checklist.map((item) => (
+                      <li key={item}>
+                        <Check size={16} aria-hidden="true" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {section.table && (
+                  <div
+                    className={styles.tableWrap}
+                    tabIndex={0}
+                    role="region"
+                    aria-label={`${section.table.caption} comparison table`}
+                  >
+                    <table>
+                      <caption>{section.table.caption}</caption>
+                      <thead>
+                        <tr>
+                          {section.table.columns.map((column) => (
+                            <th scope="col" key={column}>
+                              {column}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.table.rows.map((row) => (
+                          <tr key={row[0]}>
+                            {row.map((cell, cellIndex) =>
+                              cellIndex === 0 ? (
+                                <th scope="row" key={cellIndex}>
+                                  {cell}
+                                </th>
+                              ) : (
+                                <td key={cellIndex}>{cell}</td>
+                              ),
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </section>
+            ))}
+            {article.slug === "carton-vs-piece-price-guide" && (
+              <CartonCalculator />
+            )}
+            <section id="questions" className={styles.articleFaq}>
+              <p className={styles.eyebrow}>A few more answers</p>
+              <h2>Common buying questions</h2>
+              {article.faqs.map((faq) => (
+                <details key={faq.question}>
+                  <summary>
+                    {faq.question}
+                    <span aria-hidden="true">+</span>
+                  </summary>
+                  <p>{faq.answer}</p>
+                </details>
+              ))}
+            </section>
+            <div className={styles.productCta}>
+              <div>
+                <p className={styles.eyebrow}>Put the guide to work</p>
+                <h2>Find the right supply for your site.</h2>
+              </div>
+              <Link
+                href={article.relatedLink.href}
+                className={styles.darkButton}
+              >
+                {article.relatedLink.label}
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </Link>
+            </div>
+            <section id="references" className={styles.references}>
+              <h2>Sources &amp; product references</h2>
+              <p>
+                Original purchasing guidance with the references below.
+                Calculations are illustrative; confirm the exact specification
+                and current quotation before ordering.
+              </p>
+              <ul>
+                {article.sources.map((source) => (
+                  <li key={source.url}>
+                    <a href={source.url}>
+                      {source.title}{" "}
+                      <ArrowUpRight size={14} aria-hidden="true" />
+                    </a>
+                    <p>{source.note}</p>
+                  </li>
+                ))}
+              </ul>
+              <p>
+                Published by <Link href="/about">{company.name}</Link>,{" "}
+                {company.address}. For a correction or a product-specific
+                question, <Link href="/contact">contact our team</Link>.
+              </p>
+            </section>
           </div>
         </div>
-      </section>
+        <section className={styles.related} aria-labelledby="related-heading">
+          <div className={styles.archiveHeading}>
+            <div>
+              <p className={styles.eyebrow}>Keep reading</p>
+              <h2 id="related-heading">A little more buying clarity.</h2>
+            </div>
+            <Link href="/blog">
+              All {getAllBlogSlugs().length} guides{" "}
+              <ArrowUpRight size={17} aria-hidden="true" />
+            </Link>
+          </div>
+          <div className={styles.relatedGrid}>
+            {related.map((item) => (
+              <article key={item.slug}>
+                <span className={styles.eyebrow}>{item.category}</span>
+                <h3>
+                  <Link href={`/blog/${item.slug}`}>{item.title}</Link>
+                </h3>
+                <p>{getArticleReadTime(item)}</p>
+                <ArrowUpRight size={20} aria-hidden="true" />
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
     </article>
   );
 }

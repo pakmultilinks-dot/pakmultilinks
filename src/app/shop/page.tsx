@@ -4,7 +4,11 @@ import { ChevronRight } from "lucide-react";
 
 import { brandNameToSlug, getBrandBySlug } from "@/lib/brands";
 import { CatalogExplorer } from "@/components/catalog/catalog-explorer";
-import { isDevelopmentProduct, listPublicCategories, listPublicProducts } from "@/lib/catalog-server";
+import {
+  isDevelopmentProduct,
+  listPublicCategories,
+  listPublicProducts,
+} from "@/lib/catalog-server";
 import { absoluteUrl, breadcrumbStructuredData, safeJsonLd } from "@/lib/seo";
 
 type ShopPageProps = {
@@ -15,13 +19,17 @@ type ShopPageProps = {
   }>;
 };
 
-export async function generateMetadata({ searchParams }: ShopPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: ShopPageProps): Promise<Metadata> {
   const params = await searchParams;
-  const query = typeof params.q === "string" ? params.q : params.q?.[0] ?? "";
-  const brandParam = typeof params.brand === "string" ? params.brand : params.brand?.[0] ?? "";
-  
+  const query = typeof params.q === "string" ? params.q : (params.q?.[0] ?? "");
+  const brandParam =
+    typeof params.brand === "string" ? params.brand : (params.brand?.[0] ?? "");
+
   let title = "Wholesale Hygiene Products by Carton in Lahore";
-  let description = "Browse wholesale tissue, washroom and hygiene products supplied by carton for businesses and institutions in Lahore.";
+  let description =
+    "Browse wholesale tissue, washroom and hygiene products supplied by carton for businesses and institutions in Lahore.";
   let canonical = "/shop";
 
   if (brandParam) {
@@ -47,22 +55,32 @@ export async function generateMetadata({ searchParams }: ShopPageProps): Promise
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;
-  const query = typeof params.q === "string" ? params.q : params.q?.[0] ?? "";
-  const categoryParam = typeof params.category === "string" ? params.category : params.category?.[0] ?? "";
-  const brandParam = typeof params.brand === "string" ? params.brand : params.brand?.[0] ?? "";
+  const query = typeof params.q === "string" ? params.q : (params.q?.[0] ?? "");
+  const categoryParam =
+    typeof params.category === "string"
+      ? params.category
+      : (params.category?.[0] ?? "");
+  const brandParam =
+    typeof params.brand === "string" ? params.brand : (params.brand?.[0] ?? "");
 
   const [products, categories] = await Promise.all([
     listPublicProducts(),
     listPublicCategories(),
   ]);
-  const indexableProducts = products.filter((product) => !isDevelopmentProduct(product));
+  const indexableProducts = products.filter(
+    (product) => !isDevelopmentProduct(product),
+  );
   const structuredData = [
-    breadcrumbStructuredData([{ name: "Home", path: "/" }, { name: "Shop", path: "/shop" }]),
+    breadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "Shop", path: "/shop" },
+    ]),
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       name: "Wholesale Hygiene Products by Carton",
-      description: "Wholesale tissue, washroom and hygiene products for businesses in Lahore.",
+      description:
+        "Wholesale tissue, washroom and hygiene products for businesses in Lahore.",
       url: absoluteUrl("/shop"),
       mainEntity: {
         "@type": "ItemList",
@@ -80,23 +98,31 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const pageTitle = brandParam
     ? `${brandParam} Products & Wholesale Rates`
     : query
-    ? `Products matching “${query}”`
-    : "Wholesale Hygiene Supplies & Products";
+      ? `Products matching “${query}”`
+      : "Wholesale Hygiene Supplies & Products";
 
   const pageDescription = brandParam
     ? `Explore official wholesale carton rates, specifications and bulk stock for ${brandParam} in Lahore.`
     : query
-    ? `Search results for “${query}” across our wholesale hygiene, washroom, and cleaning products catalog.`
-    : "Browse wholesale hygiene, washroom, tissue, and cleaning supplies supplied by the carton. Guaranteed factory packaging, transparent rates, and fast delivery in Lahore.";
+      ? `Search results for “${query}” across our wholesale hygiene, washroom, and cleaning products catalog.`
+      : "Browse wholesale hygiene, washroom, tissue, and cleaning supplies supplied by the carton. Guaranteed factory packaging, transparent rates, and fast delivery in Lahore.";
 
   return (
     <div className="shop-page bg-surface-soft/40 min-h-screen">
-      {!query && indexableProducts.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }} />}
+      {!query && indexableProducts.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
+        />
+      )}
 
       {/* Visible Shop Hero Header */}
-      <section className="border-b border-line bg-surface py-8 sm:py-12">
-        <div className="site-shell max-w-5xl">
-          <nav className="mb-3 flex items-center gap-2 text-xs font-semibold text-muted" aria-label="Breadcrumb">
+      <section className="catalog-page-heading border-b border-line bg-surface py-8 sm:py-10">
+        <div className="site-shell">
+          <nav
+            className="mb-3 flex items-center gap-2 text-xs font-semibold text-muted"
+            aria-label="Breadcrumb"
+          >
             <Link href="/" className="hover:text-accent transition">
               Home
             </Link>
@@ -125,7 +151,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         products={products}
         categoryOptions={categories}
         initialQuery={query}
-        fixedCategorySlug={categoryParam}
+        initialCategorySlug={categoryParam}
         initialBrand={brandParam}
         title={pageTitle}
         description={pageDescription}

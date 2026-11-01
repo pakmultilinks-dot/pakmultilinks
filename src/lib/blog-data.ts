@@ -23,6 +23,7 @@ export type BlogArticle = {
   relatedLink: { href: string; label: string };
   relatedSlugs: string[];
   image: string;
+  thumbnail: string;
   imageAlt: string;
   sources: { title: string; url: string; note: string }[];
 };
@@ -76,6 +77,7 @@ export type BlogSummary = Pick<
   | "category"
   | "abstract"
   | "image"
+  | "thumbnail"
   | "imageAlt"
   | "publishedAt"
 > & { readTime: string; dateLabel: string };
@@ -87,6 +89,7 @@ export function getBlogSummaries(): BlogSummary[] {
     category: article.category,
     abstract: article.abstract,
     image: article.image,
+    thumbnail: article.thumbnail,
     imageAlt: article.imageAlt,
     publishedAt: article.publishedAt,
     readTime: getArticleReadTime(article),

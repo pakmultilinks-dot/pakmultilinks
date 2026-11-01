@@ -338,7 +338,7 @@
   overflow: hidden;
 }
 .cardImage img {
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.35s;
 }
 .card:hover .cardImage img {
@@ -664,7 +664,7 @@
   background: #edf0e6;
 }
 .articleCover img {
-  object-fit: cover;
+  object-fit: contain;
 }
 .takeaways {
   padding: 8px 0 28px;

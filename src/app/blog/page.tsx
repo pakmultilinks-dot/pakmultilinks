@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     locale: "en_PK",
     images: [
       {
-        url: "/images/hero-workspace-hygiene.png",
+        url: "/images/blog/workplace.webp",
         alt: "Workplace tissue and hygiene supplies",
       },
     ],
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/images/hero-workspace-hygiene.png"],
+    images: ["/images/blog/workplace.webp"],
   },
 };
 
@@ -95,7 +95,7 @@ export default function BlogIndexPage() {
               <span className={styles.dot} /> The Pak Multilinks journal
             </p>
             <h1>
-              Better supplies.
+              Tissue &amp; hygiene.
               <br />
               <em>Smarter buying.</em>
             </h1>
@@ -147,7 +147,7 @@ export default function BlogIndexPage() {
           </div>
           <div className={styles.featuredImage}>
             <Image
-              src="/images/brands/nozomi-tissue-boxes.jpg"
+              src="/images/blog/tissue-boxes.webp"
               alt="Nozomi tissue boxes showing the boxed tissue format"
               fill
               sizes="(max-width: 760px) 100vw, 50vw"

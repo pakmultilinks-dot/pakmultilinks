@@ -52,8 +52,8 @@
       "label": "Browse tissue paper products"
     },
     "updatedAt": "2026-11-01",
-    "image": "/images/brands/nozomi-tissue-boxes.jpg",
-    "imageAlt": "Boxed tissue products arranged for wholesale purchasing",
+    "image": "/images/blog/tissue-boxes.webp",
+    "imageAlt": "Nozomi boxed tissues",
     "quickAnswer": "To buy wholesale tissue in Lahore, specify the tissue type, usable sheets or roll length, units per carton and delivery address. Compare equivalent products on delivered unit cost, confirm stock and dispenser fit, then agree the carton quantity in writing.",
     "takeaways": [
       "Choose a format for each use area.",
@@ -81,7 +81,8 @@
       "one-ply-vs-two-ply-tissue-sheet-count",
       "carton-vs-piece-price-guide",
       "compare-wholesale-hygiene-supplier-quotes"
-    ]
+    ],
+    "thumbnail": "/images/blog/tissue-boxes-thumb.webp"
   },
   {
     "slug": "carton-vs-piece-price-guide",
@@ -138,8 +139,8 @@
       "label": "View product rate lists"
     },
     "updatedAt": "2026-11-01",
-    "image": "/images/warehouse-team.webp",
-    "imageAlt": "Warehouse staff checking cartons before dispatch",
+    "image": "/images/blog/warehouse.webp",
+    "imageAlt": "Warehouse staff checking tissue cartons",
     "quickAnswer": "Divide the carton price by the number of usable units inside it. When pack sizes differ, compare per sheet, roll or litre as appropriate, then include quoted delivery and other charges. Illustrative calculations are not current sales prices.",
     "takeaways": [
       "Use the same unit in both quotations.",
@@ -167,7 +168,8 @@
       "compare-wholesale-hygiene-supplier-quotes",
       "one-ply-vs-two-ply-tissue-sheet-count",
       "office-hotel-hygiene-checklist"
-    ]
+    ],
+    "thumbnail": "/images/blog/warehouse-thumb.webp"
   },
   {
     "slug": "office-hotel-hygiene-checklist",
@@ -228,8 +230,8 @@
       "label": "Explore corporate supply options"
     },
     "updatedAt": "2026-11-01",
-    "image": "/images/hero-workspace-hygiene.png",
-    "imageAlt": "Tissue and hygiene products in a workplace setting",
+    "image": "/images/blog/workplace.webp",
+    "imageAlt": "A selection of workplace hygiene supplies",
     "quickAnswer": "Organize your hygiene order by washrooms, reception, meeting rooms and pantry. Record usable stock and weekly consumption for each item. Reorder when remaining stock reaches expected usage during delivery lead time plus your chosen buffer.",
     "takeaways": [
       "Count usable stock, including stock at each location.",
@@ -257,7 +259,8 @@
       "bulk-hand-wash-refill-buying-guide",
       "garbage-bag-size-guide-commercial-bins",
       "store-receive-tissue-cartons-business"
-    ]
+    ],
+    "thumbnail": "/images/blog/workplace-thumb.webp"
   },
   {
     "slug": "facial-tissue-vs-napkins-vs-paper-towels",
@@ -351,8 +354,8 @@
       "href": "/shop/tissue-paper-products",
       "label": "Compare tissue and paper formats"
     },
-    "image": "/images/brands/nozomi-tissue-boxes.jpg",
-    "imageAlt": "Boxed tissue products arranged for wholesale purchasing",
+    "image": "/images/blog/range.webp",
+    "imageAlt": "A selection of tissue and hygiene product formats",
     "sources": [
       {
         "title": "Compare tissue and paper formats",
@@ -363,7 +366,8 @@
     "relatedSlugs": [
       "wholesale-tissue-buying-guide-lahore",
       "one-ply-vs-two-ply-tissue-sheet-count"
-    ]
+    ],
+    "thumbnail": "/images/blog/range-thumb.webp"
   },
   {
     "slug": "one-ply-vs-two-ply-tissue-sheet-count",
@@ -433,8 +437,8 @@
       "href": "/shop/facial-tissues",
       "label": "Browse facial tissues"
     },
-    "image": "/images/brands/nozomi-tissue-boxes.jpg",
-    "imageAlt": "Boxed tissue products arranged for wholesale purchasing",
+    "image": "/images/blog/tissue-boxes.webp",
+    "imageAlt": "Nozomi boxed tissues",
     "sources": [
       {
         "title": "Browse facial tissues",
@@ -445,7 +449,8 @@
     "relatedSlugs": [
       "wholesale-tissue-buying-guide-lahore",
       "facial-tissue-vs-napkins-vs-paper-towels"
-    ]
+    ],
+    "thumbnail": "/images/blog/tissue-boxes-thumb.webp"
   },
   {
     "slug": "boxed-vs-soft-pack-tissues-business",
@@ -533,8 +538,8 @@
       "href": "/shop/soft-pack-tissues",
       "label": "Browse soft pack tissues"
     },
-    "image": "/images/brands/nozomi-tissue-boxes.jpg",
-    "imageAlt": "Boxed tissue products arranged for wholesale purchasing",
+    "image": "/images/blog/soft-pack.webp",
+    "imageAlt": "Rose Petal soft pack tissue packaging",
     "sources": [
       {
         "title": "Browse soft pack tissues",
@@ -545,7 +550,8 @@
     "relatedSlugs": [
       "wholesale-tissue-buying-guide-lahore",
       "facial-tissue-vs-napkins-vs-paper-towels"
-    ]
+    ],
+    "thumbnail": "/images/blog/soft-pack-thumb.webp"
   },
   {
     "slug": "jumbo-vs-standard-toilet-rolls",
@@ -615,8 +621,8 @@
       "href": "/shop/tissue-rolls",
       "label": "Browse tissue rolls"
     },
-    "image": "/images/about-product-range.png",
-    "imageAlt": "Tissue, cleaning and washroom supply product range",
+    "image": "/images/blog/toilet-roll.webp",
+    "imageAlt": "Unwrapped toilet roll showing the roll and core format",
     "sources": [
       {
         "title": "Browse tissue rolls",
@@ -628,7 +634,8 @@
       "multifold-vs-roll-paper-hand-towels",
       "tissue-dispenser-refill-compatibility-checklist",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/toilet-roll-thumb.webp"
   },
   {
     "slug": "multifold-vs-roll-paper-hand-towels",
@@ -721,8 +728,8 @@
       "href": "/shop/washroom-supplies",
       "label": "Browse washroom supplies"
     },
-    "image": "/images/about-product-range.png",
-    "imageAlt": "Tissue, cleaning and washroom supply product range",
+    "image": "/images/blog/hand-towels.webp",
+    "imageAlt": "Folded tissue towel refill pack",
     "sources": [
       {
         "title": "Tork Xpress H2 multifold towel specification",
@@ -734,7 +741,8 @@
       "jumbo-vs-standard-toilet-rolls",
       "tissue-dispenser-refill-compatibility-checklist",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/hand-towels-thumb.webp"
   },
   {
     "slug": "tissue-dispenser-refill-compatibility-checklist",
@@ -826,8 +834,8 @@
       "href": "/shop/dispensers",
       "label": "Browse dispensers"
     },
-    "image": "/images/about-product-range.png",
-    "imageAlt": "Tissue, cleaning and washroom supply product range",
+    "image": "/images/blog/dispenser.webp",
+    "imageAlt": "Wall-mounted tissue towel dispenser",
     "sources": [
       {
         "title": "Tork Xpress H2 multifold towel specification",
@@ -839,7 +847,8 @@
       "jumbo-vs-standard-toilet-rolls",
       "multifold-vs-roll-paper-hand-towels",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/dispenser-thumb.webp"
   },
   {
     "slug": "restaurant-paper-napkins-buying-guide",
@@ -910,8 +919,8 @@
       "href": "/shop/paper-napkins",
       "label": "Browse paper napkins"
     },
-    "image": "/images/brands/nozomi-tissue-boxes.jpg",
-    "imageAlt": "Boxed tissue products arranged for wholesale purchasing",
+    "image": "/images/blog/napkins.webp",
+    "imageAlt": "Super Soft table napkin pack",
     "sources": [
       {
         "title": "Browse paper napkins",
@@ -922,7 +931,8 @@
     "relatedSlugs": [
       "wholesale-tissue-buying-guide-lahore",
       "facial-tissue-vs-napkins-vs-paper-towels"
-    ]
+    ],
+    "thumbnail": "/images/blog/napkins-thumb.webp"
   },
   {
     "slug": "rose-petal-tissue-wholesale-guide",
@@ -993,8 +1003,8 @@
       "href": "/brand/rose-petal",
       "label": "Explore Rose Petal products"
     },
-    "image": "/images/brands/nozomi-tissue-boxes.jpg",
-    "imageAlt": "Boxed tissue products arranged for wholesale purchasing",
+    "image": "/images/blog/rose-petal.webp",
+    "imageAlt": "Rose Petal tissue product packaging",
     "sources": [
       {
         "title": "Rose Petal product range",
@@ -1005,7 +1015,8 @@
     "relatedSlugs": [
       "wholesale-tissue-buying-guide-lahore",
       "facial-tissue-vs-napkins-vs-paper-towels"
-    ]
+    ],
+    "thumbnail": "/images/blog/rose-petal-thumb.webp"
   },
   {
     "slug": "recycled-vs-virgin-tissue-fsc-labels",
@@ -1090,8 +1101,8 @@
       "href": "/shop/tissue-paper-products",
       "label": "Compare tissue product specifications"
     },
-    "image": "/images/brands/nozomi-tissue-boxes.jpg",
-    "imageAlt": "Boxed tissue products arranged for wholesale purchasing",
+    "image": "/images/blog/tissue-boxes.webp",
+    "imageAlt": "Nozomi boxed tissues",
     "sources": [
       {
         "title": "FSC: what the three labels mean",
@@ -1102,7 +1113,8 @@
     "relatedSlugs": [
       "wholesale-tissue-buying-guide-lahore",
       "facial-tissue-vs-napkins-vs-paper-towels"
-    ]
+    ],
+    "thumbnail": "/images/blog/tissue-boxes-thumb.webp"
   },
   {
     "slug": "bulk-hand-wash-refill-buying-guide",
@@ -1173,8 +1185,8 @@
       "href": "/shop/hand-wash",
       "label": "Browse hand wash supplies"
     },
-    "image": "/images/about-product-range.png",
-    "imageAlt": "Tissue, cleaning and washroom supply product range",
+    "image": "/images/blog/hand-wash.webp",
+    "imageAlt": "Fresco hand wash container",
     "sources": [
       {
         "title": "Browse hand wash supplies",
@@ -1186,7 +1198,8 @@
       "jumbo-vs-standard-toilet-rolls",
       "multifold-vs-roll-paper-hand-towels",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/hand-wash-thumb.webp"
   },
   {
     "slug": "school-college-hygiene-supply-planning",
@@ -1279,8 +1292,8 @@
       "href": "/corporate-orders",
       "label": "Discuss institutional supplies"
     },
-    "image": "/images/hero-workspace-hygiene.png",
-    "imageAlt": "Tissue and hygiene products in a workplace setting",
+    "image": "/images/blog/workplace.webp",
+    "imageAlt": "A selection of workplace hygiene supplies",
     "sources": [
       {
         "title": "Discuss institutional supplies",
@@ -1292,7 +1305,8 @@
       "office-hotel-hygiene-checklist",
       "store-receive-tissue-cartons-business",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/workplace-thumb.webp"
   },
   {
     "slug": "commercial-cleaning-supplies-purchase-checklist",
@@ -1363,8 +1377,8 @@
       "href": "/shop/cleaning-products",
       "label": "Browse cleaning supplies"
     },
-    "image": "/images/brands/cleaning-items-tools.jpg",
-    "imageAlt": "Cleaning tools and workplace supplies",
+    "image": "/images/blog/cleaning.webp",
+    "imageAlt": "Cleaning tools and supplies",
     "sources": [
       {
         "title": "Browse cleaning supplies",
@@ -1376,7 +1390,8 @@
       "garbage-bag-size-guide-commercial-bins",
       "paper-cups-bulk-office-cafe-guide",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/cleaning-thumb.webp"
   },
   {
     "slug": "garbage-bag-size-guide-commercial-bins",
@@ -1447,8 +1462,8 @@
       "href": "/shop/garbage-bags",
       "label": "Browse garbage bags"
     },
-    "image": "/images/brands/cleaning-items-tools.jpg",
-    "imageAlt": "Cleaning tools and workplace supplies",
+    "image": "/images/blog/bin-liners.webp",
+    "imageAlt": "Workplace garbage bag liners",
     "sources": [
       {
         "title": "Browse garbage bags",
@@ -1460,7 +1475,8 @@
       "commercial-cleaning-supplies-purchase-checklist",
       "paper-cups-bulk-office-cafe-guide",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/bin-liners-thumb.webp"
   },
   {
     "slug": "paper-cups-bulk-office-cafe-guide",
@@ -1532,8 +1548,8 @@
       "href": "/shop/paper-plates-cups",
       "label": "Browse cups and disposables"
     },
-    "image": "/images/brands/cleaning-items-tools.jpg",
-    "imageAlt": "Cleaning tools and workplace supplies",
+    "image": "/images/blog/cups.webp",
+    "imageAlt": "Paper cups for beverage service",
     "sources": [
       {
         "title": "Browse cups and disposables",
@@ -1545,7 +1561,8 @@
       "commercial-cleaning-supplies-purchase-checklist",
       "garbage-bag-size-guide-commercial-bins",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/cups-thumb.webp"
   },
   {
     "slug": "custom-printed-tissue-boxes-lahore-guide",
@@ -1617,7 +1634,7 @@
       "href": "/request-quote?product=Custom%20printed%20tissue%20boxes",
       "label": "Request a custom tissue-box quote"
     },
-    "image": "/images/custom-branded-tissue-box-cutout.webp",
+    "image": "/images/blog/custom-box.webp",
     "imageAlt": "Custom printed Pak Multilinks tissue box",
     "sources": [
       {
@@ -1628,7 +1645,8 @@
     ],
     "relatedSlugs": [
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/custom-box-thumb.webp"
   },
   {
     "slug": "compare-wholesale-hygiene-supplier-quotes",
@@ -1724,8 +1742,8 @@
       "href": "/request-quote",
       "label": "Send a wholesale quote request"
     },
-    "image": "/images/warehouse-team.webp",
-    "imageAlt": "Warehouse staff checking cartons before dispatch",
+    "image": "/images/blog/warehouse.webp",
+    "imageAlt": "Warehouse staff checking tissue cartons",
     "sources": [
       {
         "title": "Send a wholesale quote request",
@@ -1736,7 +1754,8 @@
     "relatedSlugs": [
       "carton-vs-piece-price-guide",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/warehouse-thumb.webp"
   },
   {
     "slug": "store-receive-tissue-cartons-business",
@@ -1808,8 +1827,8 @@
       "href": "/corporate-orders",
       "label": "Plan a recurring supply order"
     },
-    "image": "/images/hero-workspace-hygiene.png",
-    "imageAlt": "Tissue and hygiene products in a workplace setting",
+    "image": "/images/blog/workplace.webp",
+    "imageAlt": "A selection of workplace hygiene supplies",
     "sources": [
       {
         "title": "Plan a recurring supply order",
@@ -1821,6 +1840,7 @@
       "office-hotel-hygiene-checklist",
       "school-college-hygiene-supply-planning",
       "wholesale-tissue-buying-guide-lahore"
-    ]
+    ],
+    "thumbnail": "/images/blog/workplace-thumb.webp"
   }
 ]

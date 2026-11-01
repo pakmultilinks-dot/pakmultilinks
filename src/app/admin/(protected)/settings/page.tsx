@@ -1,3 +1,4 @@
+import { ProfileForm } from "../../_components/profile-form";
 import { company } from "@/lib/company";
 import { db, isDatabaseConfigured, withDatabaseRetry } from "@/lib/db";
 import { DemoNotice, PageHeading } from "../../_components/ui";
@@ -57,6 +58,7 @@ export default async function SettingsPage() {
     <>
       <PageHeading eyebrow="Configuration" title="Site settings" description="Keep public business information, checkout rules, and optional contact channels accurate." />
       {!connected && <DemoNotice />}
+      <ProfileForm />
       <SettingsForm initial={initial} disabled={!connected} />
     </>
   );

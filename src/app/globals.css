@@ -752,3 +752,29 @@ summary::-webkit-details-marker {
   .rate-list-page .site-shell { width: 100%; }
   .rate-list-page { --content: #111; --accent: #174b32; --muted: #444; --surface: #fff; --surface-soft: #fff; --line: #ccc; }
 }
+
+/* One content edge for storefront headings, catalog controls and product grids. */
+.storefront-shell .site-shell {
+  width: min(1280px, calc(100% - 64px));
+  margin-inline: auto;
+}
+.catalog-page-heading h1 {
+  max-width: 980px;
+  font-size: clamp(28px, 3.1vw, 42px);
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: -.025em;
+}
+.catalog-body .catalog-filter-panel { position: static; top: auto; box-shadow: none; }
+.catalog-body .catalog-filter-panel :is(input, select) { min-width: 0; }
+.catalog-body .catalog-filter-panel input::placeholder { font-size: 13px; }
+.catalog-body .catalog-toolbar { align-items: center; }
+@media (max-width: 1050px) {
+  .storefront-shell .site-shell { width: calc(100% - 40px); }
+}
+@media (max-width: 760px) {
+  .storefront-shell .site-shell { width: calc(100% - 32px); }
+  .catalog-page-heading { padding-block: 24px; }
+  .catalog-page-heading h1 { font-size: 28px; }
+  .catalog-body { padding-top: 20px; }
+}

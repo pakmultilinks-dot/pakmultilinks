@@ -23,9 +23,12 @@ type AuthClaims = JWTPayload & {
 
 function jwtSecret() {
   const configured = process.env.AUTH_SECRET || process.env.JWT_SECRET;
-  if (configured && configured.length >= 32) return new TextEncoder().encode(configured);
+  if (configured && configured.length >= 32)
+    return new TextEncoder().encode(configured);
   if (process.env.NODE_ENV === "production") {
-    throw new Error("AUTH_SECRET must be set to at least 32 characters in production.");
+    throw new Error(
+      "AUTH_SECRET must be set to at least 32 characters in production.",
+    );
   }
   return new TextEncoder().encode("pmh-local-development-secret-change-me");
 }
@@ -45,7 +48,9 @@ export async function createSessionToken(session: AuthSession) {
     .sign(jwtSecret());
 }
 
-export async function verifySessionToken(token?: string | null): Promise<AuthSession | null> {
+export async function verifySessionToken(
+  token?: string | null,
+): Promise<AuthSession | null> {
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, jwtSecret(), {
@@ -92,46 +97,66 @@ export const sessionCookie = {
   },
 };
 
-export async function authenticateCredentials(email: string, password: string): Promise<AuthSession | null> {
+export async function authenticateCredentials(
+  email: string,
+  password: string,
+): Promise<AuthSession | null> {
   const normalizedEmail = email.trim().toLowerCase();
 
-  // Provide a safe, explicit development fallback so the local dev server
-  // works out-of-the-box without requiring the user to copy an env file.
-  const isKnownAdminEmail =
-    normalizedEmail === "pakmultilink@gmail.com" ||
-    normalizedEmail === "pakmultilinks@gmail.com" ||
-    normalizedEmail === "admin@example.com" ||
-    Boolean(process.env.ADMIN_EMAIL && normalizedEmail === process.env.ADMIN_EMAIL.trim().toLowerCase());
-
-  if (isKnownAdminEmail) {
+  // Environment bootstrap is limited to the configured account. Production
+  // accepts a bcrypt secret or the user's database password, never a built-in password.
+  const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const isEnvironmentAdmin =
+    normalizedEmail ===
+    (configuredEmail ||
+      (process.env.NODE_ENV !== "production" ? "admin@example.com" : ""));
+  if (isEnvironmentAdmin) {
     const passwordHash = process.env.ADMIN_PASSWORD_HASH;
     let matches = false;
-
-    if (passwordHash && (passwordHash.startsWith("$2a$") || passwordHash.startsWith("$2b$") || passwordHash.startsWith("$2y$"))) {
-      try {
-        matches = await bcrypt.compare(password, passwordHash);
-      } catch {}
+    if (passwordHash && /^\$2[aby]\$/.test(passwordHash)) {
+      matches = await bcrypt.compare(password, passwordHash).catch(() => false);
     }
-
     if (
       !matches &&
-      (password === "!Qazxsw2" ||
-        (process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD) ||
-        (passwordHash && password === passwordHash) ||
-        (process.env.NODE_ENV !== "production" && password === "replace-for-local-development"))
+      process.env.NODE_ENV !== "production" &&
+      process.env.ADMIN_PASSWORD
     ) {
-      matches = true;
+      matches = password === process.env.ADMIN_PASSWORD;
     }
-
     if (matches) {
-      return { userId: "environment-admin", email: normalizedEmail, name: "Administrator", role: "ADMIN" };
+      if (isDatabaseConfigured) {
+        const profile = await db.user.findUnique({
+          where: { email: normalizedEmail },
+        });
+        if (profile) {
+          if (!profile.isActive || profile.role !== "ADMIN") return null;
+          return {
+            userId: profile.id,
+            email: profile.email,
+            name: profile.name,
+            role: "ADMIN",
+          };
+        }
+      }
+      return {
+        userId: "environment-admin",
+        email: normalizedEmail,
+        name: "Administrator",
+        role: "ADMIN",
+      };
     }
   }
 
   if (!isDatabaseConfigured) return null;
   const user = await db.user.findUnique({ where: { email: normalizedEmail } });
-  if (!user?.isActive || !(await bcrypt.compare(password, user.passwordHash))) return null;
-  return { userId: user.id, email: user.email, name: user.name, role: user.role };
+  if (!user?.isActive || !(await bcrypt.compare(password, user.passwordHash)))
+    return null;
+  return {
+    userId: user.id,
+    email: user.email,
+    name: user.name,
+    role: user.role,
+  };
 }
 
 export async function hashPassword(password: string) {
@@ -186,6 +211,9 @@ export function resetRateLimit(key: string) {
 }
 
 export function requestFingerprint(request: NextRequest) {
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const forwarded = request.headers
+    .get("x-forwarded-for")
+    ?.split(",")[0]
+    ?.trim();
   return forwarded || request.headers.get("x-real-ip") || "unknown";
 }

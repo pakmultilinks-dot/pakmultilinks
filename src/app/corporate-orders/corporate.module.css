@@ -1,0 +1,258 @@
+.heroActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #e4efda;
+  min-height: 44px;
+}
+.section {
+  padding-top: 60px;
+  scroll-margin-top: 180px;
+}
+.sectionIntro {
+  max-width: 360px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #5c7054;
+}
+.supplyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.supplyCard {
+  display: flex;
+  flex-direction: column;
+  padding: 27px;
+  border: 1px solid #dce4d7;
+  border-radius: 10px;
+  background: #fff;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.supplyCard:hover {
+  border-color: #7e9b6d;
+  box-shadow: 0 6px 25px #183f2f0a;
+}
+.number {
+  font-size: 11px;
+  color: #668055;
+  font-weight: 700;
+}
+.supplyCard h3 {
+  font:
+    25px/1.25 Georgia,
+    serif;
+  letter-spacing: -0.025em;
+  margin-top: 25px;
+}
+.supplyCard > p {
+  margin: 14px 0 25px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #5c6e54;
+}
+.cardLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 18px;
+  margin-top: auto;
+  border-top: 1px solid #e9eee3;
+  font-size: 12px;
+  font-weight: 700;
+}
+.serviceSection {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 60px;
+  padding: 42px;
+  background: #eaf0e0;
+  border: 1px solid #dae3ce;
+  border-radius: 12px;
+  margin-top: 60px;
+}
+.serviceSection h2,
+.faqLayout h2 {
+  font:
+    36px/1.15 Georgia,
+    serif;
+  letter-spacing: -0.03em;
+  margin-top: 15px;
+}
+.serviceSection > div > p:not(:first-child),
+.faqLayout > div > p:not(:first-child) {
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 1.85;
+  color: #5c7054;
+}
+.services {
+  display: grid;
+  gap: 24px;
+}
+.services article {
+  display: flex;
+  gap: 17px;
+}
+.services svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.services h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.services p {
+  margin-top: 7px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #5c7054;
+}
+.industries {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+.industries > div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid #dce4d7;
+  border-radius: 9px;
+  background: #fff;
+}
+.industries h3 {
+  font-size: 13px;
+  font-weight: 600;
+}
+.industries svg {
+  flex-shrink: 0;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+.steps article {
+  padding-top: 20px;
+  border-top: 1px solid #c6d6bb;
+}
+.steps article > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.steps span {
+  font:
+    30px/1 Georgia,
+    serif;
+  color: #6f8461;
+}
+.steps h3 {
+  font:
+    27px/1.2 Georgia,
+    serif;
+  margin-top: 24px;
+}
+.steps p {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #5c7054;
+  max-width: 320px;
+}
+.faqLayout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 50px;
+  padding-top: 60px;
+  margin-top: 60px;
+  border-top: 1px solid #dce4d7;
+}
+.faqLayout > div:last-child {
+  padding-top: 0;
+  margin-top: 0;
+  border: 0;
+}
+.faqLayout a {
+  text-decoration: underline;
+}
+.footerLinks {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-top: 25px;
+  font-size: 12px;
+  color: #486840;
+}
+.footerLinks a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+@media (max-width: 1050px) {
+  .supplyGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .industries {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .section {
+    padding-top: 40px;
+  }
+  .serviceSection {
+    grid-template-columns: 1fr;
+    padding: 26px;
+    gap: 30px;
+    margin-top: 40px;
+  }
+  .serviceSection h2,
+  .faqLayout h2 {
+    font-size: 30px;
+  }
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .steps p {
+    max-width: none;
+  }
+  .faqLayout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-top: 40px;
+    padding-top: 35px;
+  }
+  .industries > div {
+    padding: 18px;
+    gap: 10px;
+  }
+  .industries h3 {
+    font-size: 12px;
+  }
+}
+@media (max-width: 540px) {
+  .supplyGrid {
+    grid-template-columns: 1fr;
+  }
+  .supplyCard {
+    padding: 24px;
+  }
+  .supplyCard h3 {
+    margin-top: 18px;
+  }
+}

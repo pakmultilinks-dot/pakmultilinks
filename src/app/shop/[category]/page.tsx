@@ -7,7 +7,12 @@ import { CatalogExplorer } from "@/components/catalog/catalog-explorer";
 import { FaqAccordion } from "@/components/ui/faq-accordion";
 import { categories as developmentCategories } from "@/lib/catalog";
 import { getCategorySeoInfo } from "@/lib/category-seo-data";
-import { getPublicCategory, isDevelopmentProduct, listPublicCategories, listPublicProducts } from "@/lib/catalog-server";
+import {
+  getPublicCategory,
+  isDevelopmentProduct,
+  listPublicCategories,
+  listPublicProducts,
+} from "@/lib/catalog-server";
 import { absoluteUrl, breadcrumbStructuredData, safeJsonLd } from "@/lib/seo";
 
 type CategoryPageProps = {
@@ -20,20 +25,32 @@ export function generateStaticParams() {
   return developmentCategories.map((category) => ({ category: category.slug }));
 }
 
-export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
   const { category: slug } = await params;
   const category = await getPublicCategory(slug);
 
   if (!category) {
-    return { title: "Category not found", robots: { index: false, follow: true } };
+    return {
+      title: "Category not found",
+      robots: { index: false, follow: true },
+    };
   }
 
   const products = await listPublicProducts();
   const hasVerifiedProduct = products.some(
-    (product) => (product.categorySlug === category.slug || product.parentCategorySlug === category.slug) && !isDevelopmentProduct(product),
+    (product) =>
+      (product.categorySlug === category.slug ||
+        product.parentCategorySlug === category.slug) &&
+      !isDevelopmentProduct(product),
   );
 
-  const seoInfo = getCategorySeoInfo(category.slug, category.name, category.description);
+  const seoInfo = getCategorySeoInfo(
+    category.slug,
+    category.name,
+    category.description,
+  );
 
   return {
     title: seoInfo.metaTitle,
@@ -62,11 +79,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   ]);
 
   const categoryProducts = products.filter(
-    (product) => product.categorySlug === category.slug || product.parentCategorySlug === category.slug,
+    (product) =>
+      product.categorySlug === category.slug ||
+      product.parentCategorySlug === category.slug,
   );
-  const indexableProducts = categoryProducts.filter((product) => !isDevelopmentProduct(product));
+  const indexableProducts = categoryProducts.filter(
+    (product) => !isDevelopmentProduct(product),
+  );
 
-  const seoInfo = getCategorySeoInfo(category.slug, category.name, category.description);
+  const seoInfo = getCategorySeoInfo(
+    category.slug,
+    category.name,
+    category.description,
+  );
   const pageUrl = absoluteUrl(`/shop/${category.slug}`);
 
   const breadcrumbs = breadcrumbStructuredData([
@@ -147,24 +172,27 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </div>
 
       {/* Visible Category Hero Header & Intro Section */}
-      <section className="border-b border-line bg-surface py-8 sm:py-12">
-        <div className="site-shell max-w-5xl">
+      <section className="catalog-page-heading border-b border-line bg-surface py-7 sm:py-9">
+        <div className="site-shell">
           <div className="flex flex-wrap items-center gap-2 mb-2.5">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-action/30 bg-action/10 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-action">
               <Sparkles className="size-3.5" />
               Wholesale Category
             </span>
             <span className="text-xs font-bold text-muted">•</span>
-            <span className="text-xs font-bold text-secondary">Carton Supply Lahore</span>
+            <span className="text-xs font-bold text-secondary">
+              Carton Supply Lahore
+            </span>
           </div>
 
           <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-content tracking-tight leading-tight">
             {seoInfo.heading}
           </h1>
 
-          <div className="mt-4 space-y-3 text-sm sm:text-base leading-relaxed text-secondary">
-            <p>{seoInfo.intro}</p>
-          </div>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-secondary">
+            Compare products, packing and current availability for your next
+            order.
+          </p>
         </div>
       </section>
 
@@ -180,6 +208,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         hideHero
         hideH1
       />
+
+      <section className="border-t border-line bg-surface py-10">
+        <div className="site-shell">
+          <div className="max-w-4xl">
+            <h2 className="font-serif text-2xl sm:text-3xl text-content">
+              Buying {category.name.toLowerCase()} in Lahore
+            </h2>
+            <p className="mt-4 text-base leading-8 text-secondary">
+              {seoInfo.intro}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Category FAQ Accordion */}
       {seoInfo.faqs.length > 0 && (

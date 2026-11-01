@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-01",
+  "environment": "Local browser and production-build verification",
+  "build": "next build passed, 191 routes generated",
+  "lint": "Scoped ESLint passed without diagnostics",
+  "browser_tests": {
+    "passed": 16,
+    "failed": 0,
+    "target": "http://localhost:3101 (production build)"
+  },
+  "profile_test": "Temporary database administrator: save, header update, reload and re-login passed; invalid input, unauthenticated and cross-origin requests rejected; account cleaned up",
+  "layout": [
+    {
+      "route": "/blog",
+      "width": 1440,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 80,
+      "headerLeft": 80
+    },
+    {
+      "route": "/corporate-orders",
+      "width": 1440,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 80,
+      "headerLeft": 80
+    },
+    {
+      "route": "/brand/rose-petal",
+      "width": 1440,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 80,
+      "headerLeft": 80
+    },
+    {
+      "route": "/shop",
+      "width": 1440,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 80,
+      "headerLeft": 80
+    },
+    {
+      "route": "/blog",
+      "width": 1024,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 20,
+      "headerLeft": 20
+    },
+    {
+      "route": "/corporate-orders",
+      "width": 1024,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 20,
+      "headerLeft": 20
+    },
+    {
+      "route": "/brand/rose-petal",
+      "width": 1024,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 20,
+      "headerLeft": 20
+    },
+    {
+      "route": "/shop",
+      "width": 1024,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 20,
+      "headerLeft": 20
+    },
+    {
+      "route": "/blog",
+      "width": 390,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    },
+    {
+      "route": "/corporate-orders",
+      "width": 390,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    },
+    {
+      "route": "/brand/rose-petal",
+      "width": 390,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    },
+    {
+      "route": "/shop",
+      "width": 390,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    },
+    {
+      "route": "/blog",
+      "width": 320,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    },
+    {
+      "route": "/corporate-orders",
+      "width": 320,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    },
+    {
+      "route": "/brand/rose-petal",
+      "width": 320,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    },
+    {
+      "route": "/shop",
+      "width": 320,
+      "status": 200,
+      "h1Count": 1,
+      "overflow": false,
+      "contentLeft": 16,
+      "headerLeft": 16
+    }
+  ]
+}

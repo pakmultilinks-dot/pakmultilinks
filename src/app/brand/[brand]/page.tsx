@@ -6,9 +6,18 @@ import { notFound } from "next/navigation";
 import { CatalogExplorer } from "@/components/catalog/catalog-explorer";
 import { FaqAccordion } from "@/components/ui/faq-accordion";
 import { getAllBrandSlugs, getBrandBySlug } from "@/lib/brands";
-import { isDevelopmentProduct, listPublicCategories, listPublicProducts } from "@/lib/catalog-server";
+import {
+  isDevelopmentProduct,
+  listPublicCategories,
+  listPublicProducts,
+} from "@/lib/catalog-server";
 import { company } from "@/lib/company";
-import { absoluteUrl, breadcrumbStructuredData, cleanDescription, safeJsonLd } from "@/lib/seo";
+import {
+  absoluteUrl,
+  breadcrumbStructuredData,
+  cleanDescription,
+  safeJsonLd,
+} from "@/lib/seo";
 
 type BrandPageProps = {
   params: Promise<{ brand: string }>;
@@ -20,7 +29,9 @@ export function generateStaticParams() {
   return getAllBrandSlugs().map((slug) => ({ brand: slug }));
 }
 
-export async function generateMetadata({ params }: BrandPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: BrandPageProps): Promise<Metadata> {
   const { brand: slug } = await params;
   const brand = getBrandBySlug(slug);
 
@@ -31,7 +42,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
   const title = brand.metaTitle;
   const description = cleanDescription(
     brand.metaDescription,
-    `Buy official ${brand.name} wholesale supplies by carton in Lahore from Pak Multilinks Hygiene.`
+    `Buy official ${brand.name} wholesale supplies by carton in Lahore from Pak Multilinks Hygiene.`,
   );
 
   return {
@@ -66,10 +77,13 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
   const brandProducts = products.filter(
     (p) =>
       p.brand.toLowerCase() === brand.name.toLowerCase() ||
-      p.brand.toLowerCase().replace(/[^a-z0-9]/g, "") === brand.name.toLowerCase().replace(/[^a-z0-9]/g, "")
+      p.brand.toLowerCase().replace(/[^a-z0-9]/g, "") ===
+        brand.name.toLowerCase().replace(/[^a-z0-9]/g, ""),
   );
 
-  const indexableProducts = brandProducts.filter((p) => !isDevelopmentProduct(p));
+  const indexableProducts = brandProducts.filter(
+    (p) => !isDevelopmentProduct(p),
+  );
   const pageUrl = absoluteUrl(`/brand/${brand.slug}`);
 
   // Structured Data (Brand + CollectionPage + BreadcrumbList + FAQPage)
@@ -123,13 +137,18 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: safeJsonLd([breadcrumbs, brandSchema, collectionSchema, faqSchema]),
+          __html: safeJsonLd([
+            breadcrumbs,
+            brandSchema,
+            collectionSchema,
+            faqSchema,
+          ]),
         }}
       />
 
       {/* Top Breadcrumb */}
       <div className="border-b border-line bg-surface py-3">
-        <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
+        <div className="site-shell">
           <nav aria-label="Breadcrumb">
             <ol className="flex items-center gap-2 text-xs font-semibold text-muted">
               <li>
@@ -156,22 +175,50 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
         </div>
       </div>
 
-      {/* Brand Hero & Intro Section */}
+      <header className="catalog-page-heading border-b border-line bg-surface py-7 sm:py-9">
+        <div className="site-shell">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-accent">
+            Brand collection
+          </p>
+          <h1 className="font-serif text-3xl sm:text-4xl font-normal text-content">
+            {brand.name} products
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-secondary">
+            Browse available products, compare packing and request current
+            carton prices.
+          </p>
+        </div>
+      </header>
+
+      {/* Catalog Explorer for this Brand */}
+      <CatalogExplorer
+        key={brand.slug}
+        products={brandProducts}
+        categoryOptions={categories}
+        initialBrand={brand.name}
+        title={`${brand.name} Products & Carton Rates`}
+        description={`Explore factory-sealed cartons of ${brand.name} with wholesale pricing, SKU codes, and instant WhatsApp ordering for Lahore.`}
+        hideH1
+      />
+
+      {/* Detailed brand information follows the product collection. */}
       <section className="border-b border-line bg-surface py-10 sm:py-14">
-        <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
+        <div className="site-shell">
           <div className="max-w-4xl">
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-action/30 bg-action/10 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-action">
                 <Sparkles className="size-3.5" />
-                Official Brand Collection
+                Brand buying information
               </span>
               <span className="text-xs font-bold text-muted">•</span>
-              <span className="text-xs font-bold text-secondary">{brand.tagline}</span>
+              <span className="text-xs font-bold text-secondary">
+                {brand.tagline}
+              </span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-content tracking-tight leading-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-content tracking-tight leading-tight">
               {brand.introHeading}
-            </h1>
+            </h2>
 
             <div className="mt-5 space-y-3.5 text-sm sm:text-base leading-relaxed text-secondary">
               {brand.introParagraphs.map((paragraph, idx) => (
@@ -190,7 +237,9 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
                     <CheckCircle2 className="size-4 shrink-0" />
                     <span>{highlight.label}</span>
                   </div>
-                  <p className="text-xs text-secondary leading-snug">{highlight.description}</p>
+                  <p className="text-xs text-secondary leading-snug">
+                    {highlight.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -198,21 +247,13 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
         </div>
       </section>
 
-      {/* Catalog Explorer for this Brand */}
-      <CatalogExplorer
-        key={brand.slug}
-        products={brandProducts}
-        categoryOptions={categories}
-        initialBrand={brand.name}
-        title={`${brand.name} Products & Carton Rates`}
-        description={`Explore factory-sealed cartons of ${brand.name} with wholesale pricing, SKU codes, and instant WhatsApp ordering for Lahore.`}
-        hideH1
-      />
-
       {/* Brand FAQ Section */}
       {brand.faqs.length > 0 && (
-        <section className="border-t border-line bg-surface py-12 sm:py-16" id="faq">
-          <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
+        <section
+          className="border-t border-line bg-surface py-12 sm:py-16"
+          id="faq"
+        >
+          <div className="site-shell">
             <div className="max-w-4xl">
               <FaqAccordion
                 faqs={brand.faqs}
@@ -229,12 +270,13 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
                     Need a custom carton quote for {brand.name}?
                   </h3>
                   <p className="mt-0.5 text-xs text-secondary">
-                    Our sales team is available on WhatsApp for direct wholesale inquiries and bulk rates.
+                    Our sales team is available on WhatsApp for direct wholesale
+                    inquiries and bulk rates.
                   </p>
                 </div>
                 <a
                   href={`https://wa.me/923006917385?text=${encodeURIComponent(
-                    `Hi Pak Multilinks, I am inquiring about wholesale carton pricing for ${brand.name} in Lahore.`
+                    `Hi Pak Multilinks, I am inquiring about wholesale carton pricing for ${brand.name} in Lahore.`,
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"

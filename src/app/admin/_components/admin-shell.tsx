@@ -172,16 +172,10 @@ export function AdminShell({ userName, children }: { userName: string; children:
           </button>
         </form>
 
-        {/* Top-Right Administrator AD (Clean Display as in User Screenshot) */}
-        <span className="ml-auto hidden max-w-36 truncate text-xs font-medium text-secondary md:block">
-          {userName}
-        </span>
-        <span
-          className="grid size-8 shrink-0 place-items-center rounded-lg bg-surface-soft text-xs font-semibold text-content border border-line/60"
-          title={userName}
-        >
-          {userName.slice(0, 2).toUpperCase()}
-        </span>
+        <Link href="/admin/settings#administrator" className="ml-auto flex shrink-0 items-center gap-3 rounded-lg p-1.5 hover:bg-surface-soft" aria-label="Administrator profile settings">
+          <span className="hidden max-w-36 truncate text-xs font-medium text-secondary md:block">{userName}</span>
+          <span className="grid size-8 place-items-center rounded-lg border border-line/60 bg-surface-soft text-xs font-semibold text-content" title={userName}>{userName.trim().split(/\s+/).map((part) => part[0]).slice(0, 2).join("").toUpperCase()}</span>
+        </Link>
       </header>
 
       {/* Desktop Sidebar */}

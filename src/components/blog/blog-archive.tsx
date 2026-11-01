@@ -92,7 +92,7 @@ export function BlogArchive({
           <article className={styles.card} key={article.slug}>
             <div className={styles.cardImage}>
               <Image
-                src={article.image}
+                src={article.thumbnail}
                 alt={article.imageAlt}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

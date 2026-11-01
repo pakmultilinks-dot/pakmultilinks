@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Check,
   Download,
@@ -63,6 +63,7 @@ type Draft = {
   stock: string;
   unitsPerCarton: string;
   minimumOrderCartons: string;
+  cartonEnabled: boolean;
 };
 
 export function detectUnitsFromName(name: string): number {
@@ -85,24 +86,36 @@ function calcPiece(cartonStr: string, units: number): string {
 }
 
 const toDraft = (row: PricingRow): Draft => {
-  let units = Number(row.unitsPerCarton) || 0;
-  if (units <= 1) {
-    const detected = detectUnitsFromName(row.name);
-    if (detected > 1) units = detected;
+  const storedUnits = Number(row.unitsPerCarton) || 0;
+  const cartonEnabled = storedUnits > 1;
+  const price = String(row.price);
+  const salePrice = row.salePrice === null ? "" : String(row.salePrice);
+
+  // Carton pricing off: `price` is the product (piece) price — no derivation.
+  if (!cartonEnabled) {
+    return {
+      price,
+      piecePrice: price,
+      salePrice,
+      salePiecePrice: salePrice,
+      priceOnRequest: row.priceOnRequest,
+      stock: String(row.stock),
+      unitsPerCarton: "0",
+      minimumOrderCartons: String(row.minimumOrderCartons || 1),
+      cartonEnabled: false,
+    };
   }
-  const safeUnits = units > 0 ? units : 1;
-  const regPiece = calcPiece(String(row.price), safeUnits);
-  const salePiece = row.salePrice === null ? "" : calcPiece(String(row.salePrice), safeUnits);
 
   return {
-    price: String(row.price),
-    piecePrice: regPiece,
-    salePrice: row.salePrice === null ? "" : String(row.salePrice),
-    salePiecePrice: salePiece,
+    price,
+    piecePrice: calcPiece(price, storedUnits),
+    salePrice,
+    salePiecePrice: salePrice === "" ? "" : calcPiece(salePrice, storedUnits),
     priceOnRequest: row.priceOnRequest,
     stock: String(row.stock),
-    unitsPerCarton: String(safeUnits),
+    unitsPerCarton: String(storedUnits),
     minimumOrderCartons: String(row.minimumOrderCartons || 1),
+    cartonEnabled: true,
   };
 };
 
@@ -124,6 +137,9 @@ export function PricingEditor({
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  // Remembers each row's last positive pcs/ctn so toggling carton pricing
+  // back on restores the previous value instead of a guess.
+  const lastUnitsRef = useRef<Record<string, string>>({});
 
   const dirtyIds = Object.keys(drafts);
 
@@ -140,7 +156,10 @@ export function PricingEditor({
     (row) => Number(drafts[row.id]?.stock ?? row.stock) === 0,
   ).length;
   const missingUnitsCount = rows.filter((row) => {
-    const units = Number(drafts[row.id]?.unitsPerCarton ?? row.unitsPerCarton) || detectUnitsFromName(row.name);
+    const draft = drafts[row.id];
+    const cartonOn = draft ? draft.cartonEnabled : row.unitsPerCarton > 1;
+    if (!cartonOn) return false; // carton intentionally off — not "missing"
+    const units = Number(draft?.unitsPerCarton ?? row.unitsPerCarton) || detectUnitsFromName(row.name);
     return units <= 1;
   }).length;
 
@@ -194,14 +213,16 @@ export function PricingEditor({
         const currentQuote = drafts[row.id]?.priceOnRequest ?? row.priceOnRequest;
         const currentStock = Number(drafts[row.id]?.stock ?? row.stock);
         const currentSale = drafts[row.id]?.salePrice ?? row.salePrice;
-        const currentUnits = Number(drafts[row.id]?.unitsPerCarton ?? row.unitsPerCarton) || detectUnitsFromName(row.name);
+        const currentDraft = drafts[row.id];
+        const currentCartonOn = currentDraft ? currentDraft.cartonEnabled : row.unitsPerCarton > 1;
+        const currentUnits = Number(currentDraft?.unitsPerCarton ?? row.unitsPerCarton) || detectUnitsFromName(row.name);
 
         let matchesFilter = true;
         if (filter === "quote") matchesFilter = currentQuote;
         else if (filter === "priced") matchesFilter = !currentQuote;
         else if (filter === "sale") matchesFilter = Boolean(currentSale && Number(currentSale) > 0);
         else if (filter === "stock") matchesFilter = currentStock === 0;
-        else if (filter === "missing-units") matchesFilter = currentUnits <= 1;
+        else if (filter === "missing-units") matchesFilter = currentCartonOn && currentUnits <= 1;
 
         return matchesQuery && matchesCategory && matchesBrand && matchesFilter;
       }),
@@ -238,6 +259,15 @@ export function PricingEditor({
 
   function handlePiecePriceChange(row: PricingRow, draft: Draft, val: string) {
     const num = Number(val);
+    if (!draft.cartonEnabled) {
+      // Carton off: the product price IS the piece price — no derivation.
+      if (!val || val.trim() === "") {
+        edit(row, { piecePrice: "", price: "" });
+      } else if (Number.isFinite(num)) {
+        edit(row, { piecePrice: val, price: val });
+      }
+      return;
+    }
     const units = Number(draft.unitsPerCarton) > 0 ? Number(draft.unitsPerCarton) : (detectUnitsFromName(row.name) || 1);
     if (!val || val.trim() === "") {
       edit(row, { piecePrice: "", price: "" });
@@ -252,6 +282,7 @@ export function PricingEditor({
   }
 
   function handleCartonPriceChange(row: PricingRow, draft: Draft, val: string) {
+    if (!draft.cartonEnabled) return;
     const num = Number(val);
     const units = Number(draft.unitsPerCarton) > 0 ? Number(draft.unitsPerCarton) : (detectUnitsFromName(row.name) || 1);
     if (!val || val.trim() === "") {
@@ -266,12 +297,45 @@ export function PricingEditor({
     }
   }
 
+  function handleCartonToggle(row: PricingRow, draft: Draft, on: boolean) {
+    const piece = Number(draft.piecePrice) > 0 ? draft.piecePrice : draft.price;
+    const salePiece = Number(draft.salePiecePrice) > 0 ? draft.salePiecePrice : draft.salePrice;
+
+    if (on) {
+      const remembered = lastUnitsRef.current[row.id];
+      const units = Number(remembered) > 0 ? remembered : String(detectUnitsFromName(row.name) || 1);
+      const patch: Partial<Draft> = { cartonEnabled: true, unitsPerCarton: units };
+      if (Number(piece) > 0) patch.price = (Number(piece) * Number(units)).toFixed(2);
+      if (Number(salePiece) > 0) patch.salePrice = (Number(salePiece) * Number(units)).toFixed(2);
+      edit(row, patch);
+      setMessage("");
+      return;
+    }
+
+    lastUnitsRef.current[row.id] = draft.unitsPerCarton;
+    edit(row, {
+      cartonEnabled: false,
+      unitsPerCarton: "0",
+      price: piece,
+      piecePrice: piece,
+      salePrice: salePiece,
+      salePiecePrice: salePiece,
+    });
+    setMessage("");
+  }
+
   function handleUnitsChange(row: PricingRow, draft: Draft, val: string) {
     const newUnits = Number(val) > 0 ? Number(val) : 0;
     const currentPiece = Number(draft.piecePrice);
     const currentCarton = Number(draft.price);
     const currentSalePiece = Number(draft.salePiecePrice);
     const currentSaleCarton = Number(draft.salePrice);
+
+    if (newUnits <= 0) {
+      // Clearing/zeroing pcs-per-ctn switches carton pricing off entirely.
+      handleCartonToggle(row, draft, false);
+      return;
+    }
 
     if (newUnits > 0 && Number.isFinite(currentPiece) && currentPiece > 0) {
       const newCarton = (currentPiece * newUnits).toFixed(2);
@@ -300,6 +364,15 @@ export function PricingEditor({
 
   function handleSalePiecePriceChange(row: PricingRow, draft: Draft, val: string) {
     const num = Number(val);
+    if (!draft.cartonEnabled) {
+      // Carton off: sale price is stored directly as the piece sale price.
+      if (!val || val.trim() === "") {
+        edit(row, { salePiecePrice: "", salePrice: "" });
+      } else if (Number.isFinite(num)) {
+        edit(row, { salePiecePrice: val, salePrice: val });
+      }
+      return;
+    }
     const units = Number(draft.unitsPerCarton) > 0 ? Number(draft.unitsPerCarton) : (detectUnitsFromName(row.name) || 1);
     if (!val || val.trim() === "") {
       edit(row, { salePiecePrice: "", salePrice: "" });
@@ -314,6 +387,7 @@ export function PricingEditor({
   }
 
   function handleSaleCartonPriceChange(row: PricingRow, draft: Draft, val: string) {
+    if (!draft.cartonEnabled) return;
     const num = Number(val);
     const units = Number(draft.unitsPerCarton) > 0 ? Number(draft.unitsPerCarton) : (detectUnitsFromName(row.name) || 1);
     if (!val || val.trim() === "") {
@@ -341,7 +415,17 @@ export function PricingEditor({
         value.salePrice === ""
           ? ""
           : (Number(value.salePrice) * (1 + percent / 100)).toFixed(2);
-      edit(row, { price: newPrice, salePrice: newSale });
+      if (value.cartonEnabled) {
+        edit(row, { price: newPrice, salePrice: newSale });
+      } else {
+        // Carton off: price IS the piece price — keep both fields in sync.
+        edit(row, {
+          price: newPrice,
+          piecePrice: newPrice,
+          salePrice: newSale,
+          salePiecePrice: newSale,
+        });
+      }
     }
     setError("");
     setMessage(`Updated rates for ${selected.length} products by ${percent}%. Remember to click Save.`);
@@ -377,30 +461,40 @@ export function PricingEditor({
     for (const id of dirtyIds) {
       const draft = drafts[id];
       const row = rows.find((r) => r.id === id);
-      const units = Number(draft.unitsPerCarton) > 0
-        ? Number(draft.unitsPerCarton)
-        : (row ? detectUnitsFromName(row.name) : 1) || 1;
 
-      if ((!draft.price || Number(draft.price) <= 0) && draft.piecePrice && Number(draft.piecePrice) > 0) {
-        draft.price = (Number(draft.piecePrice) * units).toFixed(2);
-        draft.unitsPerCarton = String(units);
-      }
-      if ((!draft.piecePrice || Number(draft.piecePrice) <= 0) && draft.price && Number(draft.price) > 0) {
-        draft.piecePrice = (Number(draft.price) / units).toFixed(2);
-      }
-      if ((!draft.salePrice || Number(draft.salePrice) <= 0) && draft.salePiecePrice && Number(draft.salePiecePrice) > 0) {
-        draft.salePrice = (Number(draft.salePiecePrice) * units).toFixed(2);
-      }
-      if ((!draft.salePiecePrice || Number(draft.salePiecePrice) <= 0) && draft.salePrice && Number(draft.salePrice) > 0) {
-        draft.salePiecePrice = (Number(draft.salePrice) / units).toFixed(2);
+      if (!draft.cartonEnabled) {
+        // Carton pricing off: price IS the piece price; units stay 0.
+        if (!draft.price && draft.piecePrice) draft.price = draft.piecePrice;
+        if (!draft.piecePrice && draft.price) draft.piecePrice = draft.price;
+        if (!draft.salePrice && draft.salePiecePrice) draft.salePrice = draft.salePiecePrice;
+        if (!draft.salePiecePrice && draft.salePrice) draft.salePiecePrice = draft.salePrice;
+        draft.unitsPerCarton = "0";
+      } else {
+        const units = Number(draft.unitsPerCarton) > 0
+          ? Number(draft.unitsPerCarton)
+          : (row ? detectUnitsFromName(row.name) : 1) || 1;
+
+        if ((!draft.price || Number(draft.price) <= 0) && draft.piecePrice && Number(draft.piecePrice) > 0) {
+          draft.price = (Number(draft.piecePrice) * units).toFixed(2);
+          draft.unitsPerCarton = String(units);
+        }
+        if ((!draft.piecePrice || Number(draft.piecePrice) <= 0) && draft.price && Number(draft.price) > 0) {
+          draft.piecePrice = (Number(draft.price) / units).toFixed(2);
+        }
+        if ((!draft.salePrice || Number(draft.salePrice) <= 0) && draft.salePiecePrice && Number(draft.salePiecePrice) > 0) {
+          draft.salePrice = (Number(draft.salePiecePrice) * units).toFixed(2);
+        }
+        if ((!draft.salePiecePrice || Number(draft.salePiecePrice) <= 0) && draft.salePrice && Number(draft.salePrice) > 0) {
+          draft.salePiecePrice = (Number(draft.salePrice) / units).toFixed(2);
+        }
+        if (!draft.unitsPerCarton || Number(draft.unitsPerCarton) <= 0) {
+          draft.unitsPerCarton = String(units);
+        }
       }
       // If sale price >= regular price, it's not a discount; clear salePrice
       if (draft.salePrice && Number(draft.salePrice) >= Number(draft.price)) {
         draft.salePrice = "";
         draft.salePiecePrice = "";
-      }
-      if (!draft.unitsPerCarton || Number(draft.unitsPerCarton) <= 0) {
-        draft.unitsPerCarton = String(units);
       }
     }
 
@@ -495,6 +589,21 @@ export function PricingEditor({
       ],
       ...visible.map((row) => {
         const draft = drafts[row.id] ?? toDraft(row);
+        if (!draft.cartonEnabled) {
+          // Carton off: price column carries the piece price; carton column blank.
+          return [
+            row.name,
+            row.sku,
+            row.category,
+            "",
+            draft.piecePrice || draft.price,
+            draft.salePiecePrice ?? draft.salePrice ?? "",
+            draft.priceOnRequest ? "Yes" : "No",
+            draft.stock,
+            "0",
+            draft.minimumOrderCartons,
+          ];
+        }
         const units = Number(draft.unitsPerCarton) || detectUnitsFromName(row.name) || 0;
         const pieceRate = draft.piecePrice || (units > 1 ? calcPiece(draft.price, units) : "");
         return [
@@ -586,7 +695,7 @@ export function PricingEditor({
           <div>
             <p className="font-bold text-accent">Wholesale Pricing Formula (Carton ⇄ Piece)</p>
             <p className="text-[11px] text-muted">
-              1 Carton Rate = Piece Rate × Carton Pieces. Piece rate ya Carton rate me se koi bhi likhein, doosra khud calculate ho jata hai. Agar dono rate same aa rahe hon to &ldquo;1 Ctn = X pcs&rdquo; me carton ke pieces set karein!
+              1 Carton Rate = Piece Rate × Carton Pieces. Piece rate ya Carton rate me se koi bhi likhein, doosra khud calculate ho jata hai. Agar dono rate same aa rahe hon to &ldquo;1 Ctn = X pcs&rdquo; me carton ke pieces set karein! Jis product par carton packing nahi hai, us ka &ldquo;Ctn&rdquo; toggle OFF karein — sirf product (piece) price active rahegi.
             </p>
           </div>
         </div>
@@ -923,9 +1032,16 @@ export function PricingEditor({
               {visible.map((row) => {
                 const draft = drafts[row.id] ?? toDraft(row);
                 const isDirty = Boolean(drafts[row.id]);
-                const units = Number(draft.unitsPerCarton) > 0 ? Number(draft.unitsPerCarton) : (detectUnitsFromName(row.name) || 1);
-                const regPiece = draft.piecePrice || calcPiece(draft.price, units);
-                const salePiece = draft.salePiecePrice || (draft.salePrice ? calcPiece(draft.salePrice, units) : "");
+                const cartonOn = draft.cartonEnabled;
+                const units = cartonOn
+                  ? (Number(draft.unitsPerCarton) > 0 ? Number(draft.unitsPerCarton) : (detectUnitsFromName(row.name) || 1))
+                  : 0;
+                const regPiece = cartonOn
+                  ? draft.piecePrice || calcPiece(draft.price, units)
+                  : draft.piecePrice || draft.price;
+                const salePiece = cartonOn
+                  ? (draft.salePiecePrice || (draft.salePrice ? calcPiece(draft.salePrice, units) : ""))
+                  : (draft.salePiecePrice || draft.salePrice);
                 const isOutOfStock = Number(draft.stock) === 0;
 
                 return (
@@ -998,96 +1114,100 @@ export function PricingEditor({
                     {/* Regular Price (Carton & Piece Linked) */}
                     <td className="p-3.5 align-top">
                       <div className="w-36 space-y-1.5">
-                        {/* Carton Rate Input */}
-                        <div className="relative flex items-center">
-                          <span className="pointer-events-none absolute left-2 text-[11px] font-bold text-muted">
-                            ₨
-                          </span>
-                          <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            aria-label={`${row.name} carton rate`}
-                            value={draft.price}
-                            disabled={disabled || pending}
-                            onChange={(e) => handleCartonPriceChange(row, draft, e.target.value)}
-                            placeholder={draft.piecePrice && units > 1 ? (Number(draft.piecePrice) * units).toFixed(2) : "0.00"}
-                            className="h-8 w-full rounded-lg border border-line-strong/80 bg-surface pl-5 pr-9 text-xs font-bold text-content tabular-nums outline-none transition focus:border-action focus:ring-1 focus:ring-action"
-                          />
-                          <span className="pointer-events-none absolute right-1.5 text-[9px] font-bold uppercase tracking-wider text-muted">
-                            /ctn
-                          </span>
-                        </div>
+                                            {/* Carton Rate Input — only when carton pricing is on */}
+                                            {cartonOn && (
+                                              <div className="relative flex items-center">
+                                                <span className="pointer-events-none absolute left-2 text-[11px] font-bold text-muted">
+                                                  Rs
+                                                </span>
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  min="0"
+                                                  aria-label={`${row.name} carton rate`}
+                                                  value={draft.price}
+                                                  disabled={disabled || pending}
+                                                  onChange={(e) => handleCartonPriceChange(row, draft, e.target.value)}
+                                                  placeholder={draft.piecePrice && units > 1 ? (Number(draft.piecePrice) * units).toFixed(2) : "0.00"}
+                                                  className="h-8 w-full rounded-lg border border-line-strong/80 bg-surface pl-5 pr-9 text-xs font-bold text-content tabular-nums outline-none transition focus:border-action focus:ring-1 focus:ring-action"
+                                                />
+                                                <span className="pointer-events-none absolute right-1.5 text-[9px] font-bold uppercase tracking-wider text-muted">
+                                                  /ctn
+                                                </span>
+                                              </div>
+                                            )}
 
-                        {/* Piece Rate Input (Two-Way Calculation) - High-Visibility Red */}
-                        <div className="relative flex items-center">
-                          <span className="pointer-events-none absolute left-2 text-[10px] font-extrabold text-red-600 dark:text-red-400">
-                            ₨
-                          </span>
-                          <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            aria-label={`${row.name} piece rate`}
-                            value={regPiece}
-                            disabled={disabled || pending}
-                            onChange={(e) => handlePiecePriceChange(row, draft, e.target.value)}
-                            placeholder="0.00"
-                            className="h-7 w-full rounded-lg border border-red-300 bg-red-50/90 pl-5 pr-8 text-[11px] font-extrabold text-red-700 tabular-nums outline-none transition focus:border-red-600 focus:ring-1 focus:ring-red-600 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300 placeholder:text-red-300"
-                          />
-                          <span className="pointer-events-none absolute right-1.5 text-[9px] font-extrabold text-red-600 dark:text-red-400">
-                            /pc
-                          </span>
-                        </div>
-                      </div>
-                    </td>
+                                            {/* Piece Rate Input (Two-Way Calculation) - High-Visibility Red */}
+                                            <div className="relative flex items-center">
+                                              <span className="pointer-events-none absolute left-2 text-[10px] font-extrabold text-red-600 dark:text-red-400">
+                                                Rs
+                                              </span>
+                                              <input
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                aria-label={`${row.name} piece rate`}
+                                                value={regPiece}
+                                                disabled={disabled || pending}
+                                                onChange={(e) => handlePiecePriceChange(row, draft, e.target.value)}
+                                                placeholder="0.00"
+                                                className={`${cartonOn ? "h-7 text-[11px]" : "h-8 text-xs"} w-full rounded-lg border border-red-300 bg-red-50/90 pl-5 pr-8 font-extrabold text-red-700 tabular-nums outline-none transition focus:border-red-600 focus:ring-1 focus:ring-red-600 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300 placeholder:text-red-300`}
+                                              />
+                                              <span className="pointer-events-none absolute right-1.5 text-[9px] font-extrabold text-red-600 dark:text-red-400">
+                                                /pc
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </td>
 
                     {/* Sale Price (Carton & Piece) */}
                     <td className="p-3.5 align-top">
                       <div className="w-36 space-y-1.5">
-                        {/* Sale Carton Rate */}
-                        <div className="relative flex items-center">
-                          <span className="pointer-events-none absolute left-2 text-[11px] font-bold text-muted">
-                            ₨
-                          </span>
-                          <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            aria-label={`${row.name} sale carton rate`}
-                            value={draft.salePrice}
-                            disabled={disabled || pending}
-                            onChange={(e) => handleSaleCartonPriceChange(row, draft, e.target.value)}
-                            placeholder="No sale"
-                            className="h-8 w-full rounded-lg border border-line-strong/80 bg-surface pl-5 pr-9 text-xs font-bold text-content tabular-nums outline-none transition focus:border-action focus:ring-1 focus:ring-action placeholder:font-normal placeholder:text-muted/60"
-                          />
-                          <span className="pointer-events-none absolute right-1.5 text-[9px] font-bold uppercase tracking-wider text-muted">
-                            /ctn
-                          </span>
-                        </div>
+                                            {/* Sale Carton Rate — only when carton pricing is on */}
+                                            {cartonOn && (
+                                              <div className="relative flex items-center">
+                                                <span className="pointer-events-none absolute left-2 text-[11px] font-bold text-muted">
+                                                  Rs
+                                                </span>
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  min="0"
+                                                  aria-label={`${row.name} sale carton rate`}
+                                                  value={draft.salePrice}
+                                                  disabled={disabled || pending}
+                                                  onChange={(e) => handleSaleCartonPriceChange(row, draft, e.target.value)}
+                                                  placeholder="No sale"
+                                                  className="h-8 w-full rounded-lg border border-line-strong/80 bg-surface pl-5 pr-9 text-xs font-bold text-content tabular-nums outline-none transition focus:border-action focus:ring-1 focus:ring-action placeholder:font-normal placeholder:text-muted/60"
+                                                />
+                                                <span className="pointer-events-none absolute right-1.5 text-[9px] font-bold uppercase tracking-wider text-muted">
+                                                  /ctn
+                                                </span>
+                                              </div>
+                                            )}
 
-                        {/* Sale Piece Rate */}
-                        <div className="relative flex items-center">
-                          <span className="pointer-events-none absolute left-2 text-[10px] font-bold text-muted">
-                            ₨
-                          </span>
-                          <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            aria-label={`${row.name} sale piece rate`}
-                            value={salePiece}
-                            disabled={disabled || pending}
-                            onChange={(e) => handleSalePiecePriceChange(row, draft, e.target.value)}
-                            placeholder="—"
-                            className="h-7 w-full rounded-lg border border-line bg-surface-soft/60 pl-5 pr-8 text-[11px] font-medium text-secondary tabular-nums outline-none transition focus:border-action focus:ring-1 focus:ring-action placeholder:text-muted/40"
-                          />
-                          <span className="pointer-events-none absolute right-1.5 text-[9px] font-medium text-muted">
-                            /pc
-                          </span>
-                        </div>
-                      </div>
-                    </td>
+                                            {/* Sale Piece Rate */}
+                                            <div className="relative flex items-center">
+                                              <span className="pointer-events-none absolute left-2 text-[10px] font-bold text-muted">
+                                                Rs
+                                              </span>
+                                              <input
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                aria-label={`${row.name} sale piece rate`}
+                                                value={salePiece}
+                                                disabled={disabled || pending}
+                                                onChange={(e) => handleSalePiecePriceChange(row, draft, e.target.value)}
+                                                placeholder={cartonOn ? "—" : "No sale"}
+                                                className={`${cartonOn ? "h-7 text-[11px]" : "h-8 text-xs"} w-full rounded-lg border ${cartonOn ? "border-line bg-surface-soft/60 text-secondary" : "border-line-strong/80 bg-surface text-content"} pl-5 pr-8 font-medium tabular-nums outline-none transition focus:border-action focus:ring-1 focus:ring-action placeholder:text-muted/40`}
+                                              />
+                                              <span className="pointer-events-none absolute right-1.5 text-[9px] font-medium text-muted">
+                                                /pc
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </td>
 
                     {/* Storefront Pricing Mode / Quote Only */}
                     <td className="p-3.5 text-center align-top pt-4">
@@ -1160,28 +1280,57 @@ export function PricingEditor({
                       </div>
                     </td>
 
-                    {/* Units per Carton */}
+                    {/* Units per Carton + Carton pricing toggle */}
                     <td className="p-3.5 align-top pt-4">
-                      <div className="w-20">
+                      <div className="w-24 space-y-1.5">
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={cartonOn}
+                          aria-label={`${row.name} carton pricing`}
+                          disabled={disabled || pending}
+                          onClick={() => handleCartonToggle(row, draft, !cartonOn)}
+                          className={`inline-flex w-full items-center justify-between gap-1 rounded-full border px-2 py-1 text-[10px] font-extrabold transition shadow-xs ${
+                            cartonOn
+                              ? "border-emerald-500 bg-emerald-100 text-emerald-950 hover:bg-emerald-200 dark:border-emerald-600 dark:bg-emerald-950 dark:text-emerald-100"
+                              : "border-line-strong bg-surface-soft text-muted hover:text-secondary"
+                          }`}
+                          title={
+                            cartonOn
+                              ? "Carton pricing ON — turn off to sell by piece only (carton price deactivated)"
+                              : "Carton pricing OFF — only product (piece) price is active. Click to enable carton pricing."
+                          }
+                        >
+                          <span className="size-2 rounded-full bg-current opacity-70" />
+                          <span className="flex-1 text-left">{cartonOn ? "Ctn ON" : "Ctn OFF"}</span>
+                        </button>
                         <input
                           type="number"
                           min="1"
                           step="1"
                           aria-label={`${row.name} units per carton`}
-                          value={draft.unitsPerCarton}
-                          disabled={disabled || pending}
+                          value={cartonOn ? draft.unitsPerCarton : ""}
+                          placeholder="—"
+                          disabled={disabled || pending || !cartonOn}
                           onChange={(e) =>
                             handleUnitsChange(row, draft, e.target.value)
                           }
                           className={`h-8 w-full rounded-lg border px-2 text-xs font-bold tabular-nums outline-none transition ${
-                            units <= 1
-                              ? "border-amber-400 bg-amber-50 text-amber-900 focus:border-amber-600 focus:ring-1 focus:ring-amber-600 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-200"
-                              : "border-line-strong/80 bg-surface text-content focus:border-action focus:ring-1 focus:ring-action"
+                            !cartonOn
+                              ? "border-line bg-surface-soft/60 text-muted/50 placeholder:text-muted/40"
+                              : units <= 1
+                                ? "border-amber-400 bg-amber-50 text-amber-900 focus:border-amber-600 focus:ring-1 focus:ring-amber-600 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-200"
+                                : "border-line-strong/80 bg-surface text-content focus:border-action focus:ring-1 focus:ring-action"
                           }`}
                         />
-                        {units <= 1 && (
+                        {cartonOn && units <= 1 && (
                           <span className="mt-1 block text-[9px] font-bold text-amber-800 dark:text-amber-300">
                             Set pcs/ctn
+                          </span>
+                        )}
+                        {!cartonOn && (
+                          <span className="mt-1 block text-[9px] font-bold text-muted">
+                            Piece only
                           </span>
                         )}
                       </div>
@@ -1241,7 +1390,7 @@ export function PricingEditor({
         {/* Footer info bar */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-surface-soft/40 px-4 py-3 text-xs text-muted">
           <span>
-            Showing <strong>{visible.length}</strong> of {totalCount} products. Enter either Carton or Piece price — both synchronize automatically.
+            Showing <strong>{visible.length}</strong> of {totalCount} products. Enter either Carton or Piece price — both synchronize automatically. Products with the Ctn toggle OFF use only the product (piece) price.
           </span>
           <span className="font-semibold text-action">
             Wholesale minimum checkout: PKR 5,000

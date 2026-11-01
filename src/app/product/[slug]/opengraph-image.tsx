@@ -38,6 +38,7 @@ export default async function ProductOpenGraphImage({ params }: Props) {
 
   const price = getPrice(product);
   const formattedPrice = price > 0 ? `Rs. ${price.toLocaleString()}` : "Rate on Request";
+  const cartonMode = (product.unitsPerCarton ?? 0) > 1;
 
   return new ImageResponse(
     (
@@ -150,11 +151,11 @@ export default async function ProductOpenGraphImage({ params }: Props) {
         >
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: 16, textTransform: "uppercase", letterSpacing: "1.5px", color: "#94a3b8", fontWeight: 700 }}>
-              Wholesale Carton Rate
+              {cartonMode ? "Wholesale Carton Rate" : "Wholesale Piece Rate"}
             </span>
             <span style={{ fontSize: 42, fontWeight: 900, color: "#4ade80", letterSpacing: "-1px" }}>
               {formattedPrice}
-              {price > 0 && <span style={{ fontSize: 22, color: "#94a3b8", fontWeight: 600, marginLeft: 8 }}>/ carton</span>}
+              {price > 0 && <span style={{ fontSize: 22, color: "#94a3b8", fontWeight: 600, marginLeft: 8 }}>{cartonMode ? "/ carton" : "/ piece"}</span>}
             </span>
           </div>
 

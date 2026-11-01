@@ -117,7 +117,7 @@ For multi-instance production deployment, replace local upload storage with Clou
 
 ## Store management update
 
-- `/admin/pricing`: edit carton regular/sale prices, quote visibility, stock, units per carton and minimum quantities; select products for percentage adjustments and export the saved prices as CSV. Changes are validated and saved atomically. Stale edits return a conflict rather than overwriting a newer update.
+- `/admin/pricing`: edit carton regular/sale prices, quote visibility, stock, units per carton and minimum quantities; select products for percentage adjustments and export the saved prices as CSV. Each row has a **Ctn ON/OFF** toggle — switch it off for products sold loose (no carton packing) to deactivate carton pricing entirely, leaving only the piece price editable (stored as `unitsPerCarton = 0`). Changes are validated and saved atomically. Stale edits return a conflict rather than overwriting a newer update.
 - `/admin/categories`: main categories and one level of subcategories. Archiving a parent hides its children and their products from the storefront. Product records remain intact.
 - Product editing includes a storefront price preview and decimal pricing. Parent collections include products assigned to their subcategories.
 

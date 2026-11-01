@@ -61,6 +61,8 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
   const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const unitsPerCarton = activeVariant?.unitsPerCarton ?? product.unitsPerCarton;
+  // Carton packing off (unitsPerCarton <= 1): price is per piece/unit only.
+  const cartonMode = unitsPerCarton > 1;
   const cartonPrice = activeVariant ? activeVariant.price : getEffectivePrice(product.price, product.salePrice);
   const perPiece = activeVariant && activeVariant.unitsPerCarton && activeVariant.unitsPerCarton > 0
     ? Math.round(activeVariant.price / activeVariant.unitsPerCarton)
@@ -140,9 +142,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
             <>
               <p className="text-3xl font-extrabold tracking-[-0.03em] text-[#dc2626]">
                 {formatPrice(cartonPrice)}
-                <span className="ml-1.5 text-sm font-semibold text-muted">/ carton</span>
+                <span className="ml-1.5 text-sm font-semibold text-muted">
+                  {cartonMode ? "/ carton" : "/ piece"}
+                </span>
               </p>
-              {perPiece != null && unitsPerCarton > 1 && (
+              {perPiece != null && cartonMode && (
                 <div className="mt-2 inline-flex items-center gap-2 rounded-lg border border-red-300 bg-red-100/90 px-3 py-1 text-sm font-bold text-red-950 shadow-2xs dark:border-red-600 dark:bg-red-950 dark:text-red-100">
                   <span className="font-semibold text-red-800 dark:text-red-300">Unit / Per piece:</span>
                   <span className="text-base font-black text-red-950 dark:text-white">{formatPiecePrice(perPiece)}</span>
@@ -222,11 +226,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
       <div className="my-6 h-px bg-surface-soft" />
 
       <div className="grid gap-2 rounded-2xl bg-surface-soft p-4 text-sm text-accent sm:grid-cols-2">
-        <p><strong>Supply unit:</strong> {unitsPerCarton > 1 ? "Carton" : "Piece / Unit"}</p>
-        <p><strong>Packing:</strong> {unitsPerCarton > 1 ? `${unitsPerCarton} units per carton` : "Single unit"}</p>
-        {perPiece != null && unitsPerCarton > 1 && <p><strong>Per piece rate:</strong> {formatPiecePrice(perPiece)}</p>}
-        <p><strong>Minimum order:</strong> {minimum} carton{minimum === 1 ? "" : "s"}</p>
-        <p><strong>Selected:</strong> {unitsPerCarton > 0 ? `${quantity * unitsPerCarton} pieces in ` : ""}{quantity} carton{quantity === 1 ? "" : "s"}</p>
+        <p><strong>Supply unit:</strong> {cartonMode ? "Carton" : "Piece / Unit"}</p>
+        <p><strong>Packing:</strong> {cartonMode ? `${unitsPerCarton} units per carton` : "Single unit"}</p>
+        {perPiece != null && cartonMode && <p><strong>Per piece rate:</strong> {formatPiecePrice(perPiece)}</p>}
+        <p><strong>Minimum order:</strong> {cartonMode ? `${minimum} carton${minimum === 1 ? "" : "s"}` : `${minimum} piece${minimum === 1 ? "" : "s"}`}</p>
+        <p><strong>Selected:</strong> {cartonMode ? `${quantity * unitsPerCarton} pieces in ${quantity} carton${quantity === 1 ? "" : "s"}` : `${quantity} piece${quantity === 1 ? "" : "s"}`}</p>
         {!product.priceOnRequest && <p><strong>Order condition:</strong> Min. PKR 5,000</p>}
       </div>
 
@@ -234,7 +238,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         <div className="mt-4 rounded-xl border border-amber-300 bg-amber-50/90 p-3 text-xs text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-200">
           <p className="font-bold">⚠️ Wholesale Order Rule: PKR 5,000 Minimum</p>
           <p className="mt-0.5">
-            Current item total: <strong>{formatPrice(itemTotal)}</strong>. Website par kam az kam PKR 5,000 ka order place kia ja sakta hai. Cartons barhain ya mazeed products shamil karein.
+            Current item total: <strong>{formatPrice(itemTotal)}</strong>. Website par kam az kam PKR 5,000 ka order place kia ja sakta hai. {cartonMode ? "Cartons" : "Quantity"} barhain ya mazeed products shamil karein.
           </p>
         </div>
       )}
@@ -265,7 +269,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
           <div>
             <label htmlFor="product-quantity" className="mb-2 block text-sm font-bold text-accent">
-              Cartons
+              {cartonMode ? "Cartons" : "Pieces"}
             </label>
             <div className="inline-grid grid-cols-[44px_56px_44px] overflow-hidden rounded-xl border border-line bg-surface">
               <button
@@ -273,7 +277,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
                 onClick={() => setSafeQuantity(quantity - 1)}
                 disabled={quantity <= minimum || isUnavailable}
                 className="inline-flex min-h-11 items-center justify-center text-accent transition hover:bg-surface-soft focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus disabled:cursor-not-allowed disabled:text-muted"
-                aria-label="Decrease cartons"
+                aria-label={cartonMode ? "Decrease cartons" : "Decrease pieces"}
               >
                 <Minus className="size-4" aria-hidden="true" />
               </button>
@@ -292,7 +296,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
                 onClick={() => setSafeQuantity(quantity + 1)}
                 disabled={quantity >= maxQuantity || isUnavailable}
                 className="inline-flex min-h-11 items-center justify-center text-accent transition hover:bg-surface-soft focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus disabled:cursor-not-allowed disabled:text-muted"
-                aria-label="Increase cartons"
+                aria-label={cartonMode ? "Increase cartons" : "Increase pieces"}
               >
                 <Plus className="size-4" aria-hidden="true" />
               </button>
@@ -334,7 +338,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
       </div>
 
       <p className="sr-only" aria-live="polite">
-        {added ? `${quantity} cartons of ${product.name} added to cart` : ""}
+        {added ? `${quantity} ${cartonMode ? "cartons" : "pieces"} of ${product.name} added to cart` : ""}
       </p>
 
       {product.bulkPricing && (

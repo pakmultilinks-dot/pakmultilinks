@@ -54,7 +54,7 @@ summary::-webkit-details-marker {
 }
 
 .site-shell {
-  width: min(100% - 2rem, 80rem);
+  width: min(100% - 2rem, 90rem);
   margin-inline: auto;
 }
 
@@ -399,7 +399,7 @@ summary::-webkit-details-marker {
 .deals-slider-viewport {
   width: 100%;
   aspect-ratio: 1024 / 434;
-  max-height: 480px;
+  max-height: 610px;
 }
 
 /* Dedicated Admin Sidebar scrollbar - invisible when idle, subtle 4px pill on hover */

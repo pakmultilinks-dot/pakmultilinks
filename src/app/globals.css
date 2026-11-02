@@ -399,7 +399,9 @@ summary::-webkit-details-marker {
 .deals-slider-viewport {
   width: 100%;
   aspect-ratio: 1024 / 434;
-  max-height: 480px;
+  /* Keep the artwork's native ratio at 100% browser zoom. Capping the height
+     made the fill image crop into the navigation on common desktop widths. */
+  max-height: none;
 }
 
 /* Dedicated Admin Sidebar scrollbar - invisible when idle, subtle 4px pill on hover */
@@ -680,7 +682,7 @@ summary::-webkit-details-marker {
   .product-page > div > section h2 { font-size: 18px; font-weight: 700; }
 
   /* ── Mobile hero banner ── */
-  .deals-slider-viewport { aspect-ratio: 16 / 9; max-height: 340px; }
+  .deals-slider-viewport { aspect-ratio: 3 / 4; max-height: none; }
 
   /* ── Contact page mobile cards ── */
   .contact-card { border-radius: 20px !important; padding: 14px !important; }

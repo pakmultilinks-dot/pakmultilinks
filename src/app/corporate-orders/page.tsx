@@ -38,8 +38,8 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/blog/warehouse.webp",
-        alt: "Warehouse staff checking tissue cartons",
+        url: "/images/corporate-delivery-loading-v2.webp",
+        alt: "Pak Multilinks team loading Rose Petal cartons for delivery",
       },
     ],
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/images/blog/warehouse.webp"],
+    images: ["/images/corporate-delivery-loading-v2.webp"],
   },
 };
 
@@ -219,8 +219,8 @@ export default function CorporateOrdersPage() {
           </div>
           <div className={styles.featuredImage}>
             <Image
-              src="/images/blog/warehouse.webp"
-              alt="Warehouse staff checking tissue cartons"
+              src="/images/corporate-delivery-loading-v2.webp"
+              alt="Pak Multilinks team loading Rose Petal cartons for delivery"
               fill
               sizes="(max-width: 760px) 100vw, 50vw"
               preload

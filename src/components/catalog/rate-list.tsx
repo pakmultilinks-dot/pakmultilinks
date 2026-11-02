@@ -2,16 +2,14 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 
 import { company } from "@/lib/company";
-import type { Product, RateListFileRecord } from "@/lib/types";
-import { MetroCataloguesStrip } from "./metro-catalogues-strip";
+import type { RateListFileRecord } from "@/lib/types";
 import { RateListFilesStrip } from "./rate-list-files-strip";
 
 interface RateListProps {
-  products?: Product[];
   rateListFiles?: RateListFileRecord[];
 }
 
-export function RateList({ products = [], rateListFiles = [] }: RateListProps) {
+export function RateList({ rateListFiles = [] }: RateListProps) {
   return (
     <section className="bg-surface py-12 sm:py-16">
       <div className="site-shell">
@@ -21,7 +19,7 @@ export function RateList({ products = [], rateListFiles = [] }: RateListProps) {
             Wholesale Rate List
           </h1>
           <p className="mt-3 text-sm text-secondary sm:text-base leading-relaxed">
-            Download our official wholesale rate lists and browse complete product catalogues. For custom corporate pricing, institutional contracts, or bulk carton supplies, contact us directly on WhatsApp.
+            Download our official wholesale rate lists. For custom corporate pricing, institutional contracts, or bulk carton supplies, contact us directly on WhatsApp.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a
@@ -45,11 +43,6 @@ export function RateList({ products = [], rateListFiles = [] }: RateListProps) {
             <RateListFilesStrip files={rateListFiles} />
           </div>
         )}
-
-        {/* Metro-style Catalogues Section (Reference Layout) */}
-        <div className="mt-12 sm:mt-16 border-t border-line pt-10 sm:pt-14">
-          <MetroCataloguesStrip products={products} />
-        </div>
       </div>
     </section>
   );

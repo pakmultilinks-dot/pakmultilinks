@@ -216,6 +216,19 @@ export const rateListFileUpdateSchema = z.object({
   sortOrder: z.coerce.number().int().min(0).max(10_000).optional(),
 });
 
+export const blogPostInputSchema = z.object({
+  title: text(3, 160),
+  slug: z.string().trim().toLowerCase().min(3).max(180).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase words separated by hyphens"),
+  excerpt: text(20, 500),
+  content: z.string().trim().min(50).max(80_000),
+  category: text(2, 80).default("Buying Guide"),
+  imageUrl: urlOrPath.nullable().optional().or(z.literal("")),
+  imageAlt: optionalText(200),
+  isPublished: z.boolean().default(false),
+});
+
+export const blogPostUpdateSchema = blogPostInputSchema.partial();
+
 
 export const settingsInputSchema = z.object({
   businessName: text(2, 140),

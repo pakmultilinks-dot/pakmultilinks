@@ -19,6 +19,7 @@ import {
 } from "@/lib/blog-data";
 import { company } from "@/lib/company";
 import { absoluteUrl, breadcrumbStructuredData, safeJsonLd } from "@/lib/seo";
+import { listPublishedBlogPosts } from "@/lib/blog-posts-server";
 
 const title = "Wholesale Tissue & Hygiene Buying Guides";
 const description =
@@ -49,7 +50,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogIndexPage() {
+export default async function BlogIndexPage() {
+  const managedPosts = await listPublishedBlogPosts();
+  const managedSummaries = managedPosts.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    category: post.category,
+    abstract: post.excerpt,
+    image: post.imageUrl || "/images/blog/workplace.webp",
+    thumbnail: post.imageUrl || "/images/blog/workplace.webp",
+    imageAlt: post.imageAlt || post.title,
+    publishedAt: (post.publishedAt || post.createdAt).toISOString(),
+    readTime: `${Math.max(2, Math.ceil(post.content.trim().split(/\s+/).length / 200))} min read`,
+    dateLabel: new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Karachi" }).format(post.publishedAt || post.createdAt),
+  }));
+  const allSummaries = [...managedSummaries, ...getBlogSummaries()];
+  const allTopics = [...new Set([...managedPosts.map((post) => post.category), ...BLOG_TOPICS])];
   const featured = BLOG_ARTICLES[0];
   const structuredData = [
     breadcrumbStructuredData([
@@ -110,7 +126,7 @@ export default function BlogIndexPage() {
                 <MapPin size={15} aria-hidden="true" /> Lahore, Pakistan
               </span>
               <span>
-                <BookOpen size={15} aria-hidden="true" /> {BLOG_ARTICLES.length}{" "}
+                <BookOpen size={15} aria-hidden="true" /> {allSummaries.length}{" "}
                 practical guides
               </span>
             </div>
@@ -177,7 +193,7 @@ export default function BlogIndexPage() {
             matter
           </span>
         </div>
-        <BlogArchive articles={getBlogSummaries()} topics={BLOG_TOPICS} />
+        <BlogArchive articles={allSummaries} topics={allTopics} />
         <section className={styles.toolsBanner} aria-labelledby="tool-heading">
           <div className={styles.toolIcon}>
             <Calculator size={30} aria-hidden="true" />

@@ -10,6 +10,7 @@ import {
   Building2,
   FileSpreadsheet,
   FileText,
+  Newspaper,
   FolderTree,
   LogOut,
   Menu,
@@ -34,6 +35,7 @@ const links = [
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/quotes", label: "Quotations", icon: FileText },
   { href: "/admin/deals", label: "Offers & banners", icon: BadgePercent },
+  { href: "/admin/blogs", label: "Blog posts", icon: Newspaper },
 ];
 
 export function AdminShell({ userName, children }: { userName: string; children: React.ReactNode }) {

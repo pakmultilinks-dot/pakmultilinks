@@ -21,15 +21,22 @@ import {
 } from "@/lib/blog-data";
 import { company } from "@/lib/company";
 import { absoluteUrl, breadcrumbStructuredData, safeJsonLd } from "@/lib/seo";
+import { getPublishedBlogPost } from "@/lib/blog-posts-server";
 
 type Props = { params: Promise<{ slug: string }> };
-export const dynamicParams = false;
+export const dynamicParams = true;
 export function generateStaticParams() {
   return getAllBlogSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = getBlogArticleBySlug((await params).slug);
+  const slug = (await params).slug;
+  const article = getBlogArticleBySlug(slug);
+  const managed = article ? null : await getPublishedBlogPost(slug);
+  if (managed) {
+    const image = managed.imageUrl || "/images/blog/workplace.webp";
+    return { title: managed.title, description: managed.excerpt, alternates: { canonical: `/blog/${managed.slug}` }, openGraph: { title: managed.title, description: managed.excerpt, type: "article", url: `/blog/${managed.slug}`, images: [{ url: image, alt: managed.imageAlt || managed.title }] }, twitter: { card: "summary_large_image", title: managed.title, description: managed.excerpt, images: [image] } };
+  }
   if (!article)
     return { title: "Guide not found", robots: { index: false, follow: true } };
   return {
@@ -60,8 +67,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogArticlePage({ params }: Props) {
-  const article = getBlogArticleBySlug((await params).slug);
-  if (!article) notFound();
+  const slug = (await params).slug;
+  const article = getBlogArticleBySlug(slug);
+  if (!article) {
+    const managed = await getPublishedBlogPost(slug);
+    if (!managed) notFound();
+    const published = managed.publishedAt || managed.createdAt;
+    const image = managed.imageUrl || "/images/blog/workplace.webp";
+    const pageUrl = absoluteUrl(`/blog/${managed.slug}`);
+    const jsonLd = { "@context": "https://schema.org", "@type": "BlogPosting", headline: managed.title, description: managed.excerpt, url: pageUrl, datePublished: published.toISOString(), dateModified: managed.updatedAt.toISOString(), image: absoluteUrl(image), author: { "@type": "Organization", name: company.name }, publisher: { "@id": `${absoluteUrl("/")}#business` }, inLanguage: "en-PK" };
+    return <article className={styles.page}><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} /><div className={styles.shell}><nav aria-label="Breadcrumb" className={styles.breadcrumb}><Link href="/">Home</Link><span>/</span><Link href="/blog">Buying guides</Link><span>/</span><span>{managed.category}</span></nav><header className={styles.articleHeader}><Link href="/blog" className={styles.backLink}><ArrowLeft size={15} /> All buying guides</Link><p className={styles.eyebrow}>{managed.category}</p><h1>{managed.title}</h1><p className={styles.articleDek}>{managed.excerpt}</p><div className={styles.byline}><span className={styles.authorMark}>PM</span><span>By <Link href="/about">{company.name}</Link></span><time dateTime={published.toISOString()}>{new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Karachi" }).format(published)}</time></div></header><div className={styles.articleLayout}><aside className={styles.articleSidebar}><div className={styles.sideQuote}><MessageCircle size={22} /><h2>Buying for your business?</h2><p>Send us your list for a current carton quotation.</p><Link href="/request-quote">Talk to our team <ArrowUpRight size={16} /></Link></div></aside><div className={styles.articleBody}><div className={styles.articleCover}><Image src={image} alt={managed.imageAlt || managed.title} fill sizes="(max-width: 900px) 100vw, 760px" preload /></div><section className={styles.proseSection}>{managed.content.split(/\n\s*\n/).filter(Boolean).map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</section><div className={styles.productCta}><div><p className={styles.eyebrow}>Need current rates?</p><h2>Request a business quotation.</h2></div><Link href="/request-quote" className={styles.darkButton}>Request a quote <ArrowUpRight size={17} /></Link></div></div></div></div></article>;
+  }
   const pageUrl = absoluteUrl(`/blog/${article.slug}`);
   const related = article.relatedSlugs
     .map(getBlogArticleBySlug)

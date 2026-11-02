@@ -559,7 +559,7 @@ export function CatalogExplorer({
             <div className="min-w-0">
               {/* Contextual Quick Selector Tabs: Categories for brand pages, Brands for multi-brand shop */}
               {!streamlined && brandList.length <= 1 && relevantCategories.length > 1 ? (
-                <div className="mb-5 flex items-center gap-2 overflow-x-auto rounded-2xl border border-line bg-surface p-2.5 shadow-xs scrollbar-thin">
+                <div className="no-scrollbar mb-5 flex min-w-0 items-center gap-2 overflow-x-auto rounded-2xl border border-line bg-surface p-2.5 shadow-xs">
                   <span className="shrink-0 text-xs font-extrabold uppercase tracking-wider text-muted px-2 border-r border-line/60">
                     Categories
                   </span>
@@ -637,7 +637,7 @@ export function CatalogExplorer({
                   )}
                 </div>
               ) : !streamlined && brandList.length > 1 ? (
-                <div className="mb-5 flex items-center gap-2 overflow-x-auto rounded-2xl border border-line bg-surface p-2.5 pb-3 shadow-xs scrollbar-thin">
+                <div className="no-scrollbar mb-5 flex min-w-0 items-center gap-2 overflow-x-auto rounded-2xl border border-line bg-surface p-2.5 shadow-xs">
                   <span className="shrink-0 text-xs font-extrabold uppercase tracking-wider text-muted px-2 border-r border-line/60">
                     Brands
                   </span>

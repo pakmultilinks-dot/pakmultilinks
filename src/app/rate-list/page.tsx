@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { RateList } from "@/components/catalog/rate-list";
-import { isDevelopmentProduct, listPublicProducts } from "@/lib/catalog-server";
 import { listPublicRateLists } from "@/lib/rate-lists-server";
 
 export const metadata: Metadata = {
@@ -20,11 +19,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function RateListPage() {
-  const [products, rateListFiles] = await Promise.all([
-    listPublicProducts().then((items) => items.filter((product) => !isDevelopmentProduct(product))),
-    listPublicRateLists(),
-  ]);
-
-  return <RateList products={products} rateListFiles={rateListFiles} />;
+  const rateListFiles = await listPublicRateLists();
+  return <RateList rateListFiles={rateListFiles} />;
 }
 

@@ -33,6 +33,7 @@ import { buttonClass, inputClass, panelClass, textareaClass } from "./ui";
 
 interface RateListsManagerProps {
   initialFiles: RateListFileRecord[];
+  taxonomyOptions?: string[];
   disabled?: boolean;
 }
 
@@ -48,7 +49,7 @@ const COMMON_CATEGORIES = [
   "General Catalogue",
 ];
 
-export function RateListsManager({ initialFiles, disabled = false }: RateListsManagerProps) {
+export function RateListsManager({ initialFiles, taxonomyOptions = [], disabled = false }: RateListsManagerProps) {
   const [files, setFiles] = useState<RateListFileRecord[]>(initialFiles);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -95,6 +96,7 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
     });
     return Array.from(set);
   }, [files]);
+  const uploadCategories = useMemo(() => [...new Set([...taxonomyOptions, ...COMMON_CATEGORIES])], [taxonomyOptions]);
 
   const stats = useMemo(() => {
     const totalFiles = files.length;
@@ -872,7 +874,7 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
               <div>
                 <label className="text-xs font-bold text-secondary">Category / Classification</label>
                 <div className="mt-1.5 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {COMMON_CATEGORIES.map((cat) => (
+                  {uploadCategories.map((cat) => (
                     <button
                       key={cat}
                       type="button"

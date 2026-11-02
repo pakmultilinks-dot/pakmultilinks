@@ -31,8 +31,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug;
-  const article = getBlogArticleBySlug(slug);
-  const managed = article ? null : await getPublishedBlogPost(slug);
+  const managed = await getPublishedBlogPost(slug);
+  const article = managed ? undefined : getBlogArticleBySlug(slug);
   if (managed) {
     const image = managed.imageUrl || "/images/blog/workplace.webp";
     return { title: managed.title, description: managed.excerpt, alternates: { canonical: `/blog/${managed.slug}` }, openGraph: { title: managed.title, description: managed.excerpt, type: "article", url: `/blog/${managed.slug}`, images: [{ url: image, alt: managed.imageAlt || managed.title }] }, twitter: { card: "summary_large_image", title: managed.title, description: managed.excerpt, images: [image] } };
@@ -68,9 +68,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogArticlePage({ params }: Props) {
   const slug = (await params).slug;
-  const article = getBlogArticleBySlug(slug);
+  const managedPost = await getPublishedBlogPost(slug);
+  const article = managedPost ? undefined : getBlogArticleBySlug(slug);
   if (!article) {
-    const managed = await getPublishedBlogPost(slug);
+    const managed = managedPost;
     if (!managed) notFound();
     const published = managed.publishedAt || managed.createdAt;
     const image = managed.imageUrl || "/images/blog/workplace.webp";

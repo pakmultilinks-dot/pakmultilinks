@@ -64,7 +64,8 @@ export default async function BlogIndexPage() {
     readTime: `${Math.max(2, Math.ceil(post.content.trim().split(/\s+/).length / 200))} min read`,
     dateLabel: new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Karachi" }).format(post.publishedAt || post.createdAt),
   }));
-  const allSummaries = [...managedSummaries, ...getBlogSummaries()];
+  const managedSlugs = new Set(managedSummaries.map((post) => post.slug));
+  const allSummaries = [...managedSummaries, ...getBlogSummaries().filter((post) => !managedSlugs.has(post.slug))];
   const allTopics = [...new Set([...managedPosts.map((post) => post.category), ...BLOG_TOPICS])];
   const featured = BLOG_ARTICLES[0];
   const structuredData = [
@@ -83,8 +84,8 @@ export default async function BlogIndexPage() {
       publisher: { "@id": `${absoluteUrl("/")}#business` },
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: BLOG_ARTICLES.length,
-        itemListElement: BLOG_ARTICLES.map((article, index) => ({
+        numberOfItems: allSummaries.length,
+        itemListElement: allSummaries.map((article, index) => ({
           "@type": "ListItem",
           position: index + 1,
           name: article.title,

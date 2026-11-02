@@ -3,10 +3,12 @@ import { NextResponse, type NextRequest } from "next/server";
 import { requireDatabase } from "@/lib/db";
 import { brandInputSchema, validationError } from "@/lib/validation";
 import { apiFailure, jsonError, noStoreHeaders, readJson, requireAdminRequest, serialize } from "@/app/api/_utils";
+import { syncStorefrontTaxonomy } from "@/lib/admin-catalog-sync";
 
 export async function GET(request: NextRequest) {
   try {
     if (!(await requireAdminRequest(request))) return jsonError("Administrator access required.", 401);
+    await syncStorefrontTaxonomy();
     const brands = await requireDatabase().brand.findMany({ orderBy: { name: "asc" }, include: { _count: { select: { products: true } } } });
     return NextResponse.json({ brands: serialize(brands) }, { headers: noStoreHeaders });
   } catch (error) {

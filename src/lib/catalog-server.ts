@@ -62,7 +62,7 @@ type PublicProductRow = Prisma.ProductGetPayload<{
   select: typeof publicProductSelect;
 }>;
 
-function inferProductTaxonomy(name: string, currentCategory: { name: string; slug: string; parent?: { slug: string } | null }) {
+export function inferProductTaxonomy(name: string, currentCategory: { name: string; slug: string; parent?: { slug: string } | null }) {
   if (currentCategory.slug && currentCategory.slug !== "general" && currentCategory.slug !== "uncategorized") {
     return {
       category: currentCategory.name,
@@ -109,7 +109,7 @@ function inferProductTaxonomy(name: string, currentCategory: { name: string; slu
   };
 }
 
-function inferBrand(name: string, currentBrandName?: string | null): string {
+export function inferBrand(name: string, currentBrandName?: string | null): string {
   if (currentBrandName && currentBrandName !== "Pak Multilinks" && currentBrandName !== "Unbranded") {
     return currentBrandName;
   }

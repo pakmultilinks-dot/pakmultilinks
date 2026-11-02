@@ -1,5 +1,6 @@
 import "server-only";
 import { db, isDatabaseConfigured, withDatabaseRetry } from "@/lib/db";
+import { BLOG_ARTICLES } from "@/lib/blog-data";
 
 let setupPromise: Promise<void> | undefined;
 
@@ -27,6 +28,31 @@ export function ensureBlogPostsTable() {
     await db.$executeRawUnsafe('CREATE INDEX IF NOT EXISTS "BlogPost_category_idx" ON "BlogPost"("category")');
   })().catch((error) => { setupPromise = undefined; throw error; });
   return setupPromise;
+}
+
+export async function ensureBuiltInBlogDrafts() {
+  await ensureBlogPostsTable();
+  if (!isDatabaseConfigured) return;
+  const count = await db.blogPost.count();
+  if (count > 0) return;
+  await db.blogPost.createMany({
+    data: BLOG_ARTICLES.map((article) => ({
+      title: article.title,
+      slug: article.slug,
+      excerpt: article.abstract,
+      category: article.category,
+      imageUrl: article.image,
+      imageAlt: article.imageAlt,
+      content: [
+        article.quickAnswer,
+        ...article.sections.flatMap((section) => [section.heading, ...section.paragraphs, ...(section.checklist || [])]),
+        ...article.faqs.flatMap((faq) => [faq.question, faq.answer]),
+      ].join("\n\n"),
+      isPublished: false,
+      publishedAt: null,
+    })),
+    skipDuplicates: true,
+  });
 }
 
 export async function listPublishedBlogPosts() {

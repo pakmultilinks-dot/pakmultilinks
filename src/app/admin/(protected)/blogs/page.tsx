@@ -3,6 +3,8 @@ import { DemoNotice, PageHeading } from "../../_components/ui";
 import { db, isDatabaseConfigured, withDatabaseRetry } from "@/lib/db";
 import { ensureBlogPostsTable, ensureBuiltInBlogDrafts } from "@/lib/blog-posts-server";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminBlogsPage() {
   let connected = isDatabaseConfigured;
   let posts: EditableBlogPost[] = [];

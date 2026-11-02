@@ -4,6 +4,8 @@ import { db, isDatabaseConfigured } from "@/lib/db";
 import { listAllRateListFiles } from "@/lib/rate-lists-server";
 import { syncStorefrontTaxonomy } from "@/lib/admin-catalog-sync";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Catalogues & Rate Lists — Pak Multilinks Admin",
 };

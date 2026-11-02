@@ -62,13 +62,15 @@ export function syncStorefrontTaxonomy() {
       });
       brandIds.set(brandName, brand.id);
     }
+    const updates = [];
     for (const { product, taxonomy, brandName } of resolved) {
       const categoryId = categoryIds.get(taxonomy.categorySlug)!;
       const brandId = brandIds.get(brandName)!;
       if (product.categoryId !== categoryId || product.brandId !== brandId) {
-        await db.product.update({ where: { id: product.id }, data: { categoryId, brandId } });
+        updates.push(db.product.update({ where: { id: product.id }, data: { categoryId, brandId } }));
       }
     }
+    if (updates.length) await db.$transaction(updates);
   }).catch((error) => { syncPromise = undefined; throw error; });
   return syncPromise;
 }

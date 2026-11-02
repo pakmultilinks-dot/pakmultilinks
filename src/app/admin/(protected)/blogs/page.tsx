@@ -1,12 +1,14 @@
 import { BlogManager, type EditableBlogPost } from "../../_components/blog-manager";
 import { DemoNotice, PageHeading } from "../../_components/ui";
 import { db, isDatabaseConfigured, withDatabaseRetry } from "@/lib/db";
+import { ensureBlogPostsTable } from "@/lib/blog-posts-server";
 
 export default async function AdminBlogsPage() {
   let connected = isDatabaseConfigured;
   let posts: EditableBlogPost[] = [];
   if (connected) {
     try {
+      await ensureBlogPostsTable();
       const rows = await withDatabaseRetry(() => db.blogPost.findMany({ orderBy: { updatedAt: "desc" } }));
       posts = rows.map((post) => ({ ...post, imageUrl: post.imageUrl || "", imageAlt: post.imageAlt || "" }));
     } catch (error) { console.error("[AdminBlogs]", error); connected = false; }

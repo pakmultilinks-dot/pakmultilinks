@@ -1,6 +1,38 @@
 import { db, isDatabaseConfigured, withDatabaseRetry } from "@/lib/db";
 import type { RateListFileRecord } from "@/lib/types";
 
+let documentSchemaPromise: Promise<void> | undefined;
+
+export function ensureDocumentLibrarySchema() {
+  if (!isDatabaseConfigured) return Promise.resolve();
+  documentSchemaPromise ??= (async () => {
+    await db.$executeRawUnsafe('ALTER TABLE "RateListFile" ADD COLUMN IF NOT EXISTS "documentType" TEXT NOT NULL DEFAULT \'RATE_LIST\'');
+    await db.$executeRawUnsafe('ALTER TABLE "RateListFile" ADD COLUMN IF NOT EXISTS "coverStyle" TEXT NOT NULL DEFAULT \'HYGIENE\'');
+    await db.$executeRawUnsafe('ALTER TABLE "RateListFile" ADD COLUMN IF NOT EXISTS "coverImageUrl" TEXT');
+    await db.rateListFile.upsert({
+      where: { slug: "wipers-cleaning-catalogue-no-prices" },
+      update: {},
+      create: {
+        title: "Wipers & Cleaning Tools Catalogue",
+        slug: "wipers-cleaning-catalogue-no-prices",
+        description: "Fourteen-page product catalogue of floor wipers, cleaning tools and related commercial cleaning items. Prices are not included.",
+        category: "Wipers & Cleaning Tools",
+        documentType: "CATALOGUE",
+        coverStyle: "CLEANING",
+        coverImageUrl: "/images/catalogues/wipers-catalogue-cover.jpg",
+        fileUrl: "/downloads/wipers-cleaning-catalogue-no-prices.pdf",
+        fileName: "wipers-cleaning-catalogue-no-prices.pdf",
+        fileSize: 22796455,
+        pageCount: 14,
+        isPrimary: false,
+        isActive: true,
+        sortOrder: 20,
+      },
+    });
+  })().catch((error) => { documentSchemaPromise = undefined; throw error; });
+  return documentSchemaPromise;
+}
+
 export const DEFAULT_RATE_LISTS: RateListFileRecord[] = [
   {
     id: "rate-list-master",
@@ -169,6 +201,7 @@ export function slugifyTitle(raw: string): string {
 export async function listAllRateListFiles(): Promise<RateListFileRecord[]> {
   if (!isDatabaseConfigured) return DEFAULT_RATE_LISTS;
   try {
+    await ensureDocumentLibrarySchema();
     const rows = await withDatabaseRetry(() =>
       db.rateListFile.findMany({
         orderBy: [
@@ -185,6 +218,9 @@ export async function listAllRateListFiles(): Promise<RateListFileRecord[]> {
       slug: r.slug,
       description: r.description,
       category: r.category,
+      documentType: r.documentType as "RATE_LIST" | "CATALOGUE",
+      coverStyle: r.coverStyle as "HYGIENE" | "CLEANING" | "CUSTOM",
+      coverImageUrl: r.coverImageUrl,
       fileUrl: r.fileUrl,
       fileName: r.fileName,
       fileSize: r.fileSize,
@@ -204,6 +240,7 @@ export async function listAllRateListFiles(): Promise<RateListFileRecord[]> {
 export async function listPublicRateLists(): Promise<RateListFileRecord[]> {
   if (!isDatabaseConfigured) return DEFAULT_RATE_LISTS.filter((r) => r.isActive);
   try {
+    await ensureDocumentLibrarySchema();
     const rows = await withDatabaseRetry(() =>
       db.rateListFile.findMany({
         where: { isActive: true },
@@ -221,6 +258,9 @@ export async function listPublicRateLists(): Promise<RateListFileRecord[]> {
       slug: r.slug,
       description: r.description,
       category: r.category,
+      documentType: r.documentType as "RATE_LIST" | "CATALOGUE",
+      coverStyle: r.coverStyle as "HYGIENE" | "CLEANING" | "CUSTOM",
+      coverImageUrl: r.coverImageUrl,
       fileUrl: r.fileUrl,
       fileName: r.fileName,
       fileSize: r.fileSize,

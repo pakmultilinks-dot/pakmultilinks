@@ -4,7 +4,7 @@ import { isDatabaseConfigured } from "@/lib/db";
 import { listAllRateListFiles } from "@/lib/rate-lists-server";
 
 export const metadata = {
-  title: "Rate Lists & Files — Pak Multilinks Admin",
+  title: "Catalogues & Rate Lists — Pak Multilinks Admin",
 };
 
 export default async function RateListsAdminPage() {
@@ -15,8 +15,8 @@ export default async function RateListsAdminPage() {
     <>
       <PageHeading
         eyebrow="Catalogue & Distribution"
-        title="Wholesale Rate Lists & Files"
-        description="Upload, preview, organize, and publish official PDF rate lists and company catalogues for wholesale buyers and corporate clients across Pakistan."
+        title="Catalogues & Rate Lists"
+        description="Manage both document types in one place. Choose catalogue or rate list, upload its PDF, select a hygiene or cleaning cover, or provide a custom cover."
       />
       {!connected && <DemoNotice />}
       <RateListsManager initialFiles={files} disabled={!connected} />

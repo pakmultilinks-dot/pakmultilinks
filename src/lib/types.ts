@@ -129,6 +129,9 @@ export type RateListFileRecord = {
   slug: string;
   description?: string | null;
   category: string;
+  documentType?: "RATE_LIST" | "CATALOGUE";
+  coverStyle?: "HYGIENE" | "CLEANING" | "CUSTOM";
+  coverImageUrl?: string | null;
   fileUrl: string;
   fileName: string;
   fileSize: number;

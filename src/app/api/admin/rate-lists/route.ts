@@ -14,7 +14,7 @@ import {
   serialize,
 } from "@/app/api/_utils";
 import { requireDatabase } from "@/lib/db";
-import { slugifyTitle } from "@/lib/rate-lists-server";
+import { ensureDocumentLibrarySchema, slugifyTitle } from "@/lib/rate-lists-server";
 import { rateListFileInputSchema, validationError } from "@/lib/validation";
 
 const MAX_PDF_SIZE = 35 * 1024 * 1024; // 35 MB
@@ -53,6 +53,7 @@ export async function GET(request: NextRequest) {
     if (!(await requireAdminRequest(request))) {
       return jsonError("Administrator access required.", 401);
     }
+    await ensureDocumentLibrarySchema();
     const database = requireDatabase();
     const files = await database.rateListFile.findMany({
       orderBy: [
@@ -72,6 +73,7 @@ export async function POST(request: NextRequest) {
     if (!(await requireAdminRequest(request))) {
       return jsonError("Administrator access required.", 401);
     }
+    await ensureDocumentLibrarySchema();
 
     const contentType = request.headers.get("content-type") || "";
     const database = requireDatabase();
@@ -154,6 +156,11 @@ export async function POST(request: NextRequest) {
 
       const isPrimary = form.get("isPrimary") === "true";
       const isActive = form.get("isActive") !== "false";
+      const documentType = form.get("documentType") === "CATALOGUE" ? "CATALOGUE" : "RATE_LIST";
+      const coverStyleValue = form.get("coverStyle");
+      const coverStyle = coverStyleValue === "CLEANING" || coverStyleValue === "CUSTOM" ? coverStyleValue : "HYGIENE";
+      const rawCoverImageUrl = form.get("coverImageUrl");
+      const coverImageUrl = typeof rawCoverImageUrl === "string" && rawCoverImageUrl.trim() ? rawCoverImageUrl.trim() : null;
       const sortOrder = Number(form.get("sortOrder")) || 0;
 
       if (isPrimary) {
@@ -175,6 +182,9 @@ export async function POST(request: NextRequest) {
           slug,
           description,
           category,
+          documentType,
+          coverStyle,
+          coverImageUrl,
           fileUrl,
           fileName: sanitizedName,
           fileSize: bytes.length,
@@ -225,6 +235,9 @@ export async function POST(request: NextRequest) {
         slug,
         description: data.description || null,
         category: data.category,
+        documentType: data.documentType,
+        coverStyle: data.coverStyle,
+        coverImageUrl: data.coverImageUrl || null,
         fileUrl: data.fileUrl,
         fileName: data.fileName,
         fileSize: data.fileSize,

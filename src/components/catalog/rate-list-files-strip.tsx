@@ -37,6 +37,8 @@ export function RateListFilesStrip({ files }: RateListFilesStripProps) {
 
   const filteredFiles = useMemo(() => {
     if (activeTab === "all") return files;
+    if (activeTab === "catalogues") return files.filter((f) => f.documentType === "CATALOGUE");
+    if (activeTab === "rate-lists") return files.filter((f) => f.documentType !== "CATALOGUE");
     if (activeTab === "primary") return files.filter((f) => f.isPrimary);
     return files.filter((f) => f.category.toLowerCase() === activeTab.toLowerCase());
   }, [files, activeTab]);
@@ -87,8 +89,10 @@ export function RateListFilesStrip({ files }: RateListFilesStripProps) {
               : "border border-line bg-surface text-secondary hover:text-content hover:bg-surface-soft"
           }`}
         >
-          All Rate Lists ({files.length})
+          All Documents ({files.length})
         </button>
+        <button type="button" onClick={() => setActiveTab("catalogues")} className={`rounded-full px-4 py-1.5 text-xs font-bold transition ${activeTab === "catalogues" ? "bg-[#0f4c3a] text-white" : "border border-line bg-surface text-secondary"}`}>Catalogues ({files.filter((f) => f.documentType === "CATALOGUE").length})</button>
+        <button type="button" onClick={() => setActiveTab("rate-lists")} className={`rounded-full px-4 py-1.5 text-xs font-bold transition ${activeTab === "rate-lists" ? "bg-[#0f4c3a] text-white" : "border border-line bg-surface text-secondary"}`}>Rate Lists ({files.filter((f) => f.documentType !== "CATALOGUE").length})</button>
         {categories.map((cat) => (
           <button
             key={cat}
@@ -117,6 +121,15 @@ export function RateListFilesStrip({ files }: RateListFilesStripProps) {
             }`}
           >
             <div>
+              {file.documentType === "CATALOGUE" && (
+                <div className="mb-4 aspect-[16/10] overflow-hidden rounded-xl border border-line bg-surface-soft">
+                  <img
+                    src={file.coverStyle === "CUSTOM" && file.coverImageUrl ? file.coverImageUrl : file.coverStyle === "CLEANING" ? "/images/catalogues/wipers-catalogue-cover.jpg" : "/images/catalogues/washroom-catalogue-cover.jpg"}
+                    alt={`${file.title} cover`}
+                    className="size-full object-cover object-top transition duration-300 group-hover:scale-[1.02]"
+                  />
+                </div>
+              )}
               {/* Top Row: Icon & Badges */}
               <div className="flex items-start justify-between gap-2">
                 <div className="grid size-12 place-items-center rounded-xl bg-red-500/10 text-red-600 transition group-hover:scale-105">
@@ -130,7 +143,7 @@ export function RateListFilesStrip({ files }: RateListFilesStripProps) {
                     </span>
                   )}
                   <span className="rounded-md bg-surface-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted border border-line">
-                    PDF Document
+                    {file.documentType === "CATALOGUE" ? "Catalogue" : "Rate List"}
                   </span>
                 </div>
               </div>

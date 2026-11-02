@@ -401,6 +401,9 @@ model RateListFile {
   slug        String   @unique
   description String?
   category    String   @default("Master Rate List")
+  documentType String  @default("RATE_LIST")
+  coverStyle   String  @default("HYGIENE")
+  coverImageUrl String?
   fileUrl     String
   fileName    String
   fileSize    Int      @default(0)

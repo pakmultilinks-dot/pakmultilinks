@@ -31,7 +31,7 @@ const links = [
   { href: "/admin/pricing", label: "Pricing & inventory", icon: SlidersHorizontal },
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
   { href: "/admin/brands", label: "Brands", icon: Building2 },
-  { href: "/admin/rate-lists", label: "Rate lists & files", icon: FileSpreadsheet },
+  { href: "/admin/rate-lists", label: "Catalogues & rate lists", icon: FileSpreadsheet },
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/quotes", label: "Quotations", icon: FileText },
   { href: "/admin/deals", label: "Offers & banners", icon: BadgePercent },

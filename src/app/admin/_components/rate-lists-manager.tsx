@@ -61,6 +61,9 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
   const [uploadCategory, setUploadCategory] = useState("Master Rate List");
   const [customCategory, setCustomCategory] = useState("");
   const [uploadDescription, setUploadDescription] = useState("");
+  const [uploadDocumentType, setUploadDocumentType] = useState<"RATE_LIST" | "CATALOGUE">("RATE_LIST");
+  const [uploadCoverStyle, setUploadCoverStyle] = useState<"HYGIENE" | "CLEANING" | "CUSTOM">("HYGIENE");
+  const [uploadCoverImageUrl, setUploadCoverImageUrl] = useState("");
   const [uploadIsPrimary, setUploadIsPrimary] = useState(false);
   const [uploadIsActive, setUploadIsActive] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
@@ -158,6 +161,9 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
       formData.append("title", uploadTitle.trim());
       formData.append("category", finalCategory);
       formData.append("description", uploadDescription.trim());
+      formData.append("documentType", uploadDocumentType);
+      formData.append("coverStyle", uploadCoverStyle);
+      formData.append("coverImageUrl", uploadCoverImageUrl.trim());
       formData.append("isPrimary", String(uploadIsPrimary));
       formData.append("isActive", String(uploadIsActive));
 
@@ -303,6 +309,9 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
           isPrimary: editingFile.isPrimary,
           isActive: editingFile.isActive,
           sortOrder: editingFile.sortOrder,
+          documentType: editingFile.documentType || "RATE_LIST",
+          coverStyle: editingFile.coverStyle || "HYGIENE",
+          coverImageUrl: editingFile.coverImageUrl || "",
         }),
       });
       const data = await res.json();
@@ -362,7 +371,7 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
             <FileSpreadsheet className="size-5" />
           </div>
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-muted">Total Rate Lists</p>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-muted">Total Documents</p>
             <p className="text-xl font-bold text-content sm:text-2xl">{stats.totalFiles}</p>
           </div>
         </div>
@@ -799,12 +808,18 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
                 <Upload className="size-5" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-content">Upload Wholesale Rate List (PDF)</h2>
-                <p className="text-xs text-muted">Upload an official PDF catalogue or price document.</p>
+                <h2 className="text-lg font-bold text-content">Upload Catalogue or Rate List</h2>
+                <p className="text-xs text-muted">Choose the document type, card cover and PDF.</p>
               </div>
             </div>
 
             <form onSubmit={handleUpload} className="mt-5 space-y-4">
+              <div>
+                <label className="text-xs font-bold text-secondary">Document Type</label>
+                <div className="mt-1.5 grid grid-cols-2 gap-2">
+                  {(["RATE_LIST", "CATALOGUE"] as const).map((type) => <button key={type} type="button" onClick={() => setUploadDocumentType(type)} className={`rounded-xl border px-3 py-2 text-xs font-bold ${uploadDocumentType === type ? "border-accent bg-accent text-white" : "border-line bg-surface-soft text-secondary"}`}>{type === "RATE_LIST" ? "Rate List" : "Catalogue"}</button>)}
+                </div>
+              </div>
               {/* Drag and drop / Select File Zone */}
               <div>
                 <label className="text-xs font-bold text-secondary">PDF Document</label>
@@ -908,6 +923,14 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
                   placeholder="Brief note on what rates or products are covered in this catalogue..."
                   className={textareaClass}
                 />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-secondary">Card Cover</label>
+                <div className="mt-1.5 grid grid-cols-3 gap-2">
+                  {(["HYGIENE", "CLEANING", "CUSTOM"] as const).map((style) => <button key={style} type="button" onClick={() => setUploadCoverStyle(style)} className={`overflow-hidden rounded-xl border text-left ${uploadCoverStyle === style ? "border-accent ring-2 ring-accent/20" : "border-line"}`}><img src={style === "CLEANING" ? "/images/catalogues/wipers-catalogue-cover.jpg" : style === "HYGIENE" ? "/images/catalogues/washroom-catalogue-cover.jpg" : uploadCoverImageUrl || "/images/catalogues/tissue-catalogue-cover.jpg"} alt="" className="h-20 w-full object-cover" /><span className="block px-2 py-1.5 text-[10px] font-bold">{style === "HYGIENE" ? "Hygiene" : style === "CLEANING" ? "Cleaning" : "Custom"}</span></button>)}
+                </div>
+                {uploadCoverStyle === "CUSTOM" && <input type="text" value={uploadCoverImageUrl} onChange={(e) => setUploadCoverImageUrl(e.target.value)} placeholder="/images/your-cover.jpg or https://..." className={`${inputClass} mt-2`} />}
               </div>
 
               {/* Checkboxes */}
@@ -1070,7 +1093,7 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
               <X className="size-5" />
             </button>
 
-            <h2 className="text-lg font-bold text-content">Edit Rate List Details</h2>
+            <h2 className="text-lg font-bold text-content">Edit Document Details</h2>
             <p className="text-xs text-muted mt-0.5">Update metadata, category, and storefront visibility.</p>
 
             <form onSubmit={handleSaveEdit} className="mt-4 space-y-4">
@@ -1096,6 +1119,12 @@ export function RateListsManager({ initialFiles, disabled = false }: RateListsMa
                   className={inputClass}
                 />
               </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-xs font-bold text-secondary">Document Type<select value={editingFile.documentType || "RATE_LIST"} onChange={(e) => setEditingFile({ ...editingFile, documentType: e.target.value as "RATE_LIST" | "CATALOGUE" })} className={inputClass}><option value="RATE_LIST">Rate List</option><option value="CATALOGUE">Catalogue</option></select></label>
+                <label className="text-xs font-bold text-secondary">Card Cover<select value={editingFile.coverStyle || "HYGIENE"} onChange={(e) => setEditingFile({ ...editingFile, coverStyle: e.target.value as "HYGIENE" | "CLEANING" | "CUSTOM" })} className={inputClass}><option value="HYGIENE">Hygiene default</option><option value="CLEANING">Cleaning default</option><option value="CUSTOM">Custom image</option></select></label>
+              </div>
+              {editingFile.coverStyle === "CUSTOM" && <div><label className="text-xs font-bold text-secondary">Custom Cover URL</label><input value={editingFile.coverImageUrl || ""} onChange={(e) => setEditingFile({ ...editingFile, coverImageUrl: e.target.value })} className={inputClass} /></div>}
 
               <div>
                 <label className="text-xs font-bold text-secondary">Description / Remarks</label>

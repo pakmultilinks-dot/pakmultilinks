@@ -14,6 +14,7 @@ import {
 import { deleteBlobs, isVercelBlobUrl } from "@/lib/blob";
 import { requireDatabase } from "@/lib/db";
 import { rateListFileUpdateSchema, validationError } from "@/lib/validation";
+import { ensureDocumentLibrarySchema } from "@/lib/rate-lists-server";
 
 type Context = { params: Promise<{ id: string }> };
 
@@ -22,6 +23,7 @@ export async function PATCH(request: NextRequest, context: Context) {
     if (!(await requireAdminRequest(request))) {
       return jsonError("Administrator access required.", 401);
     }
+    await ensureDocumentLibrarySchema();
 
     const { id } = await context.params;
     const rawBody = await readJson(request, 8_000);
@@ -54,6 +56,9 @@ export async function PATCH(request: NextRequest, context: Context) {
       data: {
         ...(data.title !== undefined && { title: data.title }),
         ...(data.category !== undefined && { category: data.category }),
+        ...(data.documentType !== undefined && { documentType: data.documentType }),
+        ...(data.coverStyle !== undefined && { coverStyle: data.coverStyle }),
+        ...(data.coverImageUrl !== undefined && { coverImageUrl: data.coverImageUrl || null }),
         ...(data.description !== undefined && { description: data.description || null }),
         ...(data.fileUrl !== undefined && { fileUrl: data.fileUrl }),
         ...(data.fileName !== undefined && { fileName: data.fileName }),
@@ -80,6 +85,7 @@ export async function DELETE(request: NextRequest, context: Context) {
     if (!(await requireAdminRequest(request))) {
       return jsonError("Administrator access required.", 401);
     }
+    await ensureDocumentLibrarySchema();
 
     const { id } = await context.params;
     const database = requireDatabase();

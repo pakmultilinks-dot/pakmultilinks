@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && node scripts/prepare-database.mjs && next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -12,6 +12,7 @@
     "db:push": "node scripts/database.mjs push",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
+    "db:prepare:legacy": "node scripts/prepare-database.mjs",
     "db:local": "node scripts/local-database.mjs",
     "test:admin": "node scripts/verify-admin.mjs",
     "test:storefront": "playwright test"

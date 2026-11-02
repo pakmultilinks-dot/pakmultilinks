@@ -10,6 +10,7 @@ import { categories, products } from "@/lib/catalog";
 import { brandNameToSlug, getBrandBySlug } from "@/lib/brands";
 import { searchCatalog } from "@/lib/search";
 import type { Category, Product } from "@/lib/types";
+import { getClientCatalog } from "@/lib/catalog-client";
 import { formatPrice, formatProductPrice } from "@/lib/utils";
 import { getPrice } from "@/lib/catalog";
 
@@ -118,10 +119,10 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/catalog", { signal: controller.signal })
-      .then((response) => (response.ok ? response.json() : null))
+    let active = true;
+    getClientCatalog()
       .then((payload: unknown) => {
+        if (!active) return;
         if (!payload || typeof payload !== "object") return;
         const data = payload as { products?: unknown; categories?: unknown };
         if (Array.isArray(data.products)) {
@@ -150,7 +151,9 @@ export function Header() {
         }
       })
       .catch(() => undefined);
-    return () => controller.abort();
+    return () => {
+      active = false;
+    };
   }, []);
 
   function submitSearch(event: FormEvent) {

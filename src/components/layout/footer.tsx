@@ -6,15 +6,20 @@ import { categories as initialCategories } from "@/lib/catalog";
 import { useSalesContactNumber } from "@/components/commerce/sales-contact";
 import { company } from "@/lib/company";
 import type { Category } from "@/lib/types";
+import { getClientCatalog } from "@/lib/catalog-client";
 import { BrandMark } from "./brand-mark";
 
 export function Footer() {
   const whatsapp = useSalesContactNumber();
   const [categories, setCategories] = useState(initialCategories);
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/catalog", { signal: controller.signal }).then(response => response.ok ? response.json() : null).then(data => { if (Array.isArray(data?.categories)) setCategories(data.categories); }).catch(() => undefined);
-    return () => controller.abort();
+    let active = true;
+    getClientCatalog().then(data => {
+      if (active && Array.isArray(data?.categories)) setCategories(data.categories);
+    }).catch(() => undefined);
+    return () => {
+      active = false;
+    };
   }, []);
   return (
     <footer className="border-t border-line bg-surface text-secondary pb-24 md:pb-0">

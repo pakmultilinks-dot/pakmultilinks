@@ -16,7 +16,7 @@ export function BrandMark({ compact = false, light = false, onNavigate }: { comp
       aria-label={`${company.name} home`}
     >
       <Image
-        src="/images/pak-multilinks-logo.png"
+        src="/images/pak-multilinks-logo.webp"
         alt="Pak Multilinks Hygiene — Corporate Supplies"
         width={500}
         height={189}
@@ -30,7 +30,7 @@ export function BrandMark({ compact = false, light = false, onNavigate }: { comp
         )}
       />
       <Image
-        src="/images/pak-multilinks-logo-dark.png"
+        src="/images/pak-multilinks-logo-dark.webp"
         alt="Pak Multilinks Hygiene — Corporate Supplies"
         width={500}
         height={189}

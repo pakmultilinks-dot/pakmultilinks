@@ -1,0 +1,222 @@
+{
+  "verifiedOn": "2026-11-02",
+  "origin": "https://www.pakmultilinks.com",
+  "pages": [
+    {
+      "route": "/blog",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/corporate-orders",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/corporate-orders",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/wholesale-tissue-buying-guide-lahore",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/wholesale-tissue-buying-guide-lahore",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/carton-vs-piece-price-guide",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/carton-vs-piece-price-guide",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/office-hotel-hygiene-checklist",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/office-hotel-hygiene-checklist",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/facial-tissue-vs-napkins-vs-paper-towels",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/facial-tissue-vs-napkins-vs-paper-towels",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/one-ply-vs-two-ply-tissue-sheet-count",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/one-ply-vs-two-ply-tissue-sheet-count",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/boxed-vs-soft-pack-tissues-business",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/boxed-vs-soft-pack-tissues-business",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/jumbo-vs-standard-toilet-rolls",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/jumbo-vs-standard-toilet-rolls",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/multifold-vs-roll-paper-hand-towels",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/multifold-vs-roll-paper-hand-towels",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/tissue-dispenser-refill-compatibility-checklist",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/tissue-dispenser-refill-compatibility-checklist",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/restaurant-paper-napkins-buying-guide",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/restaurant-paper-napkins-buying-guide",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/rose-petal-tissue-wholesale-guide",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/rose-petal-tissue-wholesale-guide",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/recycled-vs-virgin-tissue-fsc-labels",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/recycled-vs-virgin-tissue-fsc-labels",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/bulk-hand-wash-refill-buying-guide",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/bulk-hand-wash-refill-buying-guide",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/school-college-hygiene-supply-planning",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/school-college-hygiene-supply-planning",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/commercial-cleaning-supplies-purchase-checklist",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/commercial-cleaning-supplies-purchase-checklist",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/garbage-bag-size-guide-commercial-bins",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/garbage-bag-size-guide-commercial-bins",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/paper-cups-bulk-office-cafe-guide",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/paper-cups-bulk-office-cafe-guide",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/custom-printed-tissue-boxes-lahore-guide",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/custom-printed-tissue-boxes-lahore-guide",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/compare-wholesale-hygiene-supplier-quotes",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/compare-wholesale-hygiene-supplier-quotes",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    },
+    {
+      "route": "/blog/store-receive-tissue-cartons-business",
+      "status": 200,
+      "canonical": "https://www.pakmultilinks.com/blog/store-receive-tissue-cartons-business",
+      "robots": [
+        "index, follow"
+      ],
+      "h1Count": 1
+    }
+  ],
+  "articleCount": 20,
+  "allArticlesInSitemap": true,
+  "robotsReferencesSitemap": true,
+  "adminProfileUnauthenticatedStatus": 401,
+  "latestLocalProductionBuildTests": {
+    "passed": 18,
+    "failed": 0,
+    "includes": "desktop and mobile category selection, clear, brand placement, slow JavaScript first-click regression, blog discovery and article checks"
+  },
+  "deployment": {
+    "project": "pakmultilinks-final",
+    "productionUrl": "https://www.pakmultilinks.com",
+    "latestLiveFilterTests": {
+      "passed": 4,
+      "failed": 0,
+      "scope": "desktop/mobile URL filter clear and delayed JavaScript first-click regression"
+    }
+  }
+}

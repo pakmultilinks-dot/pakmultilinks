@@ -6,7 +6,7 @@ test("category filters show the available products on desktop and mobile", async
   const {products, categories}: {products: Product[]; categories: Category[]} = await (await request.get('/api/catalog')).json();
   await page.goto('/shop', {waitUntil: 'domcontentloaded'});
   const mobile = testInfo.project.name === 'mobile';
-  if (mobile) await page.locator('.catalog-mobile-filters summary').click();
+  if (mobile) await page.locator('.catalog-mobile-filters summary:visible').click();
   const select = page.locator(mobile ? '#mobile-category' : '#desktop-category');
   const available = categories.filter(c=>products.some(p=>matchesCategory(p,c.slug,categories)));
   for (const category of available) {
@@ -25,7 +25,7 @@ test("category filters show the available products on desktop and mobile", async
 
 test("category URL is an initial filter that can be cleared", async ({ page }, testInfo) => {
   await page.goto('/shop?category=tissue-paper-products', {waitUntil: 'domcontentloaded'});
-  if(testInfo.project.name==='mobile') await page.locator('.catalog-mobile-filters summary').click();
+  if(testInfo.project.name==='mobile') await page.locator('.catalog-mobile-filters summary:visible').click();
   const area=page.locator(testInfo.project.name==='mobile'?'.catalog-mobile-filters':'aside[aria-label="Product filters"]');
   await area.getByRole('button',{name:/Clear \d+ filter/}).click();
   await expect(area.getByLabel('Category',{exact:true})).toHaveValue('');
@@ -41,7 +41,7 @@ test("brand introduction follows products and filters remain in normal flow", as
   });
   expect(order).toBeTruthy();
   const mobile=testInfo.project.name==='mobile';
-  if(mobile)await page.locator('.catalog-mobile-filters summary').click();
+  if(mobile)await page.locator('.catalog-mobile-filters summary:visible').click();
   const select=page.locator(mobile?'#mobile-category':'#desktop-category');
   const brandProducts=products.filter(p=>matchesBrand(p,'Rose Petal'));
   for(const option of await select.locator('option').all()){
@@ -51,4 +51,29 @@ test("brand introduction follows products and filters remain in normal flow", as
     await expect(page.locator('#product-results .product-card').first()).toBeVisible();
   }
   if(!mobile)await expect(page.locator('aside[aria-label="Product filters"]')).toHaveCSS('position','static');
+});
+
+test("filters wait for JavaScript before accepting the first click", async ({ page }, testInfo) => {
+  // Isolate script readiness from unrelated third-party product image downloads.
+  await page.route('**/*', (route) => route.request().resourceType() === 'image' ? route.abort() : route.fallback());
+  let releaseScripts!: () => void;
+  const scriptsReady = new Promise<void>((resolve) => { releaseScripts = resolve; });
+  await page.route(/\/_next\/static\/.*\.js(?:\?.*)?$/, async (route) => {
+    await scriptsReady;
+    await route.continue();
+  });
+  try {
+    await page.goto('/shop?category=tissue-paper-products', { waitUntil: 'commit' });
+    const mobile = testInfo.project.name === 'mobile';
+    if (mobile) await page.locator('.catalog-mobile-filters summary:visible').click();
+    const area = page.locator(mobile ? '.catalog-mobile-filters' : 'aside[aria-label="Product filters"]');
+    const clear = area.getByRole('button', { name: /Clear \d+ filter/ });
+    await expect(clear).toBeDisabled();
+    releaseScripts();
+    await expect(clear).toBeEnabled();
+    await clear.click();
+    await expect(area.getByLabel('Category', { exact: true })).toHaveValue('');
+  } finally {
+    releaseScripts();
+  }
 });

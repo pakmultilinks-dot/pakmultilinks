@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState, useSyncExternalStore } from "react";
 
 import { categories as developmentCategories, getPrice } from "@/lib/catalog";
 import {
@@ -48,6 +48,9 @@ type CatalogExplorerProps = {
 };
 
 const PAGE_SIZE = 24;
+const subscribeToHydration = () => () => {};
+const clientReady = () => true;
+const serverReady = () => false;
 
 export function CatalogExplorer({
   products,
@@ -60,6 +63,9 @@ export function CatalogExplorer({
   hideHero = false,
   hideH1,
 }: CatalogExplorerProps) {
+  // Server HTML is visible before React attaches handlers. Do not accept a
+  // filter interaction until hydration can preserve the user's selection.
+  const interactive = useSyncExternalStore(subscribeToHydration, clientReady, serverReady);
   const [search, setSearch] = useState(initialQuery);
   const [category, setCategory] = useState(initialCategorySlug);
   const [brand, setBrand] = useState(initialBrand);
@@ -257,6 +263,7 @@ export function CatalogExplorer({
               aria-hidden="true"
             />
             <input
+              disabled={!interactive}
               id={`${idPrefix}-catalog-search`}
               type="search"
               value={search}
@@ -287,6 +294,7 @@ export function CatalogExplorer({
               Category
             </label>
             <select
+              disabled={!interactive}
               id={`${idPrefix}-category`}
               value={category}
               onChange={(event) => {
@@ -314,6 +322,7 @@ export function CatalogExplorer({
               Brand
             </label>
             <select
+              disabled={!interactive}
               id={`${idPrefix}-brand`}
               value={brand}
               onChange={(event) => {
@@ -346,6 +355,7 @@ export function CatalogExplorer({
                   Minimum price in Pakistani rupees
                 </label>
                 <input
+                  disabled={!interactive}
                   id={`${idPrefix}-minimum-price`}
                   type="number"
                   min="0"
@@ -367,6 +377,7 @@ export function CatalogExplorer({
                   Maximum price in Pakistani rupees
                 </label>
                 <input
+                  disabled={!interactive}
                   id={`${idPrefix}-maximum-price`}
                   type="number"
                   min="0"
@@ -389,6 +400,7 @@ export function CatalogExplorer({
 
         <label className="flex cursor-pointer items-center gap-3 rounded-md border border-line bg-surface px-3 py-3 text-sm font-semibold text-accent">
           <input
+            disabled={!interactive}
             type="checkbox"
             checked={inStockOnly}
             onChange={(event) => {
@@ -402,6 +414,7 @@ export function CatalogExplorer({
 
         {activeFilterCount > 0 && (
           <button
+            disabled={!interactive}
             type="button"
             onClick={clearFilters}
             className="commerce-button commerce-button-secondary inline-flex w-full items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2"
@@ -430,6 +443,7 @@ export function CatalogExplorer({
               Search products
             </label>
             <input
+              disabled={!interactive}
               id="catalog-mobile-query"
               type="search"
               value={search}
@@ -442,6 +456,7 @@ export function CatalogExplorer({
             />
             {search && (
               <button
+                disabled={!interactive}
                 type="button"
                 onClick={() => {
                   setSearch("");
@@ -459,6 +474,7 @@ export function CatalogExplorer({
             <div className="mb-3.5 lg:hidden">
               <div className="catalog-category-chips no-scrollbar flex items-center gap-2 overflow-x-auto pb-1 pt-0.5">
                 <button
+                  disabled={!interactive}
                   type="button"
                   onClick={() => {
                     setCategory("");
@@ -477,6 +493,7 @@ export function CatalogExplorer({
                   .filter((c) => !c.parentId)
                   .map((item) => (
                     <button
+                      disabled={!interactive}
                       key={item.id}
                       type="button"
                       onClick={() => {
@@ -545,6 +562,7 @@ export function CatalogExplorer({
                     Categories
                   </span>
                   <button
+                    disabled={!interactive}
                     type="button"
                     onClick={() => {
                       setCategory("");
@@ -573,6 +591,7 @@ export function CatalogExplorer({
                     const isSelected = category === slug;
                     return (
                       <button
+                        disabled={!interactive}
                         key={slug}
                         type="button"
                         onClick={() => {
@@ -602,6 +621,7 @@ export function CatalogExplorer({
                   })}
                   {category && (
                     <button
+                      disabled={!interactive}
                       type="button"
                       onClick={() => {
                         setCategory("");
@@ -620,6 +640,7 @@ export function CatalogExplorer({
                     Brands
                   </span>
                   <button
+                    disabled={!interactive}
                     type="button"
                     onClick={() => {
                       setBrand("");
@@ -650,6 +671,7 @@ export function CatalogExplorer({
                       brand.toLowerCase() === name.toLowerCase();
                     return (
                       <button
+                        disabled={!interactive}
                         key={name}
                         type="button"
                         onClick={() => {
@@ -680,6 +702,7 @@ export function CatalogExplorer({
 
                   {brand && (
                     <button
+                      disabled={!interactive}
                       type="button"
                       onClick={() => {
                         setBrand("");
@@ -716,6 +739,7 @@ export function CatalogExplorer({
                       </span>
                     </div>
                     <button
+                      disabled={!interactive}
                       type="button"
                       onClick={() => {
                         if (searchResult?.correctedQuery) {
@@ -747,6 +771,7 @@ export function CatalogExplorer({
                     <ArrowDownUp className="size-4" aria-hidden="true" />
                     <span className="sr-only sm:not-sr-only">Sort by</span>
                     <select
+                      disabled={!interactive}
                       value={sort}
                       onChange={(event) => {
                         setSort(event.target.value as SortOption);
@@ -776,6 +801,7 @@ export function CatalogExplorer({
                     aria-label="Product layout"
                   >
                     <button
+                      disabled={!interactive}
                       type="button"
                       onClick={() => setView("grid")}
                       className={cn(
@@ -790,6 +816,7 @@ export function CatalogExplorer({
                       <Grid2X2 className="size-4" aria-hidden="true" />
                     </button>
                     <button
+                      disabled={!interactive}
                       type="button"
                       onClick={() => setView("list")}
                       className={cn(
@@ -845,6 +872,7 @@ export function CatalogExplorer({
                   </p>
                   <div className="mt-6 flex flex-wrap justify-center gap-3">
                     <button
+                      disabled={!interactive}
                       type="button"
                       onClick={clearFilters}
                       className="commerce-button commerce-button-primary inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2"
@@ -875,6 +903,7 @@ export function CatalogExplorer({
                         "Trash Bags",
                       ].map((chip) => (
                         <button
+                          disabled={!interactive}
                           key={chip}
                           type="button"
                           onClick={() => {
@@ -894,6 +923,7 @@ export function CatalogExplorer({
               {visibleCount < filteredProducts.length && (
                 <div className="mt-8 text-center">
                   <button
+                    disabled={!interactive}
                     type="button"
                     onClick={() =>
                       setVisibleCount((count) => count + PAGE_SIZE)

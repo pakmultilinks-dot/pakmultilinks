@@ -35,3 +35,11 @@ Research references and the twenty-page inventory: [SEO research](seo-research-2
 ## Release verification
 
 Production-build Playwright run: **16 passed, 0 failed** (desktop and mobile, 15.3 seconds). A development-server run encountered one early-interaction timing failure; the production build passed the complete suite. Reproducible check summaries: [verification evidence](seo-verification-2026-11-01.json).
+
+## Live verification — 2 November 2026
+
+On `https://www.pakmultilinks.com`, `/blog`, `/corporate-orders` and all twenty article URLs returned HTTP 200 with a single H1, their own HTTPS canonical and no `noindex` meta. The sitemap listed every article and robots.txt linked to the sitemap. See [live verification results](seo-live-verification-2026-11-02.json). The admin profile endpoint returned HTTP 401 without authentication.
+
+A slow script-load check exposed a missed first filter click; catalog controls now wait for hydration. After this fix, the production build and all **18 desktop/mobile Playwright tests passed** locally, including a regression test that delays JavaScript. This is interaction validation, not an observed Google ranking improvement.
+
+The final filter patch was deployed to the Vercel project connected to `www.pakmultilinks.com` (`pakmultilinks-final`). On the public domain, four targeted desktop/mobile first-click and clear-filter tests passed. Blog, corporate and a sample article returned HTTP 200 with the expected canonical; the production sitemap still contains all twenty guides.

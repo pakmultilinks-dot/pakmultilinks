@@ -755,7 +755,7 @@ summary::-webkit-details-marker {
 
 /* One content edge for storefront headings, catalog controls and product grids. */
 .storefront-shell .site-shell {
-  width: min(1280px, calc(100% - 64px));
+  width: min(1440px, calc(100% - 64px));
   margin-inline: auto;
 }
 .catalog-page-heading h1 {

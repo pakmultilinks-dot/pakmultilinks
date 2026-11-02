@@ -45,6 +45,7 @@ type CatalogExplorerProps = {
   categoryOptions?: Category[];
   hideHero?: boolean;
   hideH1?: boolean;
+  streamlined?: boolean;
 };
 
 const PAGE_SIZE = 24;
@@ -62,6 +63,7 @@ export function CatalogExplorer({
   categoryOptions = developmentCategories,
   hideHero = false,
   hideH1,
+  streamlined = false,
 }: CatalogExplorerProps) {
   // Server HTML is visible before React attaches handlers. Do not accept a
   // filter interaction until hydration can preserve the user's selection.
@@ -470,7 +472,7 @@ export function CatalogExplorer({
             )}
           </div>
           {/* Mobile Quick Category Slider */}
-          {!fixedCategorySlug && (
+          {!fixedCategorySlug && !streamlined && (
             <div className="mb-3.5 lg:hidden">
               <div className="catalog-category-chips no-scrollbar flex items-center gap-2 overflow-x-auto pb-1 pt-0.5">
                 <button
@@ -556,7 +558,7 @@ export function CatalogExplorer({
 
             <div className="min-w-0">
               {/* Contextual Quick Selector Tabs: Categories for brand pages, Brands for multi-brand shop */}
-              {brandList.length <= 1 && relevantCategories.length > 1 ? (
+              {!streamlined && brandList.length <= 1 && relevantCategories.length > 1 ? (
                 <div className="mb-5 flex items-center gap-2 overflow-x-auto rounded-2xl border border-line bg-surface p-2.5 shadow-xs scrollbar-thin">
                   <span className="shrink-0 text-xs font-extrabold uppercase tracking-wider text-muted px-2 border-r border-line/60">
                     Categories
@@ -634,7 +636,7 @@ export function CatalogExplorer({
                     </button>
                   )}
                 </div>
-              ) : brandList.length > 1 ? (
+              ) : !streamlined && brandList.length > 1 ? (
                 <div className="mb-5 flex items-center gap-2 overflow-x-auto rounded-2xl border border-line bg-surface p-2.5 pb-3 shadow-xs scrollbar-thin">
                   <span className="shrink-0 text-xs font-extrabold uppercase tracking-wider text-muted px-2 border-r border-line/60">
                     Brands
@@ -840,7 +842,7 @@ export function CatalogExplorer({
                   className={cn(
                     "catalog-products grid gap-3.5 sm:gap-5",
                     view === "grid"
-                      ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                      ? "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                       : "grid-cols-1",
                   )}
                 >

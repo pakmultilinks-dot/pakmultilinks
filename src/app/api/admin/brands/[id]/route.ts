@@ -35,10 +35,35 @@ export async function DELETE(request: NextRequest, context: Context) {
     if (!(await requireAdminRequest(request))) return jsonError("Administrator access required.", 401);
     const { id } = await context.params;
     const database = requireDatabase();
-    const existing = await database.brand.findUnique({ where: { id }, select: { logoUrl: true } });
-    const brand = await database.brand.update({ where: { id }, data: { isActive: false } });
-    if (existing?.logoUrl) await deleteBlobs([existing.logoUrl]);
-    return NextResponse.json({ brand: serialize(brand) }, { headers: noStoreHeaders });
+    const existing = await database.brand.findUnique({
+      where: { id },
+      select: { id: true, isActive: true, logoUrl: true, _count: { select: { products: true } } },
+    });
+    if (!existing) return jsonError("Brand not found.", 404);
+
+    if (existing.isActive) {
+      const brand = await database.brand.update({ where: { id }, data: { isActive: false } });
+      revalidatePath("/", "layout");
+      revalidatePath("/shop");
+      revalidatePath("/rate-list");
+      revalidatePath("/admin/brands");
+      return NextResponse.json({ brand: serialize(brand), deleted: false }, { headers: noStoreHeaders });
+    }
+
+    if (existing._count.products > 0) {
+      return jsonError(
+        `This archived brand still has ${existing._count.products} product${existing._count.products === 1 ? "" : "s"}. Move those products to another brand before deleting it.`,
+        409,
+      );
+    }
+
+    await database.brand.delete({ where: { id } });
+    if (existing.logoUrl) await deleteBlobs([existing.logoUrl]);
+    revalidatePath("/", "layout");
+    revalidatePath("/shop");
+    revalidatePath("/rate-list");
+    revalidatePath("/admin/brands");
+    return NextResponse.json({ ok: true, deleted: true }, { headers: noStoreHeaders });
   } catch (error) {
     return apiFailure(error);
   }

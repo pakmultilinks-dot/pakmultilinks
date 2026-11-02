@@ -107,7 +107,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 {product.stock <= product.threshold && <span className="ml-2 rounded-full bg-danger-soft px-2 py-1 text-[10px] font-bold uppercase text-danger">Low</span>}
               </td>
               <td className="px-5 py-4"><span className="rounded-full bg-surface-soft px-2.5 py-1 text-xs font-bold text-secondary">{product.status}</span></td>
-              <td className="px-5 py-4"><ProductActions id={product.id} stock={product.stock} disabled={!connected} /></td>
+              <td className="px-5 py-4"><ProductActions id={product.id} stock={product.stock} status={product.status} disabled={!connected} /></td>
             </tr>
           );
         })}</tbody></table></div> : <div className="p-5"><EmptyState title="No products found" body="Try a different search or add the first product." /></div>}

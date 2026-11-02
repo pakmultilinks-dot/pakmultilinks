@@ -27,7 +27,7 @@ function errorMessage(data: Record<string, unknown>, fallback: string) {
   return typeof data.error === "string" && data.error.trim() ? data.error : fallback;
 }
 
-export function CheckoutForm() {
+export function CheckoutForm({ initialCustomer = {} }: { initialCustomer?: Partial<CustomerDetails> }) {
   const router = useRouter();
   const { cart, subtotal, clearCart } = useStore();
   const [submitting, setSubmitting] = useState(false);
@@ -201,32 +201,32 @@ export function CheckoutForm() {
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <label className="text-sm font-semibold text-content">Full name <span aria-hidden="true" className="text-danger">*</span>
-              <input className={inputClass} name="fullName" autoComplete="name" required maxLength={100} />
+              <input className={inputClass} name="fullName" autoComplete="name" required maxLength={100} defaultValue={initialCustomer.fullName || ""} />
             </label>
             <label className="text-sm font-semibold text-content">Phone <span aria-hidden="true" className="text-danger">*</span>
-              <input className={inputClass} name="phone" type="tel" inputMode="tel" autoComplete="tel" required maxLength={20} pattern="[+0-9][0-9 \(\)\-]{7,19}" placeholder="03XX XXXXXXX" />
+              <input className={inputClass} name="phone" type="tel" inputMode="tel" autoComplete="tel" required maxLength={20} pattern="[+0-9][0-9 \(\)\-]{7,19}" placeholder="03XX XXXXXXX" defaultValue={initialCustomer.phone || ""} />
             </label>
             <label className="text-sm font-semibold text-content">Email <span aria-hidden="true" className="text-danger">*</span>
-              <input className={inputClass} name="email" type="email" autoComplete="email" required maxLength={160} />
+              <input className={inputClass} name="email" type="email" autoComplete="email" required maxLength={160} defaultValue={initialCustomer.email || ""} />
             </label>
             <label className="text-sm font-semibold text-content">Company / organization <span aria-hidden="true" className="text-danger">*</span>
-              <input className={inputClass} name="companyName" autoComplete="organization" required maxLength={160} />
+              <input className={inputClass} name="companyName" autoComplete="organization" required maxLength={160} defaultValue={initialCustomer.companyName || ""} />
             </label>
             <label className="text-sm font-semibold text-content">NTN <span className="font-normal text-muted">(optional)</span><input className={inputClass} name="ntn" maxLength={30} /></label>
             <label className="text-sm font-semibold text-content">Province / territory <span aria-hidden="true" className="text-danger">*</span>
-              <select className={inputClass} name="province" autoComplete="address-level1" required defaultValue="">
+              <select className={inputClass} name="province" autoComplete="address-level1" required defaultValue={initialCustomer.province || ""}>
                 <option value="" disabled>Select province or territory</option>
                 <option>Punjab</option><option>Sindh</option><option>Khyber Pakhtunkhwa</option><option>Balochistan</option><option>Islamabad Capital Territory</option><option>Gilgit-Baltistan</option><option>Azad Jammu and Kashmir</option>
               </select>
             </label>
             <label className="text-sm font-semibold text-content">City <span aria-hidden="true" className="text-danger">*</span>
-              <input className={inputClass} name="city" autoComplete="address-level2" required maxLength={100} />
+              <input className={inputClass} name="city" autoComplete="address-level2" required maxLength={100} defaultValue={initialCustomer.city || ""} />
             </label>
             <label className="text-sm font-semibold text-content sm:col-span-2">Full address <span aria-hidden="true" className="text-danger">*</span>
-              <textarea className={`${inputClass} min-h-28 resize-y`} name="address" autoComplete="street-address" required maxLength={500} />
+              <textarea className={`${inputClass} min-h-28 resize-y`} name="address" autoComplete="street-address" required maxLength={500} defaultValue={initialCustomer.address || ""} />
             </label>
             <label className="text-sm font-semibold text-content">Postal code <span className="font-normal text-muted">(optional)</span>
-              <input className={inputClass} name="postalCode" autoComplete="postal-code" maxLength={20} placeholder="e.g. 54000" />
+              <input className={inputClass} name="postalCode" autoComplete="postal-code" maxLength={20} placeholder="e.g. 54000" defaultValue={initialCustomer.postalCode || ""} />
             </label>
             <label className="text-sm font-semibold text-content sm:col-span-2">Order notes <span className="font-normal text-muted">(optional)</span>
               <textarea className={`${inputClass} min-h-24 resize-y`} name="notes" maxLength={1000} placeholder="Access instructions, preferred contact time, or other requirements" />

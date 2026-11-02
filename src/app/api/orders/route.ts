@@ -145,6 +145,39 @@ export async function POST(request: NextRequest) {
         const deliveryFee = new Prisma.Decimal(0);
         const taxAmount = subtotal.mul(settings?.taxRate ?? 0).div(100).toDecimalPlaces(2);
         const customer = parsed.data.customer;
+
+        if (session?.role === "CUSTOMER") {
+          await tx.user.update({
+            where: { id: session.userId },
+            data: { name: customer.fullName, phone: customer.phone },
+          });
+          const savedAddress = await tx.address.findFirst({
+            where: { userId: session.userId },
+            orderBy: [{ isDefault: "desc" }, { updatedAt: "desc" }],
+            select: { id: true },
+          });
+          const addressData = {
+            label: "Delivery",
+            fullName: customer.fullName,
+            phone: customer.phone,
+            company: customer.companyName || null,
+            province: customer.province,
+            city: customer.city,
+            line1: customer.address,
+            postalCode: customer.postalCode || null,
+            isDefault: true,
+          };
+          await tx.address.updateMany({
+            where: { userId: session.userId, isDefault: true },
+            data: { isDefault: false },
+          });
+          if (savedAddress) {
+            await tx.address.update({ where: { id: savedAddress.id }, data: addressData });
+          } else {
+            await tx.address.create({ data: { ...addressData, userId: session.userId } });
+          }
+        }
+
         return tx.order.create({
           data: {
             orderNumber: newOrderNumber(),

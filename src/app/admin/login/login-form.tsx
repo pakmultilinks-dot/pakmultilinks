@@ -1,11 +1,26 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useState,
+  useSyncExternalStore,
+  type FormEvent,
+} from "react";
 import { useRouter } from "next/navigation";
 import { LoaderCircle, LockKeyhole, Mail } from "lucide-react";
 
+const subscribeToHydration = () => () => {};
+const clientReady = () => true;
+const serverReady = () => false;
+
 export function AdminLoginForm({ disabled }: { disabled: boolean }) {
   const router = useRouter();
+  const interactive = useSyncExternalStore(
+    subscribeToHydration,
+    clientReady,
+    serverReady,
+  );
+  const formDisabled = disabled || !interactive;
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const [retrySeconds, setRetrySeconds] = useState(0);
@@ -49,24 +64,29 @@ export function AdminLoginForm({ disabled }: { disabled: boolean }) {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-4">
+    <form
+      action="/api/auth/login"
+      method="post"
+      onSubmit={submit}
+      className="space-y-4"
+    >
       <label className="block text-sm font-semibold text-content">
         Email address
         <span className="mt-2 flex items-center gap-2 rounded-md border border-line px-3 focus-within:border-focus focus-within:ring-2 focus-within:ring-focus/10">
           <Mail className="size-4 text-muted" aria-hidden="true" />
-          <input name="email" type="email" autoComplete="username" required disabled={disabled} className="h-12 min-w-0 flex-1 bg-transparent outline-none disabled:cursor-not-allowed" />
+          <input name="email" type="email" autoComplete="username" required disabled={formDisabled} className="h-12 min-w-0 flex-1 bg-transparent outline-none disabled:cursor-not-allowed" />
         </span>
       </label>
       <label className="block text-sm font-semibold text-content">
         Password
         <span className="mt-2 flex items-center gap-2 rounded-md border border-line px-3 focus-within:border-focus focus-within:ring-2 focus-within:ring-focus/10">
           <LockKeyhole className="size-4 text-muted" aria-hidden="true" />
-          <input name="password" type="password" autoComplete="current-password" required disabled={disabled} className="h-12 min-w-0 flex-1 bg-transparent outline-none disabled:cursor-not-allowed" />
+          <input name="password" type="password" autoComplete="current-password" required disabled={formDisabled} className="h-12 min-w-0 flex-1 bg-transparent outline-none disabled:cursor-not-allowed" />
         </span>
       </label>
       {retrySeconds > 0 && <p role="status" className="rounded-md bg-warning-soft px-4 py-3 text-sm text-warning">Too many sign-in attempts. You can try again in {retryLabel}.</p>}
       {error && <p role="alert" className="rounded-md bg-danger-soft px-4 py-3 text-sm text-danger">{error}</p>}
-      <button disabled={disabled || pending || retrySeconds > 0} className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-neutral-900 font-bold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50">
+      <button disabled={formDisabled || pending || retrySeconds > 0} className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-neutral-900 font-bold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50">
         {pending && <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />}
         {pending ? "Signing in…" : retrySeconds > 0 ? `Try again in ${retryLabel}` : "Sign in securely"}
       </button>

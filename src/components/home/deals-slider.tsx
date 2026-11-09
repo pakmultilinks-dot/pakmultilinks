@@ -104,7 +104,7 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
                   fetchPriority={index === 0 ? "high" : "low"}
                   unoptimized
                   sizes="(min-width: 768px) 100vw, 1920px"
-                  className="size-full object-cover object-center"
+                  className="size-full object-contain object-center"
                 />
               </div>
             </div>

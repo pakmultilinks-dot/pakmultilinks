@@ -16,7 +16,7 @@
 .retailCopy h3 { font-size: clamp(22px, 2.3vw, 32px); font-weight: 750; letter-spacing: -.025em; }
 .retailCopy p { color: #e4f4e9; font-size: 14px; line-height: 1.65; }
 .retailViewport { overflow-x: auto; padding: 24px; scrollbar-width: thin; scrollbar-color: #57966f #e9f3ec; }
-.retailImage { position: relative; width: 100%; min-width: 760px; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 20px; background: #fff; }
+.retailImage { position: relative; width: 100%; max-width: 920px; min-width: 560px; margin: 0 auto; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 20px; background: #fff; }
 .storefronts { object-fit: contain; }
 @media (max-width: 800px) {
   .section { padding: 44px 0; }
@@ -32,6 +32,6 @@
 @media (max-width: 520px) {
   .partnerGrid { grid-template-columns: repeat(2, 1fr); }
   .partner:last-child { grid-column: 1 / -1; }
-  .retailImage { min-width: 680px; }
+  .retailImage { min-width: 520px; }
 }
 @media (prefers-reduced-motion: reduce) { .logo { transition: none; } }

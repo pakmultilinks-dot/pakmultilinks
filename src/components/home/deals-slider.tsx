@@ -93,10 +93,10 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
                 />
               </div>
 
-              {/* Desktop banner image */}
+              {/* Desktop banner image (wide 1920x480 version, preview only) */}
               <div className="relative size-full hidden md:block">
                 <Image
-                  src={deal.imageUrl}
+                  src={deal.imageUrl.replace("/hero/", "/hero/wide/")}
                   alt={deal.alt}
                   fill
                   priority={index === 0}

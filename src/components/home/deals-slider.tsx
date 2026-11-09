@@ -121,35 +121,9 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
           </Link>
         ))}
 
-        {/* Floating Overlay Dots & Controls */}
+        {/* Floating Overlay Controls (chevrons only; dots moved below the banner so they never cover banner text) */}
         {deals.length > 1 && (
           <>
-            <div
-              className="pointer-events-none absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 backdrop-blur-md shadow-md sm:bottom-4"
-              aria-label="Offer controls"
-            >
-              {deals.map((deal, index) => (
-                <button
-                  key={deal.id}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    select(index);
-                  }}
-                  aria-label={`Show ${deal.title}`}
-                  aria-current={index === active ? "true" : undefined}
-                  className="pointer-events-auto p-0.5 focus-ring rounded-full"
-                >
-                  <span
-                    className={`block h-1.5 rounded-full transition-all duration-300 ${
-                      index === active ? "w-5 bg-white shadow-sm" : "w-1.5 bg-white/50 hover:bg-white/80"
-                    }`}
-                  />
-                </button>
-              ))}
-            </div>
-
             {/* Metro-style direct white Chevrons matching Metro.pk */}
             <button
               type="button"
@@ -178,6 +152,31 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
           </>
         )}
       </div>
+      {/* Pagination dots below the banner (never covering banner text) */}
+      {deals.length > 1 && (
+        <div className="mt-2 flex items-center justify-center gap-1.5" aria-label="Offer controls">
+          {deals.map((deal, index) => (
+            <button
+              key={deal.id}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                select(index);
+              }}
+              aria-label={`Show ${deal.title}`}
+              aria-current={index === active ? "true" : undefined}
+              className="p-0.5 focus-ring rounded-full"
+            >
+              <span
+                className={`block h-1.5 rounded-full transition-all duration-300 ${
+                  index === active ? "w-5 bg-neutral-800" : "w-1.5 bg-neutral-300 hover:bg-neutral-500"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      )}
       </div>
     </section>
   );

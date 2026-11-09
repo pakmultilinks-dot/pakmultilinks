@@ -37,18 +37,6 @@ export const BRAND_SHOWCASE: BrandCardData[] = [
     ],
   },
   {
-    id: "fine-life",
-    name: "Fine Life",
-    subtitle: "Everyday Hygiene & Tissue Essentials",
-    image: "/images/brands/fine-life.jpg",
-    mainHref: "/brand/fine-life",
-    popularCategories: [
-      { label: "Pop-Up Facial Tissues (100 Sheets)", href: "/shop?brand=Fine+Life&category=facial-tissues" },
-      { label: "Soft Pack Tissues & Pocket Packs", href: "/shop?brand=Fine+Life&category=soft-pack-tissues" },
-      { label: "Kitchen Towels & Toilet Paper Rolls", href: "/shop?brand=Fine+Life&category=tissue-rolls" },
-    ],
-  },
-  {
     id: "tissue-craft",
     name: "Tissue Craft",
     subtitle: "Premium Hygiene & Craft Paper",
@@ -70,18 +58,6 @@ export const BRAND_SHOWCASE: BrandCardData[] = [
       { label: "Dettol Surface & Infection Control", href: "/shop?category=cleaning-products" },
       { label: "Harpic Power Plus Cleaner", href: "/shop?category=cleaning-products" },
       { label: "Mortein PowerGard Protection", href: "/shop?category=cleaning-products" },
-    ],
-  },
-  {
-    id: "disposables",
-    name: "Disposables",
-    subtitle: "Bulk Institutional Packaging",
-    image: "/images/brands/disposables.jpg",
-    mainHref: "/shop?category=disposable-items",
-    popularCategories: [
-      { label: "Paper Coffee Cups (8oz / 6.5oz)", href: "/shop?category=paper-plates-cups" },
-      { label: "Heavy Duty Garbage Bags", href: "/shop?category=garbage-bags" },
-      { label: "Food Packaging & Cutlery", href: "/shop?category=disposable-items" },
     ],
   },
   {

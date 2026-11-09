@@ -111,11 +111,11 @@ const FAQ_DATA = [
   {
     question: "Are your products genuine?",
     answer:
-      "Yes, original sealed factory cartons from brands including Rose Petal, Fine Life, Nozomi and Fresco.",
+      "Yes, original sealed factory cartons from brands including Rose Petal, Nozomi and Fresco.",
     renderedAnswer: (
       <p>
         Yes, original sealed factory cartons from brands including Rose Petal,
-        Fine Life, Nozomi and Fresco. For return or exchange details, see our{" "}
+        Nozomi and Fresco. For return or exchange details, see our{" "}
         <Link href="/returns" className="text-action font-semibold hover:underline">
           return policy
         </Link>

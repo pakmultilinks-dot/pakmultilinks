@@ -71,12 +71,6 @@ const categories = [
     href: "/shop/cleaning-products",
   },
   {
-    title: "Disposable items",
-    description:
-      "Cups, napkins, bags and other consumables for pantries, events and service areas.",
-    href: "/shop/disposable-items",
-  },
-  {
     title: "Dispensers",
     description:
       "Washroom dispensers and compatible refill options for busy spaces.",

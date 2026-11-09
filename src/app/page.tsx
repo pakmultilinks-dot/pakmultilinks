@@ -30,7 +30,7 @@ export default async function HomePage() {
             <p className="mt-4 text-sm leading-7 text-secondary sm:text-base sm:leading-8">
               Pak Multilinks Hygiene is a Lahore wholesale supplier of tissue paper products, washroom supplies, cleaning
               chemicals and disposable items for offices, hotels, restaurants, hospitals, schools and factories. We stock
-              Rose Petal, Nozomi, Fine Life, Fresco, Germi Cure and Shine Well, sold by the carton at wholesale rates with
+              Rose Petal, Nozomi, Fresco, Germi Cure and Shine Well, sold by the carton at wholesale rates with
               a minimum order of one carton or PKR 5,000.
             </p>
             <p className="mt-3 text-sm leading-7 text-secondary sm:text-base sm:leading-8">

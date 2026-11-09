@@ -89,39 +89,6 @@ export const BRAND_DATA: Record<string, BrandInfo> = {
       },
     ],
   },
-  "fine-life": {
-    slug: "fine-life",
-    name: "Fine Life",
-    tagline: "Everyday Essential Hygiene & Tissues",
-    metaTitle: "Fine Life Tissues Wholesale Rates in Lahore",
-    metaDescription: "Wholesale Fine Life facial tissues, soft packs, and kitchen rolls in Lahore. Bulk carton orders, immediate dispatch, and wholesale rates for offices & homes.",
-    introHeading: "Fine Life Tissues Wholesale Carton Supplies in Lahore",
-    introParagraphs: [
-      "Fine Life delivers reliable everyday hygiene essentials designed for heavy daily consumption in business offices, schools, colleges, restaurants, and busy commercial environments. Engineered for quick absorbency and soft touch, Fine Life products represent outstanding value.",
-      "At Pak Multilinks Hygiene, we carry the full lineup of Fine Life products in bulk carton quantities, including pop-up facial tissues, economical soft packs, pocket packs, kitchen paper towels, and commercial toilet rolls.",
-      "Our direct distribution model ensures your facility gets fresh, clean stock directly delivered with minimum hassle and maximum cost savings across Lahore.",
-    ],
-    keyHighlights: [
-      { label: "Economic Bulk Packing", description: "Designed for high-consumption environments needing frequent replenishment." },
-      { label: "Gentle & Absorbent", description: "Reliable 2-ply construction provides immediate moisture absorption." },
-      { label: "Convenient Soft Packs", description: "Space-saving flexible packaging ideal for cars, desk drawers, and cafeteria tables." },
-      { label: "Doorstep Warehouse Delivery", description: "Direct drop-off at your office, warehouse, or retail shop anywhere in Lahore." },
-    ],
-    faqs: [
-      {
-        question: "What Fine Life products are available in carton quantities?",
-        answer: "We supply Fine Life Pop-Up Facial Tissues (100 sheets), Soft Packs, Party Packs, Toilet Rolls, and Kitchen Towels in full master cartons.",
-      },
-      {
-        question: "Can I combine Fine Life with other brands in a single delivery?",
-        answer: "Yes, you can combine Fine Life cartons with Rose Petal, Nozomi, Germi Cure, or dispensers to meet your procurement needs in a single consolidated delivery.",
-      },
-      {
-        question: "Is there a discount for bulk orders above 10 cartons?",
-        answer: "Yes, we offer additional tiered volume discounts for orders of 10 cartons or more. Contact our WhatsApp sales desk for special contract pricing.",
-      },
-    ],
-  },
   "fresco": {
     slug: "fresco",
     name: "Fresco",

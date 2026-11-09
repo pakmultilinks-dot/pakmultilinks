@@ -42,7 +42,6 @@ const SECTORS: Array<{ name: string; copy: string; links: Array<{ label: string;
     name: "Restaurants, cafes & caterers",
     copy: "Table napkins, kitchen towel rolls, hand wash, dishwash and disposable items are the daily consumables of food businesses. We supply them by the carton, and custom logo printing is available on facial tissue boxes for branded dining rooms.",
     links: [
-      { label: "Disposable items", href: "/shop/disposable-items" },
       { label: "Cleaning products", href: "/shop/cleaning-products" },
     ],
   },
@@ -67,7 +66,6 @@ const SECTORS: Array<{ name: string; copy: string; links: Array<{ label: string;
     copy: "Industrial sites order heavy-duty garbage bags, mops and wipers, bulk hand wash for worker washrooms and cleaning chemicals for large floor areas, all in carton and drum packing at wholesale rates.",
     links: [
       { label: "Cleaning products", href: "/shop/cleaning-products" },
-      { label: "Disposable items", href: "/shop/disposable-items" },
     ],
   },
   {

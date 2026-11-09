@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 const SECTORS: Array<{ name: string; copy: string; links: Array<{ label: string; href: string }> }> = [
   {

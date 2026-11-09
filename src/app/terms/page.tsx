@@ -13,4 +13,4 @@ export default function TermsPage() { return <><PageHero eyebrow="Customer suppo
   ["Product information", "Actual product labels, safety instructions and manufacturer information take priority. Do not rely on development placeholder descriptions for use, compatibility or safety decisions."],
   ["Final terms required", "Delivery coverage, timing, tax/GST, invoices, minimum wholesale order and dispute terms remain to be confirmed before production launch."],
 ]} /></>; }
-export const revalidate = 3600;
+export const revalidate = 86400;

@@ -16,4 +16,4 @@ export default function PrivacyPage() {
     ["Policy status", "Retention periods, cookie choices and any third-party provider disclosures must be finalized before the production launch once hosting, analytics, delivery and communication providers are selected."],
   ]} /></>;
 }
-export const revalidate = 3600;
+export const revalidate = 86400;

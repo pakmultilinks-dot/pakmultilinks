@@ -97,4 +97,4 @@ export default function ContactPage() {
     </section>
   </>;
 }
-export const revalidate = 3600;
+export const revalidate = 86400;

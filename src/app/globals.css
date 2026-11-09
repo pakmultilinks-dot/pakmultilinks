@@ -398,8 +398,7 @@ summary::-webkit-details-marker {
 /* ── Hero Deals Slider Viewport (Metro.pk style flush banner) ── */
 .deals-slider-viewport {
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 1;
+  height: clamp(380px, 28vw, 480px);
   background: #f4f8fa;
 }
 

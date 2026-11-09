@@ -7,15 +7,6 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { PublicDealBanner } from "@/lib/deals";
 
 const ROTATION_DELAY = 5_000;
-
-// Hero banners live inside this repo (public/hero and public/hero-original),
-// so the slider does not depend on any outside image host.
-function localHero(url: string) {
-  return url.includes("/hero/") ? `/hero/${url.split("/").pop()}` : url;
-}
-function localHeroOriginal(url: string) {
-  return url.includes("/hero/") ? `/hero-original/${url.split("/").pop()}` : url;
-}
 function subscribeToMotion(callback: () => void) {
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
   media.addEventListener("change", callback);
@@ -90,7 +81,7 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
               {/* Mobile banner image */}
               <div className="relative size-full block md:hidden">
                 <Image
-                  src={localHeroOriginal(deal.mobileImageUrl || deal.imageUrl)}
+                  src={deal.mobileImageUrl || deal.imageUrl}
                   alt={deal.alt}
                   fill
                   priority={index === 0}
@@ -102,10 +93,10 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
                 />
               </div>
 
-              {/* Desktop banner image (remade 1920x480 version, served from this repo) */}
+              {/* Desktop banner image */}
               <div className="relative size-full hidden md:block">
                 <Image
-                  src={localHero(deal.imageUrl)}
+                  src={deal.imageUrl}
                   alt={deal.alt}
                   fill
                   priority={index === 0}
@@ -113,7 +104,7 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
                   fetchPriority={index === 0 ? "high" : "low"}
                   unoptimized
                   sizes="(min-width: 768px) 100vw, 1920px"
-                  className="size-full object-cover object-center"
+                  className="size-full object-contain object-center"
                 />
               </div>
             </div>

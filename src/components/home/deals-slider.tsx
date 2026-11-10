@@ -16,6 +16,11 @@ function localHero(url: string) {
 function localHeroOriginal(url: string) {
   return url.includes("/hero/") ? `/hero-original/${url.split("/").pop()}` : url;
 }
+// Nozomi keeps its original 1367x558 banner (not remade), so it shows whole
+// with object-contain; the remade 1920x480 banners fill the box with object-cover.
+function isOriginalNozomi(url: string) {
+  return url.toLowerCase().includes("nozomi");
+}
 function subscribeToMotion(callback: () => void) {
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
   media.addEventListener("change", callback);
@@ -102,7 +107,7 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
                 />
               </div>
 
-              {/* Desktop banner image (remade 1920x480 version, served from this repo) */}
+              {/* Desktop banner image (remade 1920x480 version, served from this repo; Nozomi keeps its original, shown whole) */}
               <div className="relative size-full hidden md:block">
                 <Image
                   src={localHero(deal.imageUrl)}
@@ -113,7 +118,7 @@ export function DealsSlider({ deals }: { deals: PublicDealBanner[] }) {
                   fetchPriority={index === 0 ? "high" : "low"}
                   unoptimized
                   sizes="(min-width: 768px) 100vw, 1920px"
-                  className="size-full object-cover object-center"
+                  className={`size-full object-center ${isOriginalNozomi(deal.imageUrl) ? "object-contain" : "object-cover"}`}
                 />
               </div>
             </div>

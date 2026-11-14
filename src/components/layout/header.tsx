@@ -335,7 +335,7 @@ export function Header() {
           {/* Mobile Right Actions: Direct WhatsApp & Hamburger (matching user request & Metro.pk) */}
           <div className="ml-auto flex items-center gap-1.5 sm:gap-2 md:hidden">
             <a
-              href="https://wa.me/923258166829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
+              href="https://wa.me/923171678829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
               target="_blank"
               rel="noreferrer"
               className="grid size-9 sm:size-10 shrink-0 place-items-center rounded-lg border border-[#25D366]/40 bg-[#25D366]/15 text-[#128C7E] shadow-2xs transition active:scale-95 hover:bg-[#25D366] hover:text-white"
@@ -561,7 +561,7 @@ export function Header() {
               <p className="px-3 text-xs font-extrabold uppercase tracking-[0.14em] text-muted">Direct WhatsApp</p>
               <div className="grid grid-cols-2 gap-2">
                 <a
-                  href="https://wa.me/923258166829?text=Hi%20Zohair%2C%20I%20am%20inquiring%20about%20Pak%20Multilinks%20wholesale%20supplies"
+                  href="https://wa.me/923171678829?text=Hi%20Zohair%2C%20I%20am%20inquiring%20about%20Pak%20Multilinks%20wholesale%20supplies"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-1.5 rounded-xl border border-line bg-surface py-2.5 text-xs font-bold text-accent transition hover:border-action hover:bg-surface-soft"
@@ -570,7 +570,7 @@ export function Header() {
                   <span>Zohair Ahmed</span>
                 </a>
                 <a
-                  href="https://wa.me/923258166829?text=Hi%20Bilal%2C%20I%20am%20inquiring%20about%20Pak%20Multilinks%20wholesale%20supplies"
+                  href="https://wa.me/923171678829?text=Hi%20Bilal%2C%20I%20am%20inquiring%20about%20Pak%20Multilinks%20wholesale%20supplies"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-1.5 rounded-xl border border-line bg-surface py-2.5 text-xs font-bold text-accent transition hover:border-action hover:bg-surface-soft"
@@ -614,7 +614,7 @@ export function Header() {
                 <Linkedin className="size-4" />
               </a>
               <a
-                href="https://wa.me/923258166829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
+                href="https://wa.me/923171678829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
                 target="_blank"
                 rel="noreferrer"
                 className="grid size-10 place-items-center rounded-full border border-line bg-transparent text-secondary transition hover:border-action hover:text-action hover:bg-surface-soft"

@@ -119,7 +119,7 @@ export function localBusinessStructuredData() {
       "https://www.linkedin.com/company/pakmultilinks",
       "https://www.facebook.com/pakmultilinks",
       "https://www.instagram.com/pakmultilinks",
-      "https://wa.me/923258166829",
+      "https://wa.me/923171678829",
     ],
     hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(company.address)}`,
   };

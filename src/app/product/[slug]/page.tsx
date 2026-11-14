@@ -91,7 +91,7 @@ function buildProductFaqs(product: Product) {
     },
     {
       question: `How can I place an order for ${product.name} via WhatsApp?`,
-      answer: `Send a message to +92 325 8166 829 with your required carton quantity of ${product.name} (SKU: ${product.sku}) to receive an instant carton quotation, stock availability, and delivery coordination.`,
+      answer: `Send a message to +92 317 1678 829 with your required carton quantity of ${product.name} (SKU: ${product.sku}) to receive an instant carton quotation, stock availability, and delivery coordination.`,
     },
   ];
 }

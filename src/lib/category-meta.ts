@@ -140,14 +140,14 @@ export function getProductImage(product: Partial<Product>): string {
 }
 
 export function buildProductWhatsAppUrl(product: Product, quantity?: number): string {
-  const number = company.whatsapp || "923258166829";
+  const number = company.whatsapp || "923171678829";
   const qty = quantity ?? minimumCartons(product);
   const text = `Assalam-o-Alaikum Pak Multilinks,\n\nI want to order / inquire about this product:\n- Product: ${product.name}\n- SKU: ${product.sku}\n- Quantity: ${qty} carton(s)\n- Category: ${product.category}\n\nPlease share price quotation and delivery details. Thank you!`;
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 }
 
 export function buildDirectWhatsAppUrl(customMessage?: string): string {
-  const number = company.whatsapp || "923258166829";
+  const number = company.whatsapp || "923171678829";
   const text = customMessage || "Assalam-o-Alaikum Pak Multilinks, I need a bulk price quotation for hygiene & tissue products. Please guide me.";
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 }

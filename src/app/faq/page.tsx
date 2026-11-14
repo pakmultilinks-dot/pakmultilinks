@@ -91,17 +91,17 @@ const FAQ_DATA = [
   {
     question: "How do I order on WhatsApp?",
     answer:
-      "Message +92 325 8166 829 with the product name and carton quantity for an instant carton quotation, packing confirmation and delivery coordination.",
+      "Message +92 317 1678 829 with the product name and carton quantity for an instant carton quotation, packing confirmation and delivery coordination.",
     renderedAnswer: (
       <p>
         Message{" "}
         <a
-          href="https://wa.me/923258166829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
+          href="https://wa.me/923171678829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
           target="_blank"
           rel="noopener noreferrer"
           className="text-action font-bold hover:underline"
         >
-          +92 325 8166 829
+          +92 317 1678 829
         </a>{" "}
         with the product name and carton quantity for an instant carton
         quotation, packing confirmation and delivery coordination.
@@ -131,12 +131,12 @@ const FAQ_DATA = [
       <p>
         Ask on{" "}
         <a
-          href="https://wa.me/923258166829?text=Hello%2C%20I%20would%20like%20a%20bulk%20quotation%20for%20an%20order%20above%2010%20cartons."
+          href="https://wa.me/923171678829?text=Hello%2C%20I%20would%20like%20a%20bulk%20quotation%20for%20an%20order%20above%2010%20cartons."
           target="_blank"
           rel="noopener noreferrer"
           className="text-action font-bold hover:underline"
         >
-          WhatsApp (+92 325 8166 829)
+          WhatsApp (+92 317 1678 829)
         </a>{" "}
         for a bulk quotation for orders above 10 cartons.
       </p>
@@ -160,17 +160,17 @@ const FAQ_DATA = [
   {
     question: "How do I contact you?",
     answer:
-      "WhatsApp +92 325 8166 829, email zohair.shah8@gmail.com, or the /contact page.",
+      "WhatsApp +92 317 1678 829, email zohair.shah8@gmail.com, or the /contact page.",
     renderedAnswer: (
       <p>
         WhatsApp{" "}
         <a
-          href="https://wa.me/923258166829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
+          href="https://wa.me/923171678829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
           target="_blank"
           rel="noopener noreferrer"
           className="text-action font-bold hover:underline"
         >
-          +92 325 8166 829
+          +92 317 1678 829
         </a>
         , email{" "}
         <a
@@ -281,7 +281,7 @@ export default function FaqPage() {
               </p>
             </div>
             <a
-              href="https://wa.me/923258166829?text=Hello%20Pak%20Multilinks%2C%20I%20have%20an%20inquiry%20regarding%20wholesale%20supplies."
+              href="https://wa.me/923171678829?text=Hello%20Pak%20Multilinks%2C%20I%20have%20an%20inquiry%20regarding%20wholesale%20supplies."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-action px-6 text-xs sm:text-sm font-extrabold text-white transition hover:bg-action-hover shadow-xs shrink-0"

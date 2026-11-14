@@ -19,7 +19,7 @@ export function PerksStrip() {
       icon: MessageCircle,
       title: "Instant WhatsApp Desk",
       subtitle: "Direct support & bulk quotations",
-      href: "https://wa.me/923258166829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies",
+      href: "https://wa.me/923171678829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies",
       external: true,
     },
     {

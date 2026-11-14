@@ -338,7 +338,7 @@ model SiteSettings {
   subtitle            String   @default("Corporate Supplies")
   tagline             String   @default("Your Hygiene Partner")
   logoUrl             String?
-  phone               String   @default("0325 8166829")
+  phone               String   @default("0317 1678829")
   email               String   @default("bilalshah2237463@gmail.com")
   address             String   @default("Shop No LG-9, Rehman Tower Main Market Gulberg II, Lahore")
   whatsapp            String?

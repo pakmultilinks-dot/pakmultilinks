@@ -229,7 +229,7 @@ async function generateBrandPdf(catalog) {
     color: catalog.headerColor,
   });
 
-  page.drawText("Official B2B Rates in PKR · Delivery Across Lahore & Punjab · WhatsApp: 0300 6917385 / 0325 8166829", {
+  page.drawText("Official B2B Rates in PKR · Delivery Across Lahore & Punjab · WhatsApp: 0300 6917385 / 0317 1678829", {
     x: 46,
     y: height - 134,
     size: 8.5,

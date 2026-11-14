@@ -98,7 +98,7 @@ async function main() {
       businessName: "Pak Multilinks Hygiene",
       subtitle: "Corporate Supplies",
       tagline: "Your Hygiene Partner",
-      phone: "+92 325 8166 829",
+      phone: "+92 317 1678 829",
       email: "zohair.shah8@gmail.com",
       address: "Shop No LG-9, Rehman Tower Main Market Gulberg II, Lahore",
       currency: "PKR",

@@ -239,7 +239,7 @@ export function ProductsCatalogTable({}: ProductsCatalogTableProps) {
                       {/* Inquiry WhatsApp Button */}
                       <td className="px-4 py-3 text-center">
                         <a
-                          href={`https://wa.me/923258166829?text=${whatsappMsg}`}
+                          href={`https://wa.me/923171678829?text=${whatsappMsg}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 rounded-lg bg-[#114b2f] px-2.5 py-1 text-[11px] font-bold text-white shadow-2xs transition hover:bg-[#17643a] active:scale-95"
@@ -320,7 +320,7 @@ export function ProductsCatalogTable({}: ProductsCatalogTableProps) {
                         )}
 
                         <a
-                          href={`https://wa.me/923258166829?text=${whatsappMsg}`}
+                          href={`https://wa.me/923171678829?text=${whatsappMsg}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 rounded-lg bg-[#114b2f] px-2.5 py-1 text-[11px] font-bold text-white shadow-2xs transition hover:bg-[#17643a] active:scale-95"

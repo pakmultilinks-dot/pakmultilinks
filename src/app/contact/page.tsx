@@ -21,7 +21,7 @@ export default function ContactPage() {
               ? "/images/contact/zohair-ahmed-card.png"
               : "/images/contact/bilal-shah-card.png";
             const primaryPhone = contact.phones[0]?.href || "";
-            const whatsappNumber = contact.name.includes("Zohair") ? "923006917385" : "923258166829";
+            const whatsappNumber = "923258166829";
 
             return (
               <article

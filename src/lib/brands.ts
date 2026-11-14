@@ -48,7 +48,7 @@ export const BRAND_DATA: Record<string, BrandInfo> = {
       },
       {
         question: "How do I place a bulk Rose Petal order via WhatsApp?",
-        answer: "Simply click the WhatsApp button or message us directly at +92 300 6917 385 with your required product names and carton quantities. Our sales desk will provide an instant quote and confirm delivery timing.",
+        answer: "Simply click the WhatsApp button or message us directly at +92 325 8166 829 with your required product names and carton quantities. Our sales desk will provide an instant quote and confirm delivery timing.",
       },
     ],
   },

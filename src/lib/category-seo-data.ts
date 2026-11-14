@@ -40,7 +40,7 @@ export const CATEGORY_SEO_DATA: Record<string, CategorySeoInfo> = {
       {
         question: "Do you provide corporate account billing and bulk quotations?",
         answer:
-          "Yes, corporate clients and institutions can message our sales desk at +92 300 6917 385 on WhatsApp for formal quotations, tax invoices, and scheduled restocking contracts.",
+          "Yes, corporate clients and institutions can message our sales desk at +92 325 8166 829 on WhatsApp for formal quotations, tax invoices, and scheduled restocking contracts.",
       },
     ],
   },
@@ -130,7 +130,7 @@ export const CATEGORY_SEO_DATA: Record<string, CategorySeoInfo> = {
       {
         question: "How can I order washroom tissue rolls in bulk for my facility in Lahore?",
         answer:
-          "You can order directly online or message our sales desk on WhatsApp at +92 300 6917 385 for same-day delivery coordination in Lahore and custom corporate billing.",
+          "You can order directly online or message our sales desk on WhatsApp at +92 325 8166 829 for same-day delivery coordination in Lahore and custom corporate billing.",
       },
     ],
   },
@@ -220,7 +220,7 @@ export const CATEGORY_SEO_DATA: Record<string, CategorySeoInfo> = {
       {
         question: "Can you provide recurring restocking for commercial facilities?",
         answer:
-          "Yes, corporate clients and facility management teams can set up scheduled restocking via WhatsApp at +92 300 6917 385 with custom invoicing and corporate terms.",
+          "Yes, corporate clients and facility management teams can set up scheduled restocking via WhatsApp at +92 325 8166 829 with custom invoicing and corporate terms.",
       },
     ],
   },
@@ -261,7 +261,7 @@ export function getCategorySeoInfo(categorySlug: string, categoryName: string, c
       {
         question: "How do I place an order on WhatsApp?",
         answer:
-          "Message +92 300 6917 385 with your product list and carton quantities for an instant quotation, packing confirmation, and delivery coordination.",
+          "Message +92 325 8166 829 with your product list and carton quantities for an instant quotation, packing confirmation, and delivery coordination.",
       },
     ],
   };

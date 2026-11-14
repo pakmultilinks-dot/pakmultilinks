@@ -58,7 +58,7 @@ export function ProductQuickView({
   const whatsappText = encodeURIComponent(
     `Hi Pak Multilinks, I am inquiring about *${product.name}* (SKU: ${product.sku}) priced at Rs. ${price}. Please share carton availability and delivery time in Lahore.`
   );
-  const whatsappUrl = `https://wa.me/923006917385?text=${whatsappText}`;
+  const whatsappUrl = `https://wa.me/923258166829?text=${whatsappText}`;
 
   return (
     <>

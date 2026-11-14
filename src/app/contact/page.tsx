@@ -44,7 +44,7 @@ export default function ContactPage() {
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 px-1 pt-1">
                   <div className="flex items-center gap-2">
                     <a
-                      href={`https://wa.me/${whatsappNumber}`}
+                      href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi Pak Multilinks, I am inquiring about wholesale supplies")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366]/10 px-3 py-1.5 text-xs font-bold text-[#128C7E] transition hover:bg-[#25D366] hover:text-white"

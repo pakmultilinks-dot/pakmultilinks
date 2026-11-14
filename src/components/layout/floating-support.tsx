@@ -178,7 +178,7 @@ export function FloatingSupport() {
       >
         {open ? <X className="size-5" /> : <Bot className="size-5" />}
       </button>
-      <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" className="focus-ring fixed bottom-5 right-6 z-[65] hidden size-10 place-items-center rounded-xl border border-white/40 bg-action text-white shadow-md transition hover:bg-action-hover hover:scale-105 sm:grid" aria-label="Chat with our team on WhatsApp" title="Chat on WhatsApp"><MessageCircle className="size-5" /></a>
+      <a href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hi Pak Multilinks, I am inquiring about wholesale supplies")}`} target="_blank" rel="noreferrer" className="focus-ring fixed bottom-5 right-6 z-[65] hidden size-10 place-items-center rounded-xl border border-white/40 bg-action text-white shadow-md transition hover:bg-action-hover hover:scale-105 sm:grid" aria-label="Chat with our team on WhatsApp" title="Chat on WhatsApp"><MessageCircle className="size-5" /></a>
     </>
   );
 }

@@ -96,7 +96,7 @@ const FAQ_DATA = [
       <p>
         Message{" "}
         <a
-          href="https://wa.me/923258166829"
+          href="https://wa.me/923258166829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
           target="_blank"
           rel="noopener noreferrer"
           className="text-action font-bold hover:underline"
@@ -165,7 +165,7 @@ const FAQ_DATA = [
       <p>
         WhatsApp{" "}
         <a
-          href="https://wa.me/923258166829"
+          href="https://wa.me/923258166829?text=Hi%20Pak%20Multilinks%2C%20I%20am%20inquiring%20about%20wholesale%20supplies"
           target="_blank"
           rel="noopener noreferrer"
           className="text-action font-bold hover:underline"

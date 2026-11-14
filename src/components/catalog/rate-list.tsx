@@ -23,7 +23,7 @@ export function RateList({ rateListFiles = [] }: RateListProps) {
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a
-              href={`https://wa.me/${company.whatsapp}`}
+              href={`https://wa.me/${company.whatsapp}?text=${encodeURIComponent("Hi Pak Multilinks, I am inquiring about wholesale supplies")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="commerce-button commerce-button-primary inline-flex items-center gap-2"

@@ -11,14 +11,14 @@ export const CATEGORY_SEO_COPY: Record<string, CategorySeoCopy> = {
   "tissue-paper-products": {
     heading: "Tissue paper products at wholesale rates in Lahore",
     paragraphs: [
-      "Pak Multilinks Hygiene supplies the full tissue paper range by the carton: facial tissues in pop-up boxes and soft packs, toilet rolls and jumbo rolls, kitchen towel rolls, and table and party napkins. The range covers Rose Petal, Nozomi and Fine Life, the tissue brands offices, hotels, restaurants and clinics across Pakistan reorder most.",
+      "Pak Multilinks Hygiene supplies the full tissue paper range by the carton: facial tissues in pop-up boxes and soft packs, toilet rolls and jumbo rolls, kitchen towel rolls, and table and party napkins. The range covers Rose Petal and Nozomi, the tissue brands offices, hotels, restaurants and clinics across Pakistan reorder most.",
       "Every product on this page is sold wholesale by the carton with the packing and minimum order shown on the product. Orders placed in Lahore are delivered the same day or the next day, and cartons are dispatched by cargo to Karachi, Islamabad and all other cities. Send your list on WhatsApp for the current carton rate before you order.",
     ],
   },
   "facial-tissues": {
     heading: "Facial tissues wholesale, by the carton",
     paragraphs: [
-      "Facial tissues are the highest-rotation hygiene item in any office, clinic or hotel. We stock pop-up boxes, luxury cubes and soft packs in 100, 150 and 200 sheet counts from Rose Petal, Nozomi and Fine Life, all supplied in sealed factory cartons at wholesale rates.",
+      "Facial tissues are the highest-rotation hygiene item in any office, clinic or hotel. We stock pop-up boxes, luxury cubes and soft packs in 100, 150 and 200 sheet counts from Rose Petal and Nozomi, all supplied in sealed factory cartons at wholesale rates.",
       "Buying by the carton keeps the per-box cost at the wholesale rate and avoids mid-month stock-outs. Tell us your monthly usage on WhatsApp and we will confirm the right pack size, carton packing and rate for your facility.",
     ],
   },

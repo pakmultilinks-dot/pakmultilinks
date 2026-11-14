@@ -120,9 +120,6 @@ export function inferBrand(name: string, currentBrandName?: string | null): stri
   if (lower.includes("nozomi")) {
     return "Nozomi";
   }
-  if (lower.includes("fine life") || lower.includes("finelife")) {
-    return "Fine Life";
-  }
   if (lower.includes("fresco")) {
     return "Fresco";
   }
@@ -224,6 +221,7 @@ export async function listPublicProducts(): Promise<Product[]> {
         where: {
           status: "ACTIVE",
           category: { isActive: true, OR: [{ parentId: null }, { parent: { isActive: true } }] },
+          NOT: [{ brand: { slug: "fine-life" } }, { name: { contains: "fine life", mode: "insensitive" } }],
         },
         orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
         select: publicProductSelect,
@@ -247,6 +245,7 @@ export async function getPublicProduct(slug: string): Promise<Product | undefine
           slug,
           status: "ACTIVE",
           category: { isActive: true, OR: [{ parentId: null }, { parent: { isActive: true } }] },
+          NOT: [{ brand: { slug: "fine-life" } }, { name: { contains: "fine life", mode: "insensitive" } }],
         },
         select: publicProductSelect,
       })

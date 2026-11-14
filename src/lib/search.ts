@@ -88,7 +88,6 @@ export const SYNONYMS: Record<string, string> = {
   airenergy: "airnergy",
   suprsoft: "super soft supersoft",
   supersoft: "super soft supersoft",
-  finelife: "fine life finelife",
   pakmultilinks: "pak multilinks",
 
   // Tissue & Paper variations

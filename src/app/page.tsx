@@ -1,5 +1,4 @@
 import { HomeProductsExplorer } from "@/components/home/home-products-explorer";
-import { TrustedPartners } from "@/components/home/trusted-partners";
 import { DealsSlider } from "@/components/home/deals-slider";
 import { PerksStrip } from "@/components/home/perks-strip";
 import { ShopByBrand } from "@/components/home/shop-by-brand";
@@ -42,7 +41,6 @@ export default async function HomePage() {
             </p>
           </div>
         </section>
-        <TrustedPartners />
         <ShopByBrand />
 
         {/* Desktop Category Navigation */}

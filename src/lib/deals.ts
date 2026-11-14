@@ -70,7 +70,7 @@ export async function listPublicDeals(): Promise<PublicDealBanner[]> {
       }),
     );
     const active = rows
-      .filter((row) => row.isActive)
+      .filter((row) => row.isActive && row.title.trim().toLowerCase() !== "fine life" && !row.imageUrl.toLowerCase().includes("fine-life"))
       .map((row) => ({
         id: row.id,
         title: row.title,

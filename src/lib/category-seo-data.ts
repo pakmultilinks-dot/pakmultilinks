@@ -20,12 +20,12 @@ export const CATEGORY_SEO_DATA: Record<string, CategorySeoInfo> = {
       "Wholesale facial tissues in Lahore by carton — pop-up boxes, soft packs and luxury tissues for offices, hotels and homes. Bulk rates at Pak Multilinks.",
     heading: "Wholesale Facial Tissues in Lahore",
     intro:
-      "Pak Multilinks Hygiene is Lahore's trusted wholesale supplier for commercial facial tissues, providing master cartons directly to offices, clinics, hospitals, hotels, and residences across Gulberg, DHA, Bahria Town, and Johar Town. Our facial tissue portfolio features factory-sealed cartons from leading national brands including Rose Petal, Fine Life, and Nozomi. Choose from everyday essentials like Rose Petal Essential and Multicolor boxes, elegant Rose Petal Luxury and Perfumed tissue boxes, and convenient Fine Life Pop-Up 2-ply dispensers designed for high-traffic reception areas and executive desks. Every product is sold in full wholesale cartons with transparent carton pricing, confirmed piece counts per box, and clearly defined minimum order quantities (MOQ). Whether you need scheduled monthly replenishments for a corporate facility or immediate event stock, our Lahore warehouse coordinates prompt same-day or next-day delivery, alongside reliable cargo dispatch to commercial clients across Pakistan.",
+      "Pak Multilinks Hygiene is Lahore's trusted wholesale supplier for commercial facial tissues, providing master cartons directly to offices, clinics, hospitals, hotels, and residences across Gulberg, DHA, Bahria Town, and Johar Town. Our facial tissue portfolio features factory-sealed cartons from leading national brands including Rose Petal and Nozomi. Choose from everyday essentials like Rose Petal Essential and Multicolor boxes and elegant Rose Petal Luxury and Perfumed tissue boxes. Every product is sold in full wholesale cartons with transparent carton pricing, confirmed piece counts per box, and clearly defined minimum order quantities (MOQ). Whether you need scheduled monthly replenishments for a corporate facility or immediate event stock, our Lahore warehouse coordinates prompt same-day or next-day delivery, alongside reliable cargo dispatch to commercial clients across Pakistan.",
     faqs: [
       {
         question: "What brands of facial tissues do you supply wholesale in Lahore?",
         answer:
-          "We supply factory-sealed master cartons from recognized brands including Rose Petal (Luxury, Essential, Perfumed, Multicolor, Ciblure), Fine Life (Pop-Up, Luxury, Executive), and Nozomi.",
+          "We supply factory-sealed master cartons from recognized brands including Rose Petal (Luxury, Essential, Perfumed, Multicolor, Ciblure) and Nozomi.",
       },
       {
         question: "What is the minimum order quantity (MOQ) for facial tissue cartons?",
@@ -80,12 +80,12 @@ export const CATEGORY_SEO_DATA: Record<string, CategorySeoInfo> = {
       "Wholesale soft pack tissues in Lahore by carton — Rose Petal pocket packs, party packs and multipurpose tissues for cars and offices. Pak Multilinks rates.",
     heading: "Wholesale Soft Pack & Pocket Tissues in Lahore",
     intro:
-      "Pak Multilinks Hygiene is your primary wholesale distributor for commercial soft pack and portable pocket pack tissues in Lahore. Ideal for vehicles, hotel housekeeping kits, corporate giveaways, conference tables, and busy retail counters, soft pack tissues offer space-efficient convenience without boxed packaging bulk. Our extensive inventory includes the full Rose Petal pocket pack collection in Purple, Teal, White, and Blue variants, as well as the high-demand Rose Petal Party Pack multipurpose tissues and Rose Petal Flu Packs. We also carry Fine Life Soft Pack Twin Packs and Nozomi commercial soft packs, delivering reliable 2-ply softness and high absorbency in every sheet. Products are delivered in original manufacturer master cartons with clear per-carton piece counts and per-unit breakdowns. With wholesale carton pricing, an accessible minimum order quantity, and dependable same-day or next-day scheduled delivery across Lahore, Pak Multilinks makes procurement effortless for procurement heads, distributors, and facility managers across Pakistan.",
+      "Pak Multilinks Hygiene is your primary wholesale distributor for commercial soft pack and portable pocket pack tissues in Lahore. Ideal for vehicles, hotel housekeeping kits, corporate giveaways, conference tables, and busy retail counters, soft pack tissues offer space-efficient convenience without boxed packaging bulk. Our extensive inventory includes the full Rose Petal pocket pack collection in Purple, Teal, White, and Blue variants, as well as the high-demand Rose Petal Party Pack multipurpose tissues and Rose Petal Flu Packs. We also carry Nozomi commercial soft packs, delivering reliable 2-ply softness and high absorbency in every sheet. Products are delivered in original manufacturer master cartons with clear per-carton piece counts and per-unit breakdowns. With wholesale carton pricing, an accessible minimum order quantity, and dependable same-day or next-day scheduled delivery across Lahore, Pak Multilinks makes procurement effortless for procurement heads, distributors, and facility managers across Pakistan.",
     faqs: [
       {
         question: "What soft pack and pocket tissue variants are available in bulk?",
         answer:
-          "We stock Rose Petal Pocket Packs (Purple, Teal, White, Blue), Rose Petal Party Packs, Rose Petal Flu Packs, Fine Life Soft Pack Twin Packs, and Nozomi commercial soft packs.",
+          "We stock Rose Petal Pocket Packs (Purple, Teal, White, Blue), Rose Petal Party Packs, Rose Petal Flu Packs, and Nozomi commercial soft packs.",
       },
       {
         question: "Why choose soft pack tissues over boxed facial tissues?",
@@ -110,12 +110,12 @@ export const CATEGORY_SEO_DATA: Record<string, CategorySeoInfo> = {
       "Wholesale tissue rolls in Lahore by carton — toilet rolls, kitchen towels and commercial maxi rolls for offices and washrooms. Bulk rates at Pak Multilinks.",
     heading: "Wholesale Tissue Rolls & Toilet Paper in Lahore",
     intro:
-      "Pak Multilinks Hygiene provides high-capacity commercial tissue rolls, toilet rolls, and kitchen paper towels by the wholesale master carton to facilities, restaurants, corporate headquarters, and shopping malls in Lahore. Our washroom paper roll portfolio features recognized brands engineered for heavy daily consumption, including Rose Petal Maxob Toilet Rolls (8+2 pack), Rose Petal Zzoop Maxi Rolls, and Hi-jeen Jumbo dispenser rolls. For hospitality pantries, commercial kitchens, and janitorial stations, we stock absorbent Nozomi Jumbo Kitchen Towels, Fine Life Jumbo Kitchen Towels in twin large rolls, Nozomi 200-meter Autocut Maxi Roll Hand Towels, and Fine Life Commercial 10-roll toilet packs. All paper rolls offer superior wet strength, rapid absorbency, and consistent perforations. Cartons are dispatched in sealed manufacturer packaging with transparent per-roll and per-carton pricing. With our MOQ starting at a single wholesale carton and scheduled same-day or next-day delivery across Gulberg, DHA, and Lahore industrial zones, restock your washrooms reliably.",
+      "Pak Multilinks Hygiene provides high-capacity commercial tissue rolls, toilet rolls, and kitchen paper towels by the wholesale master carton to facilities, restaurants, corporate headquarters, and shopping malls in Lahore. Our washroom paper roll portfolio features recognized brands engineered for heavy daily consumption, including Rose Petal Maxob Toilet Rolls (8+2 pack), Rose Petal Zzoop Maxi Rolls, and Hi-jeen Jumbo dispenser rolls. For hospitality pantries, commercial kitchens, and janitorial stations, we stock absorbent Nozomi Jumbo Kitchen Towels and Nozomi 200-meter Autocut Maxi Roll Hand Towels. All paper rolls offer superior wet strength, rapid absorbency, and consistent perforations. Cartons are dispatched in sealed manufacturer packaging with transparent per-roll and per-carton pricing. With our MOQ starting at a single wholesale carton and scheduled same-day or next-day delivery across Gulberg, DHA, and Lahore industrial zones, restock your washrooms reliably.",
     faqs: [
       {
         question: "What types of paper rolls do you supply for commercial washrooms?",
         answer:
-          "We supply 2-ply toilet rolls (Rose Petal Maxob, Nozomi, Fine Life), high-absorbency kitchen towel rolls (Rose Petal Zzoop, Fine Life Jumbo), and high-capacity maxi autocut hand towel rolls (200m).",
+          "We supply 2-ply toilet rolls (Rose Petal Maxob, Nozomi), high-absorbency kitchen towel rolls (Rose Petal Zzoop), and high-capacity maxi autocut hand towel rolls (200m).",
       },
       {
         question: "Are commercial toilet rolls compatible with standard dispensers?",
@@ -140,12 +140,12 @@ export const CATEGORY_SEO_DATA: Record<string, CategorySeoInfo> = {
       "Wholesale paper napkins in Lahore by carton — table napkins, coffee napkins and kitchen towels for cafes, restaurants and events. Bulk rates at Pak Multilinks.",
     heading: "Wholesale Paper Napkins & Hand Towels in Lahore",
     intro:
-      "Pak Multilinks Hygiene is the premier wholesale source for commercial paper napkins, dispenser refills, and kitchen hand towels in Lahore. Catering to food service operators, cafeteria managers, corporate pantries, event planners, and catering businesses, our napkin inventory delivers practical hygiene and soft absorbency at predictable carton costs. We supply 1-ply 100-sheet Nozomi and Fine Life embossed table napkins, Super Soft table napkins, and compact Super Soft coffee napkins suited for cafes, beverage stations, and conference breaks. For washroom and pantry hand drying, we offer Rose Petal Hand Towels in standard and economy packaging, as well as the grease-fighting Rose Petal Zzoop Kitchen Towel. All products are delivered in factory-sealed master cartons with clear sheet counts and unit specifications. With an accessible minimum order requirement of one carton, wholesale pricing tiers, and fast same-day or next-day scheduled delivery across Lahore and nationwide shipping, Pak Multilinks ensures seamless table and pantry service for your facility.",
+      "Pak Multilinks Hygiene is the premier wholesale source for commercial paper napkins, dispenser refills, and kitchen hand towels in Lahore. Catering to food service operators, cafeteria managers, corporate pantries, event planners, and catering businesses, our napkin inventory delivers practical hygiene and soft absorbency at predictable carton costs. We supply 1-ply 100-sheet Nozomi embossed table napkins, Super Soft table napkins, and compact Super Soft coffee napkins suited for cafes, beverage stations, and conference breaks. For washroom and pantry hand drying, we offer Rose Petal Hand Towels in standard and economy packaging, as well as the grease-fighting Rose Petal Zzoop Kitchen Towel. All products are delivered in factory-sealed master cartons with clear sheet counts and unit specifications. With an accessible minimum order requirement of one carton, wholesale pricing tiers, and fast same-day or next-day scheduled delivery across Lahore and nationwide shipping, Pak Multilinks ensures seamless table and pantry service for your facility.",
     faqs: [
       {
         question: "What paper napkins are available for restaurants and corporate pantries?",
         answer:
-          "We supply Nozomi 1-ply 100-sheet table napkins, Fine Life embossed table napkins, Super Soft table and coffee napkins, and Rose Petal hand towels in standard and economy packs.",
+          "We supply Nozomi 1-ply 100-sheet table napkins, Super Soft table and coffee napkins, and Rose Petal hand towels in standard and economy packs.",
       },
       {
         question: "What are the sheet dimensions and ply specifications?",

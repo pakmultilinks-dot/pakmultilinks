@@ -37,7 +37,6 @@ export function inferBrandFromName(name: string, brand?: string): string {
   const lower = name.toLowerCase();
   if (lower.includes("rose petal") || lower.includes("hi-jeen") || lower.includes("zzoop") || lower.includes("maxob")) return "Rose Petal";
   if (lower.includes("nozomi")) return "Nozomi";
-  if (lower.includes("fine life") || lower.includes("finelife")) return "Fine Life";
   if (lower.includes("fresco")) return "Fresco";
   if (lower.includes("germi cure") || lower.includes("germicure")) return "Germi Cure";
   if (lower.includes("shine well") || lower.includes("shinewell")) return "Shine Well";

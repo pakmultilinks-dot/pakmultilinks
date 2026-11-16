@@ -6,7 +6,7 @@ const AUTH_COOKIE = "pmh_session";
 // Maintenance mode: set to true to take the whole site down and show the
 // maintenance page on every route. Set to false to bring the site back.
 // Nothing is deleted by this flag; it only changes what visitors see.
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 
 const MAINTENANCE_HTML = `<!doctype html>
 <html lang="en">

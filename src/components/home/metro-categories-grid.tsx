@@ -21,8 +21,8 @@ interface CategoryTile {
 // Curated high-resolution authentic product photography for prominent category tiles
 const CATEGORY_REAL_IMAGES: Record<string, string> = {
   "tissue-paper-products": "/rate-products/rose-petal-pop-up.jpg",
-  "washroom-supplies": "/rate-products/germicure-toilet-cleaner.jpg",
-  "cleaning-products": "/rate-products/fresco-dish-wash-liquid.jpg",
+  "washroom-supplies": "/rate-products/fresco-hand-wash.jpg",
+  "cleaning-products": "/rate-products/fresco-dish-wash-real.jpg",
   "garbage-bags": "/images/products/garbage-bags-real.jpg",
   "dispensers": "/rate-products/fresco-air-freshener-dispenser.jpg",
   "cleaning-tools": "/images/products/mop-tools-real.jpg",

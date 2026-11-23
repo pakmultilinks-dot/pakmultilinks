@@ -213,9 +213,59 @@ function canUseDevelopmentFallback() {
   return true;
 }
 
+// Tissue Craft products the owner asked to add. They are created in the DB
+// the first time the shop loads, so they show without an admin step.
+// Price is left on request; the owner sets prices from the admin panel.
+const TISSUE_CRAFT_PRODUCTS = [
+  { slug: "eco-fresh-toilet-paper-2-rolls", name: "Eco Fresh Toilet Paper (2 Rolls)", shortDescription: "2-roll toilet paper pack", description: "Eco Fresh toilet paper, 2-roll pack. Price on request.", categorySlug: "tissue-rolls", imageUrl: "/images/products/eco-fresh-toilet-paper-2-rolls.jpg" },
+  { slug: "eco-fresh-multi-purpose-towel", name: "Eco Fresh Multi Purpose Towel", shortDescription: "Multi purpose towel roll", description: "Eco Fresh multi purpose towel roll. Price on request.", categorySlug: "tissue-rolls", imageUrl: "/images/products/eco-fresh-multi-purpose-towel.jpg" },
+  { slug: "for-you-facial-tissues-400", name: "For You Facial Tissues (400 Sheets)", shortDescription: "Facial tissues, 400 sheets", description: "For You facial tissues, 400 sheets. Price on request.", categorySlug: "facial-tissues", imageUrl: "/images/products/for-you-facial-tissues-400.jpg" },
+  { slug: "for-you-pop-up-300", name: "For You Pop Up Ultra Strong (300 Sheets)", shortDescription: "Pop up tissues, ultra strong, 300 sheets", description: "For You pop up tissues, ultra strong, 300 sheets. Price on request.", categorySlug: "facial-tissues", imageUrl: "/images/products/for-you-pop-up-300.jpg" },
+];
+
+let tissueCraftPromise: Promise<void> | undefined;
+
+export function ensureTissueCraftProducts() {
+  if (!isDatabaseConfigured) return Promise.resolve();
+  tissueCraftPromise ??= (async () => {
+    const brand = await db.brand.upsert({
+      where: { slug: "tissue-craft" },
+      update: {},
+      create: { name: "Tissue Craft", slug: "tissue-craft", logoUrl: "/images/brands/tissue-craft.jpg", isActive: true },
+    });
+    for (const item of TISSUE_CRAFT_PRODUCTS) {
+      const category = await db.category.findUnique({ where: { slug: item.categorySlug }, select: { id: true } });
+      if (!category) continue;
+      const product = await db.product.upsert({
+        where: { slug: item.slug },
+        update: {},
+        create: {
+          name: item.name,
+          slug: item.slug,
+          sku: item.slug,
+          shortDescription: item.shortDescription,
+          description: item.description,
+          price: 0,
+          priceOnRequest: true,
+          minimumOrderCartons: 1,
+          status: "ACTIVE",
+          categoryId: category.id,
+          brandId: brand.id,
+        },
+      });
+      const existingImage = await db.productImage.findFirst({ where: { productId: product.id }, select: { id: true } });
+      if (!existingImage) {
+        await db.productImage.create({ data: { productId: product.id, url: item.imageUrl, alt: item.name, sortOrder: 0 } });
+      }
+    }
+  })().catch((error) => { tissueCraftPromise = undefined; throw error; });
+  return tissueCraftPromise;
+}
+
 export async function listPublicProducts(): Promise<Product[]> {
   if (!isDatabaseConfigured) return developmentProducts;
   try {
+    await ensureTissueCraftProducts();
     const rows = await withDatabaseRetry(() =>
       db.product.findMany({
         where: {

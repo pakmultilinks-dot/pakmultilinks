@@ -307,6 +307,12 @@ export function ensureNozomiProductPhotos() {
       } else if (existing.url !== item.imageUrl) {
         await db.productImage.update({ where: { id: existing.id }, data: { url: item.imageUrl, alt: item.name } });
       }
+      // Variant images override the product image on the product page, so
+      // point them at the new photo too.
+      await db.productVariant.updateMany({
+        where: { productId: product.id, imageUrl: { not: item.imageUrl } },
+        data: { imageUrl: item.imageUrl },
+      });
     }
   })().catch((error) => { nozomiPhotoPromise = undefined; throw error; });
   return nozomiPhotoPromise;

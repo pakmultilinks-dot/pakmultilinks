@@ -26,8 +26,8 @@ const CATEGORY_REAL_IMAGES: Record<string, string> = {
   "garbage-bags": "/images/products/garbage-bags-real.jpg",
   "dispensers": "/rate-products/fresco-air-freshener-dispenser.jpg",
   "cleaning-tools": "/images/products/mop-tools-real.jpg",
-  "soaps-sanitizers": "/rate-products/germicure-hand-wash.jpg",
-  "wet-wipes-fresheners": "/rate-products/air-energy-aerosol-refill.jpg",
+  "soaps-sanitizers": "/rate-products/fresco-hand-wash.jpg",
+  "wet-wipes-fresheners": "/rate-products/fresco-air-freshener-range.jpg",
   "all": "/images/about-product-range.png",
 };
 

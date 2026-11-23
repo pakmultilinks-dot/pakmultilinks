@@ -69,6 +69,7 @@ export function Footer() {
             ["Official Rate List 2026", "/rate-list"],
             ["Frequently Asked Questions", "/faq"],
             ["Procurement Guides & Blog", "/blog"],
+            ["Nozomi Wholesale Buying Guide", "/nozomi-wholesale-guide"],
             ["About Our Business", "/about"],
             ["Corporate Orders (B2B)", "/corporate-orders"],
             ["Request a Bulk Quote", "/request-quote"],

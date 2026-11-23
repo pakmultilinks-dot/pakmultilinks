@@ -2,7 +2,6 @@ import { HomeProductsExplorer } from "@/components/home/home-products-explorer";
 import { DealsSlider } from "@/components/home/deals-slider";
 import { PerksStrip } from "@/components/home/perks-strip";
 import { ShopByBrand } from "@/components/home/shop-by-brand";
-import { CustomBrandingSection } from "@/components/home/custom-branding-section";
 import { listPublicCategories, listPublicProducts } from "@/lib/catalog-server";
 import { company } from "@/lib/company";
 import { listPublicDeals } from "@/lib/deals";
@@ -73,17 +72,11 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Custom Branding Animated Tissue Box Showcase (Directly below Shop by category) */}
-        <CustomBrandingSection />
       </div>
 
       {/* Main Products Explorer: Shows ALL products with rates on site opening (prominently at top on mobile) */}
       <HomeProductsExplorer products={products} categories={categories} />
 
-      {/* Custom Branding Showcase on Mobile (kept at bottom of page so mobile catalog remains prominent) */}
-      <div className="block md:hidden">
-        <CustomBrandingSection className="border-t" />
-      </div>
     </>
   );
 }

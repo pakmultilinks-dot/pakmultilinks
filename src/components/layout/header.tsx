@@ -357,15 +357,6 @@ export function Header() {
           </div>
         </div>
 
-        {/* Metro-style Wholesale Delivery Strip */}
-        <div className="bg-[#0f4c3a] text-white px-3 py-1.5 text-[11px] font-semibold flex items-center justify-between md:hidden shadow-xs">
-          <div className="flex items-center gap-1.5 truncate">
-            <span className="text-yellow-400">📍</span>
-            <span className="truncate">Wholesale Delivery: Lahore & Nationwide</span>
-          </div>
-          <span className="text-emerald-200 text-[10px] font-bold shrink-0 ml-2">Wholesale Carton Rates 📦</span>
-        </div>
-
         {/* Mobile Search & Cart Bar (Metro-style clean layout with spacious search + cart on right) */}
         <div className="relative border-b border-line/60 bg-surface px-3 py-2 md:hidden">
           <div className="flex items-center gap-2.5">

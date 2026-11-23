@@ -6,7 +6,6 @@ import { SalesContactProvider } from "@/components/commerce/sales-contact";
 import { StoreProvider } from "@/components/providers/store-provider";
 
 import { Footer } from "./footer";
-import { FloatingSupport } from "./floating-support";
 import { Header } from "./header";
 import { MobileSalesBar } from "./mobile-sales-bar";
 import { MobileFooter } from "./mobile-footer";
@@ -30,7 +29,6 @@ export function RouteShell({ children }: Readonly<{ children: React.ReactNode }>
             {children}
           </main>
           <Footer />
-          <FloatingSupport />
           <MobileSalesBar />
         </div>
       </StoreProvider>

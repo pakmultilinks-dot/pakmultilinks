@@ -800,3 +800,45 @@ summary::-webkit-details-marker {
   .catalog-page-heading h1 { font-size: 28px; }
   .catalog-body { padding-top: 20px; }
 }
+
+/* Floating WhatsApp button, bottom-right on every storefront page */
+.floating-whatsapp {
+  position: fixed;
+  right: 16px;
+  bottom: 78px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  background-color: #25d366;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.floating-whatsapp:hover,
+.floating-whatsapp:focus-visible {
+  transform: scale(1.06);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.34);
+}
+
+.floating-whatsapp-icon {
+  width: 30px;
+  height: 30px;
+}
+
+@media (min-width: 768px) {
+  .floating-whatsapp {
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-whatsapp {
+    transition: none;
+  }
+}

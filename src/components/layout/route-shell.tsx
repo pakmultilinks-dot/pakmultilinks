@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { SalesContactProvider } from "@/components/commerce/sales-contact";
 import { StoreProvider } from "@/components/providers/store-provider";
 
+import { FloatingWhatsApp } from "./floating-whatsapp";
 import { Footer } from "./footer";
 import { Header } from "./header";
 import { MobileSalesBar } from "./mobile-sales-bar";
@@ -30,6 +31,7 @@ export function RouteShell({ children }: Readonly<{ children: React.ReactNode }>
           </main>
           <Footer />
           <MobileSalesBar />
+          <FloatingWhatsApp />
         </div>
       </StoreProvider>
     </SalesContactProvider>

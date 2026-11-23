@@ -60,10 +60,44 @@ export const defaultDealBanners: PublicDealBanner[] = [
   },
 ];
 
+const BRAND_BANNERS: Array<{ title: string; imageUrl: string; alt: string; linkUrl: string; sortOrder: number }> = [
+  {
+    title: "Rose Petal",
+    imageUrl: "/hero/rose-petal-banner.jpg",
+    alt: "Rose Petal - Go Soft with Rose Petal. Tissues, rolls and everyday essentials.",
+    linkUrl: "/brand/rose-petal",
+    sortOrder: 10,
+  },
+  {
+    title: "Tissue Craft",
+    imageUrl: "/hero/tissue-craft-banner.jpg",
+    alt: "Tissue Craft - We value your hygiene. Facial tissues, towels and toilet rolls.",
+    linkUrl: "/shop?category=tissue-paper-products",
+    sortOrder: 11,
+  },
+];
+
+let brandBannerPromise: Promise<void> | undefined;
+export function ensureBrandBanners() {
+  if (!isDatabaseConfigured) return Promise.resolve();
+  brandBannerPromise ??= (async () => {
+    for (const banner of BRAND_BANNERS) {
+      const existing = await db.dealBanner.findFirst({ where: { title: banner.title }, select: { id: true, imageUrl: true } });
+      if (!existing) {
+        await db.dealBanner.create({ data: { ...banner, isActive: true } });
+      } else if (existing.imageUrl !== banner.imageUrl) {
+        await db.dealBanner.update({ where: { id: existing.id }, data: { imageUrl: banner.imageUrl, alt: banner.alt, linkUrl: banner.linkUrl, sortOrder: banner.sortOrder, isActive: true } });
+      }
+    }
+  })().catch((error) => { brandBannerPromise = undefined; throw error; });
+  return brandBannerPromise;
+}
+
 export async function listPublicDeals(): Promise<PublicDealBanner[]> {
   if (!isDatabaseConfigured) return defaultDealBanners;
 
   try {
+    await ensureBrandBanners();
     const rows = await withDatabaseRetry(() =>
       db.dealBanner.findMany({
         orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],

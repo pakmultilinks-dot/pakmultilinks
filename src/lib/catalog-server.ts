@@ -340,6 +340,8 @@ export async function listPublicProducts(): Promise<Product[]> {
 export async function getPublicProduct(slug: string): Promise<Product | undefined> {
   if (!isDatabaseConfigured) return getDevelopmentProduct(slug);
   try {
+    await ensureTissueCraftProducts();
+    await ensureNozomiProductPhotos();
     const row = await withDatabaseRetry(() =>
       db.product.findFirst({
         where: {

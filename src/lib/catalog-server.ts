@@ -262,10 +262,61 @@ export function ensureTissueCraftProducts() {
   return tissueCraftPromise;
 }
 
+// Nozomi original manufacturer photos. The main image of each mapped
+// product is replaced with its photo from the zip. #2 and #14 are skipped
+// (no file in the zip). Matches by product name, case-insensitive.
+const NOZOMI_PHOTO_UPDATES: { name: string; imageUrl: string }[] = [
+  { name: "SHINE WELL Car Polish Aerosol", imageUrl: "/images/products/nozomi/01-shine-well-car-polish-aerosol-400ml-desire.jpg" },
+  { name: "Super Soft Tissue Box", imageUrl: "/images/products/nozomi/03-super-soft-tissue-box-supreme-200-tissues.jpg" },
+  { name: "GLAD Tissue Box", imageUrl: "/images/products/nozomi/04-glad-tissue-box-popup-300-tissues-recycled.jpg" },
+  { name: "Super Soft Soft Pack", imageUrl: "/images/products/nozomi/05-super-soft-soft-pack-mini-300-tissues.jpg" },
+  { name: "FRESCO Air Freshener Aerosol", imageUrl: "/images/products/nozomi/06-fresco-air-freshener-aerosol-250ml-premium.jpg" },
+  { name: "FRESCO Antibacterial Hand Wash Liquid", imageUrl: "/images/products/nozomi/07-fresco-antibacterial-hand-wash-liquid-500ml.jpg" },
+  { name: "GERMI CURE Hand Wash Liquid", imageUrl: "/images/products/nozomi/08-germi-cure-hand-wash-liquid-500ml.jpg" },
+  { name: "FRESCO Antibacterial Dish Wash Liquid", imageUrl: "/images/products/nozomi/09-fresco-antibacterial-dish-wash-liquid-500ml-lemon.jpg" },
+  { name: "FRESCO Hand Sanitizer Gel", imageUrl: "/images/products/nozomi/10-fresco-hand-sanitizer-gel-500ml.jpg" },
+  { name: "INSECTO GUARD Manual Insect Killer Spray", imageUrl: "/images/products/nozomi/11-insecto-guard-manual-insect-killer-spray-300ml.jpg" },
+  { name: "Softex Hygiene Tissue Hand Towel 18gsm x 2 ply", imageUrl: "/images/products/nozomi/12-softex-hygiene-hand-towel-150-tissues-36gsm.jpg" },
+  { name: "Softex Hygiene Tissue Hand Towel 24gsm x 2 ply = 48gsm 125 x 2 ply = 250 Tissues Tissue Size 215 x 220mm Pure Imported Paper 20/pkt per Carton", imageUrl: "/images/products/nozomi/13-softex-hygiene-hand-towel-250-tissues-48gsm.jpg" },
+  { name: "SOFTEX Tissue Box Pop-UP Tissue Size 15x20cm 150x2 Ply =300 Tissues Pure Imported Paper 13.7gsm 36/Box per Carton", imageUrl: "/images/products/nozomi/15-softex-tissue-box-pop-up-300-tissues.jpg" },
+  { name: "SOFTEX Tissue Box Multicolor Tissue Size 20x20cm 150x2 Ply = 300 Tissue Pure Imported Paper 13.7gsm 36/Box per carton", imageUrl: "/images/products/nozomi/16-softex-tissue-box-multicolor-300-tissues.jpg" },
+  { name: "FRESCO Auto JET Hand Dryer Model K2201 Heat & Cool Option Water Resist Body", imageUrl: "/images/products/nozomi/17-fresco-auto-jet-hand-dryer-k2201.jpg" },
+  { name: "FRESCO Auto Heavy Duty Hand Dryer Model V-182 Heat & Cool Option Water Resist Body", imageUrl: "/images/products/nozomi/18-fresco-auto-heavy-duty-hand-dryer-v-182.jpg" },
+  { name: "SIEMENSE Auto Hand Dryer Model TH92001 Metal Body", imageUrl: "/images/products/nozomi/19-siemense-auto-hand-dryer-th92001.jpg" },
+  { name: "Auto Hand Dryer Made in China", imageUrl: "/images/products/nozomi/20-auto-hand-dryer-made-in-china.jpg" },
+  { name: "FRESCO Auto Sanitizer/Soap Dispenser Model PL-151045 Capacity: 600ml 30/Dispenser per Carton", imageUrl: "/images/products/nozomi/21-fresco-auto-sanitizer-soap-dispenser-pl-151045.jpg" },
+  { name: "FRESCO Auto Sanitizer/Soap Dispenser Model V-410 Capacity: 600ml 16/Dispenser per Carton", imageUrl: "/images/products/nozomi/22-fresco-auto-sanitizer-soap-dispenser-v-410.jpg" },
+  { name: "FRESCO Manual Sanitizer/Soap Dispenser Model AR-800 Capacity: 800ml 30/Dispenser per Carton", imageUrl: "/images/products/nozomi/23-fresco-manual-sanitizer-soap-dispenser-ar-800.jpg" },
+  { name: "Germi Cure Hand Sanitizer Dispenser Model V-730 for 1000ml Pouch use 32/Dispenser per Carton", imageUrl: "/images/products/nozomi/24-germi-cure-hand-sanitizer-dispenser-v-730.jpg" },
+];
+
+let nozomiPhotoPromise: Promise<void> | undefined;
+
+export function ensureNozomiProductPhotos() {
+  if (!isDatabaseConfigured) return Promise.resolve();
+  nozomiPhotoPromise ??= (async () => {
+    for (const item of NOZOMI_PHOTO_UPDATES) {
+      const product = await db.product.findFirst({
+        where: { name: { startsWith: item.name, mode: "insensitive" } },
+        select: { id: true },
+      });
+      if (!product) continue;
+      const existing = await db.productImage.findFirst({ where: { productId: product.id }, orderBy: { sortOrder: "asc" }, select: { id: true, url: true } });
+      if (!existing) {
+        await db.productImage.create({ data: { productId: product.id, url: item.imageUrl, alt: item.name, sortOrder: 0 } });
+      } else if (existing.url !== item.imageUrl) {
+        await db.productImage.update({ where: { id: existing.id }, data: { url: item.imageUrl, alt: item.name } });
+      }
+    }
+  })().catch((error) => { nozomiPhotoPromise = undefined; throw error; });
+  return nozomiPhotoPromise;
+}
+
 export async function listPublicProducts(): Promise<Product[]> {
   if (!isDatabaseConfigured) return developmentProducts;
   try {
     await ensureTissueCraftProducts();
+    await ensureNozomiProductPhotos();
     const rows = await withDatabaseRetry(() =>
       db.product.findMany({
         where: {

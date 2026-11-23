@@ -10,6 +10,37 @@ export function ensureDocumentLibrarySchema() {
     await db.$executeRawUnsafe('ALTER TABLE "RateListFile" ADD COLUMN IF NOT EXISTS "coverStyle" TEXT NOT NULL DEFAULT \'HYGIENE\'');
     await db.$executeRawUnsafe('ALTER TABLE "RateListFile" ADD COLUMN IF NOT EXISTS "coverImageUrl" TEXT');
     await db.rateListFile.upsert({
+      where: { slug: "rose-petal-wholesale-rate-list" },
+      update: {
+        title: "Rose Petal Wholesale Rate List",
+        description: "Wholesale carton pricing for Rose Petal Popup, Luxury, Multicolor, Deluxe, Maxob Roll, Hygiene Brown, Hand Towel and Hi-jeen White, plus Fresco air freshener, Harpic and hand wash. Updated 28 October 2026.",
+        category: "Rose Petal Tissues",
+        documentType: "RATE_LIST",
+        coverStyle: "HYGIENE",
+        fileUrl: "/downloads/rose-petal-rate-list.pdf",
+        fileName: "rose-petal-rate-list.pdf",
+        fileSize: 327247,
+        pageCount: 2,
+        isActive: true,
+        sortOrder: 1,
+      },
+      create: {
+        title: "Rose Petal Wholesale Rate List",
+        slug: "rose-petal-wholesale-rate-list",
+        description: "Wholesale carton pricing for Rose Petal Popup, Luxury, Multicolor, Deluxe, Maxob Roll, Hygiene Brown, Hand Towel and Hi-jeen White, plus Fresco air freshener, Harpic and hand wash. Updated 28 October 2026.",
+        category: "Rose Petal Tissues",
+        documentType: "RATE_LIST",
+        coverStyle: "HYGIENE",
+        fileUrl: "/downloads/rose-petal-rate-list.pdf",
+        fileName: "rose-petal-rate-list.pdf",
+        fileSize: 327247,
+        pageCount: 2,
+        isPrimary: false,
+        isActive: true,
+        sortOrder: 1,
+      },
+    });
+    await db.rateListFile.upsert({
       where: { slug: "wipers-cleaning-catalogue-no-prices" },
       update: {},
       create: {

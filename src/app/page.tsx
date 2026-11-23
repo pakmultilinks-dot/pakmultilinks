@@ -6,11 +6,26 @@ import { listPublicCategories, listPublicProducts } from "@/lib/catalog-server";
 import { company } from "@/lib/company";
 import { listPublicDeals } from "@/lib/deals";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { alternates: { canonical: "/" }, openGraph: { url: "/", title: `${company.name} | ${company.tagline}` } };
 export const revalidate = 3600;
+
+// Real product photos for the desktop category cards (same as the mobile grid).
+const CATEGORY_IMAGES: Record<string, string> = {
+  "tissue-paper-products": "/rate-products/rose-petal-pop-up.jpg",
+  "washroom-supplies": "/rate-products/germicure-toilet-cleaner.jpg",
+  "cleaning-products": "/rate-products/fresco-dish-wash-liquid.jpg",
+  "garbage-bags": "/images/products/garbage-bags-real.jpg",
+  "dispensers": "/rate-products/fresco-air-freshener-dispenser.jpg",
+  "cleaning-tools": "/images/products/mop-tools-real.jpg",
+  "soaps-sanitizers": "/rate-products/germicure-hand-wash.jpg",
+  "wet-wipes-fresheners": "/rate-products/air-energy-aerosol-refill.jpg",
+  "disposable-items": "/images/products/garbage-bags-real.jpg",
+  "all": "/images/about-product-range.png",
+};
 
 export default async function HomePage() {
   const [products, categories, deals] = await Promise.all([listPublicProducts(), listPublicCategories(), listPublicDeals()]);
@@ -54,7 +69,11 @@ export default async function HomePage() {
           </div>
           <div className="grid gap-3.5 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-6 lg:grid-cols-4">
             {roots.map((category, idx) => (
-              <div key={category.id} className={`rounded-xl bg-surface/60 p-4 shadow-2xs hover:bg-surface hover:shadow-xs transition animate-page-enter stagger-${Math.min(idx + 1, 4)}`}>
+              <div key={category.id} className={`overflow-hidden rounded-xl bg-surface/60 shadow-2xs hover:bg-surface hover:shadow-xs transition animate-page-enter stagger-${Math.min(idx + 1, 4)}`}>
+                <Link href={`/shop/${category.slug}`} className="relative block h-36 w-full overflow-hidden" aria-label={category.name}>
+                  <Image src={CATEGORY_IMAGES[category.slug] || "/images/about-product-range.png"} alt={category.name} fill className="object-cover transition-transform duration-300 hover:scale-105" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px" />
+                </Link>
+                <div className="p-4">
                 <Link href={`/shop/${category.slug}`} className="flex items-center justify-between gap-3 text-sm font-bold text-accent hover:text-action">
                   {category.name}<ArrowRight className="size-4 text-muted transition-transform group-hover:translate-x-1" />
                 </Link>
@@ -67,6 +86,7 @@ export default async function HomePage() {
                     </li>
                   ))}
                 </ul>
+                </div>
               </div>
             ))}
           </div>

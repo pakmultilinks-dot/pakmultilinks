@@ -296,23 +296,24 @@ export function ensureNozomiProductPhotos() {
   if (!isDatabaseConfigured) return Promise.resolve();
   nozomiPhotoPromise ??= (async () => {
     for (const item of NOZOMI_PHOTO_UPDATES) {
-      const product = await db.product.findFirst({
+      const products = await db.product.findMany({
         where: { name: { startsWith: item.name, mode: "insensitive" } },
         select: { id: true },
       });
-      if (!product) continue;
-      const existing = await db.productImage.findFirst({ where: { productId: product.id }, orderBy: { sortOrder: "asc" }, select: { id: true, url: true } });
-      if (!existing) {
-        await db.productImage.create({ data: { productId: product.id, url: item.imageUrl, alt: item.name, sortOrder: 0 } });
-      } else if (existing.url !== item.imageUrl) {
-        await db.productImage.update({ where: { id: existing.id }, data: { url: item.imageUrl, alt: item.name } });
+      for (const product of products) {
+        const existing = await db.productImage.findFirst({ where: { productId: product.id }, orderBy: { sortOrder: "asc" }, select: { id: true, url: true } });
+        if (!existing) {
+          await db.productImage.create({ data: { productId: product.id, url: item.imageUrl, alt: item.name, sortOrder: 0 } });
+        } else if (existing.url !== item.imageUrl) {
+          await db.productImage.update({ where: { id: existing.id }, data: { url: item.imageUrl, alt: item.name } });
+        }
+        // Variant images override the product image on the product page, so
+        // point them at the new photo too.
+        await db.productVariant.updateMany({
+          where: { productId: product.id, imageUrl: { not: item.imageUrl } },
+          data: { imageUrl: item.imageUrl },
+        });
       }
-      // Variant images override the product image on the product page, so
-      // point them at the new photo too.
-      await db.productVariant.updateMany({
-        where: { productId: product.id, imageUrl: { not: item.imageUrl } },
-        data: { imageUrl: item.imageUrl },
-      });
     }
   })().catch((error) => { nozomiPhotoPromise = undefined; throw error; });
   return nozomiPhotoPromise;

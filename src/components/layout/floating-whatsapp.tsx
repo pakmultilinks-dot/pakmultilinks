@@ -1,11 +1,11 @@
 "use client";
 
-import { useSalesContactNumber } from "@/components/commerce/sales-contact";
-
 // Floating WhatsApp button, bottom-right on every storefront page.
-// Opens a chat with Bilal Shah (the sales number) with a prefilled message.
+// Opens a chat with Bilal Shah on his number +92 325 8166829 with a prefilled message.
+const BILAL_SHAH_WHATSAPP = "923258166829";
+
 export function FloatingWhatsApp() {
-  const whatsapp = useSalesContactNumber();
+  const whatsapp = BILAL_SHAH_WHATSAPP;
   const message = encodeURIComponent(
     "Hi Bilal, I am inquiring about Pak Multilinks wholesale supplies",
   );

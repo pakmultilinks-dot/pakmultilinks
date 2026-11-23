@@ -31,34 +31,24 @@ const CATEGORY_REAL_IMAGES: Record<string, string> = {
   "all": "/images/about-product-range.png",
 };
 
-const STATIC_METRO_TILES = [
-  { slug: "tissue-paper-products", name: "Tissue & Paper" },
-  { slug: "washroom-supplies", name: "Washroom" },
-  { slug: "cleaning-products", name: "Cleaning" },
-  { slug: "garbage-bags", name: "Garbage Bags" },
-  { slug: "dispensers", name: "Dispensers" },
-  { slug: "cleaning-tools", name: "Mops & Tools" },
-  { slug: "soaps-sanitizers", name: "Soaps & Care" },
-  { slug: "wet-wipes-fresheners", name: "Air Fresheners" },
-  { slug: "all", name: "All Products" },
-];
-
 export function MetroCategoriesGrid({
-  categories: _categories,
+  categories,
   products: _products,
   selectedCategory,
   onSelectCategory,
 }: MetroCategoriesGridProps) {
+  // Tiles come from the real root categories in the database, so every
+  // category the shop actually has shows up here (no hardcoded list).
   const tiles: CategoryTile[] = useMemo(() => {
-    return STATIC_METRO_TILES.map((tile) => {
-      const realImage = CATEGORY_REAL_IMAGES[tile.slug] || "/images/products/tissue.svg";
-      return {
-        slug: tile.slug,
-        name: tile.name,
-        image: realImage,
-      };
-    });
-  }, []);
+    const roots = categories.filter((c) => !c.parentId);
+    const list = roots.map((cat) => ({
+      slug: cat.slug,
+      name: cat.name,
+      image: CATEGORY_REAL_IMAGES[cat.slug] || "/images/about-product-range.png",
+    }));
+    list.push({ slug: "all", name: "All Products", image: CATEGORY_REAL_IMAGES["all"] || "/images/about-product-range.png" });
+    return list;
+  }, [categories]);
 
   return (
     <section className="w-full my-2 sm:my-3.5" aria-label="Shop by category">

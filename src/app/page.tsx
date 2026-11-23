@@ -2,6 +2,7 @@ import { HomeProductsExplorer } from "@/components/home/home-products-explorer";
 import { DealsSlider } from "@/components/home/deals-slider";
 import { PerksStrip } from "@/components/home/perks-strip";
 import { ShopByBrand } from "@/components/home/shop-by-brand";
+import { BrandShowcase } from "@/components/home/brand-showcase";
 import { listPublicCategories, listPublicProducts } from "@/lib/catalog-server";
 import { company } from "@/lib/company";
 import { listPublicDeals } from "@/lib/deals";
@@ -93,6 +94,11 @@ export default async function HomePage() {
         </section>
 
       </div>
+
+      {/* Brand showcases: Rose Petal + Tissue Craft with circular scrolling products (all screens) */}
+      <section className="site-shell py-6 sm:py-8">
+        <BrandShowcase />
+      </section>
 
       {/* Main Products Explorer: Shows ALL products with rates on site opening (prominently at top on mobile) */}
       <HomeProductsExplorer products={products} categories={categories} />

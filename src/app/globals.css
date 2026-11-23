@@ -79,6 +79,27 @@ summary::-webkit-details-marker {
   to { transform: translateX(-50%); }
 }
 
+/* Brand showcase circular marquee: products loop continuously. */
+.brand-marquee-track {
+  display: flex;
+  gap: 0.75rem;
+  width: max-content;
+  animation: brand-marquee-scroll 36s linear infinite;
+}
+
+.brand-marquee:hover .brand-marquee-track,
+.brand-marquee:focus .brand-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes brand-marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-marquee-track { animation: none; width: auto; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .announcement-track { animation: none; width: auto; min-width: 0; }
   .announcement-copy { flex: 1 1 auto; white-space: normal; }
